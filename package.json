@@ -1,0 +1,30 @@
+{
+  "name": "chameleon-sdk",
+  "version": "1.0.0",
+  "description": "Chameleon Software Development Kit",
+  "author": "Chameleon Team <chameleon@nsoft.com>",
+  "contributors": [
+    "Jadranko Dragoje <dragoje.jadranko@nsoft.com>",
+    "Snježana Drežnjak <dreznjak.snjezana@nsoft.com>",
+    "Lana Džidić <dzidic.lana@nsoft.com>"
+  ],
+  "private": false,
+  "scripts": {
+    "lint": "eslint --ext .js,.vue src test/unit/specs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chmjs/chameleon-sdk"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.5"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.3.0",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-plugin-html": "^3.0.0",
+    "eslint-plugin-import": "^2.9.0"
+  }
+}
