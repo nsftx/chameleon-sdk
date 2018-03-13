@@ -1,5 +1,9 @@
 import { isArray, isUndefined, merge, map } from 'lodash';
 
+
+// Global after string concatenation
+let globalDeps = null;
+
 // Check is global variable registered
 const isGlobalAvailable = (dep) => {
   if (dep.indexOf('.') < 0) {
@@ -11,18 +15,18 @@ const isGlobalAvailable = (dep) => {
   return !!window[parts[0]] && !!window[parts[0]][parts[1]];
 };
 
-const setFlag = (globalDep, prop, value) => {
-  merge(window, {
-    // eslint-disable-next-line
-    __CHAMELEON_MATERIAL_DEPS__: { [globalDep]: { [prop]: value } },
-  });
+const setGlobal = (context) => {
+  const deps = context.$chameleon.bundle || 'material';
+  globalDeps = `__CHAMELEON_${deps.toUpperCase()}_DEPS__`;
+  window[globalDeps] = {};
+};
+
+const setFlag = (global, prop, value) => {
+    window[globalDeps] = { [global]: { [prop]: value } };
 };
 
 // Register & handle interval for global variable check
 const startAvailabilityInterval = (dep, resolve, reject) => {
-  // eslint-disable-next-line
-  const globalDeps = window.__CHAMELEON_MATERIAL_DEPS__;
-
   const availabilityInterval = setInterval(() => {
     if (isGlobalAvailable(dep)) {
       resolve();
@@ -77,9 +81,6 @@ const initDependencies = (url, globals) => {
 export default {
   methods: {
     loadDependencies(srcs, dep) {
-      // eslint-disable-next-line
-      const globalDeps = window.__CHAMELEON_MATERIAL_DEPS__;
-
       return new Promise((resolve, reject) => {
         if (!globalDeps[dep]) {
           // Start dependency intialization
@@ -100,7 +101,6 @@ export default {
     },
   },
   beforeMount() {
-    // eslint-disable-next-line
-    if (!window.__CHAMELEON_MATERIAL_DEPS__) window.__CHAMELEON_MATERIAL_DEPS__ = {};
+    setGlobal(this);
   },
 };
