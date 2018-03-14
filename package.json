@@ -17,15 +17,15 @@
     "url": "https://github.com/chmjs/chameleon-sdk"
   },
   "license": "MIT",
-  "dependencies": {
-    "lodash": "^4.17.5",
-    "uuid": "^3.2.1"
-  },
   "devDependencies": {
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.3.0",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-plugin-html": "^3.0.0",
     "eslint-plugin-import": "^2.9.0"
+  },
+  "peerDependency": {
+    "lodash": "^4.17.5",
+    "uuid": "^3.2.1"
   }
 }

@@ -1,6 +1,4 @@
 import { isArray, isUndefined, merge, map } from 'lodash';
-
-
 // Global after string concatenation
 let globalDeps = null;
 
@@ -22,7 +20,9 @@ const setGlobal = (context) => {
 };
 
 const setFlag = (global, prop, value) => {
-    window[globalDeps] = { [global]: { [prop]: value } };
+  merge(window[globalDeps], {
+    [global]: { [prop]: value }
+  });
 };
 
 // Register & handle interval for global variable check
@@ -30,8 +30,9 @@ const startAvailabilityInterval = (dep, resolve, reject) => {
   const availabilityInterval = setInterval(() => {
     if (isGlobalAvailable(dep)) {
       resolve();
+      setFlag(dep, 'loading', false);
       clearInterval(availabilityInterval);
-    } else if (globalDeps[dep].rejected) {
+    } else if (window[globalDeps][dep].rejected) {
       reject();
       clearInterval(availabilityInterval);
     }
@@ -82,16 +83,18 @@ export default {
   methods: {
     loadDependencies(srcs, dep) {
       return new Promise((resolve, reject) => {
-        if (!globalDeps[dep]) {
+        if (!window[globalDeps][dep]) {
           // Start dependency intialization
-          setFlag(dep, 'started', true);
+          setFlag(dep, 'loading', true);
           initDependencies(srcs, dep).then(() => {
             resolve();
+            setFlag(dep, 'loading', false);
           }).catch((error) => {
             console.warn('[CV] Script rejected =>', error);
           });
         } else if (isGlobalAvailable(dep)) {
           // Resolve if global vairable is registered
+          setFlag(dep, 'loading', false);
           resolve();
         } else {
           // Schedule checks if global variable is unregistered
