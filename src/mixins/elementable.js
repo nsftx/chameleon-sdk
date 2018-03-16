@@ -1,10 +1,10 @@
-import uuid from 'uuid/v4';
-import { assign, kebabCase, map } from 'lodash';
-
 /*
 This mixin is shared by all components.
 Do not place any component specific logic here!
 */
+import uuid from 'uuid/v4';
+import { assign, kebabCase, map } from 'lodash';
+
 export default {
   props: {
     definition: {
