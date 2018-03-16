@@ -21,7 +21,9 @@ const setGlobal = (context) => {
 
 const setFlag = (global, prop, value) => {
   merge(window[globalDeps], {
-    [global]: { [prop]: value },
+    [global]: {
+      [prop]: value,
+    },
   });
 };
 
@@ -42,25 +44,25 @@ const startAvailabilityInterval = (dep, resolve, reject) => {
 const addDependency = (url, globals) => {
   const type = url.type === 'script' || isUndefined(url.type) ? 'script' : 'link';
   const attr = url.type === 'script' || isUndefined(url.type) ? 'src' : 'href';
-  const script = document.createElement(type);
+  const resource = document.createElement(type);
 
-  script.setAttribute(attr, url.src || url);
+  resource.setAttribute(attr, url.src || url);
 
-  if (url.type === 'script' || isUndefined(url.type)) {
-    document.body.appendChild(script);
+  if (type === 'script') {
+    document.body.appendChild(resource);
   } else if (url.type === 'link') {
-    script.rel = 'stylesheet';
-    script.type = 'text/css';
-    document.head.appendChild(script);
+    resource.rel = 'stylesheet';
+    resource.type = 'text/css';
+    document.head.appendChild(resource);
   }
 
   return new Promise((resolve, reject) => {
-    script.onerror = () => {
+    resource.onerror = () => {
       reject();
       setFlag(globals, 'rejected', true);
     };
 
-    script.onload = () => {
+    resource.onload = () => {
       if (type === 'link' || (type !== 'link' && isGlobalAvailable(globals))) {
         // Resolve stylesheets and registered global variables
         resolve();
@@ -90,7 +92,7 @@ export default {
             resolve();
             setFlag(dep, 'loading', false);
           }).catch((error) => {
-            console.warn('[CV] Script rejected =>', error);
+            console.warn('[CSDK] Script rejected =>', error);
           });
         } else if (isGlobalAvailable(dep)) {
           // Resolve if global vairable is registered
