@@ -25,9 +25,13 @@ export default {
   },
   data() {
     return {
-      baseClass: `${this.$options.namespace}element`,
-      baseParentClass: `${this.$options.namespace}element-parent`,
-      baseChildrenClass: `${this.$options.namespace}element-children`,
+      /*
+      Static classes needed for chameleon builder.
+      This is required for all elements used in builder.
+      */
+      baseClass: 'c-element',
+      baseParentClass: 'c-element-parent',
+      baseChildrenClass: 'c-element-children',
     };
   },
   methods: {

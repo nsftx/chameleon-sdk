@@ -12,7 +12,7 @@
   "main": "./src/index.js",
   "scripts": {
     "lint": "eslint --ext .js,.vue src test/unit/specs",
-    "test": "jest test"
+    "test": "npm run lint && jest test"
   },
   "repository": {
     "type": "git",
