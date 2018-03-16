@@ -21,7 +21,7 @@ const setGlobal = (context) => {
 
 const setFlag = (global, prop, value) => {
   merge(window[globalDeps], {
-    [global]: { [prop]: value }
+    [global]: { [prop]: value },
   });
 };
 
