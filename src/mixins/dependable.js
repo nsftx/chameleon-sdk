@@ -1,8 +1,17 @@
-import { isArray, isUndefined, merge, map } from 'lodash';
-// Global after string concatenation
+/*
+This mixin provides `loadDependencies` method that checks if
+required library for component is loaded (for example youtube API).
+Mixin sets global flags to make sure dependencies are loaded only once.
+*/
+import {
+  isArray,
+  isUndefined,
+  merge,
+  map,
+} from 'lodash';
+
 let globalDeps = null;
 
-// Check is global variable registered
 const isGlobalAvailable = (dep) => {
   if (dep.indexOf('.') < 0) {
     return !!window[dep];
@@ -16,7 +25,8 @@ const isGlobalAvailable = (dep) => {
 const setGlobal = (context) => {
   const deps = context.$chameleon.bundle || 'material';
   globalDeps = `__CHAMELEON_${deps.toUpperCase()}_DEPS__`;
-  window[globalDeps] = {};
+
+  window[globalDeps] = window[globalDeps] || {};
 };
 
 const setFlag = (global, prop, value) => {
@@ -27,7 +37,6 @@ const setFlag = (global, prop, value) => {
   });
 };
 
-// Register & handle interval for global variable check
 const startAvailabilityInterval = (dep, resolve, reject) => {
   const availabilityInterval = setInterval(() => {
     if (isGlobalAvailable(dep)) {
