@@ -1,13 +1,14 @@
 import http from 'axios';
-import { each, isEmpty, map } from 'lodash';
+import { each, isEmpty, isNil, map } from 'lodash';
 import { localStorage } from '../../../utility';
 
 const getOptions = () => {
   const token = localStorage.getAuthToken();
+  const headers = {};
 
-  const headers = {
-    authorization: token ? `Bearer ${token}` : null,
-  };
+  if (!isNil(token)) {
+    headers.authorization = `Bearer ${token}`;
+  }
 
   return {
     headers,
