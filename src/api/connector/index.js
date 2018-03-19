@@ -3,18 +3,15 @@ import * as connectorTypes from './internal';
 
 const parseSourceData = (connector, source, options, data) => {
   const result = {
+    name: source.name,
     connector: {
       name: connector.name,
       type: connector.type,
     },
-    name: source.name,
     model: source.model,
-    schema: source.schema,
+    items: data[source.name],
+    schema: source.schema, 
   };
-
-  if (options.copyDataSource) {
-    result.items = data[source.name];
-  }
 
   return result;
 };
