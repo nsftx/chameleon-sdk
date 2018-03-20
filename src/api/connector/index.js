@@ -9,8 +9,8 @@ const parseSourceData = (connector, source, options, data) => {
       type: connector.type,
     },
     model: source.model,
-    items: data[source.name],
-    schema: source.schema, 
+    items: data[source.name].items,
+    schema: source.schema,
   };
 
   return result;
@@ -18,7 +18,8 @@ const parseSourceData = (connector, source, options, data) => {
 
 export default {
   getConnectorType(connector) {
-    return connectorTypes[connector.type];
+    const type = connectorTypes[connector.type];
+    return type;
   },
   getSources(connector) {
     const connectorType = this.getConnectorType(connector);

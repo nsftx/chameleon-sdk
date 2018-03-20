@@ -1,8 +1,8 @@
 import http from 'axios';
-import { each, isEmpty, isNil, map } from 'lodash';
+import { each, find, isEmpty, isNil, map } from 'lodash';
 import { localStorage } from '../../../utility';
 
-const getOptions = () => {
+const getMeta = () => {
   const token = localStorage.getAuthToken();
   const headers = {};
 
@@ -47,23 +47,11 @@ const getQuery = (source) => {
 
   return `query ${name}${params.args} { 
     ${name}${params.bindings} {
-      ${getQueryFields(source)}
+      items {
+        ${getQueryFields(source)}
+      }
     }
   }`;
-};
-
-const getQueryVariables = (source, filters) => {
-  const vars = {};
-
-  if (!isEmpty(filters)) {
-    each(filters, (filter, key) => {
-      if (source.params[key]) {
-        vars[key] = filter;
-      }
-    });
-  }
-
-  return vars;
 };
 
 const getSchemaTypeQuery = () => {
@@ -82,9 +70,25 @@ const getSchemaTypeQuery = () => {
         type {
           name
           kind
+          fields {
+            name
+            type {
+              name
+              ofType {
+                name
+                kind
+              }
+            }
+          }
           ofType {
             name
             kind
+            fields {
+              name
+              type {
+                name
+              }
+            }
           }
         }
       }
@@ -100,21 +104,36 @@ const getRootType = (response) => {
   return data.data.__type;
 };
 
+const getSourceModel = (source) => {
+  if (source.type) {
+    const items = find(source.type.fields, { name: 'items' });
+    if (items) {
+      return items.type.ofType.name;
+    }
+  }
+
+  return null;
+};
+
 export default {
   getSources(connector) {
-    return http.post(connector.options.endpoint, {
+    const url = connector.options.endpoint;
+    return http.post(url, {
       query: getSchemaTypeQuery(),
       variables: {
         name: 'Query',
       },
-    }, getOptions()).then((response) => {
+    }, getMeta()).then((response) => {
       const data = getRootType(response);
       const sources = {};
+
       each(data.fields, (item) => {
-        if (item.type.ofType) {
+        const model = getSourceModel(item);
+
+        if (model) {
           const source = {
             name: item.name,
-            model: item.type.ofType.name,
+            model,
           };
 
           const params = {};
@@ -135,30 +154,34 @@ export default {
       return sources;
     });
   },
-  getSourceData(connector, source, { filters }) {
-    return http.post(connector.options.endpoint, {
+  getSourceData(connector, source, options) {
+    const url = connector.options.endpoint;
+    return http.post(url, {
       query: getQuery(source),
-      variables: getQueryVariables(source, filters),
-    }, getOptions()).then((response) => {
+      variables: {
+        options,
+      },
+    }, getMeta()).then((response) => {
       const result = response.data.data;
       return result;
     });
   },
   getSourceSchema(connector, source) {
-    return http.post(connector.options.endpoint, {
+    const url = connector.options.endpoint;
+    return http.post(url, {
       query: getSchemaTypeQuery(),
       variables: {
         name: source.model,
       },
-    }, getOptions()).then((response) => {
+    }, getMeta()).then((response) => {
       const data = getRootType(response);
+      const schema = [];
 
-      const schema = {};
       each(data.fields, (item) => {
-        schema[item.name] = {
+        schema.push({
           name: item.name,
           type: item.type.name,
-        };
+        });
       });
 
       return {
