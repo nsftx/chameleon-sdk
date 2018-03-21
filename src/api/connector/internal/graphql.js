@@ -27,6 +27,7 @@ const getQueryParams = (source) => {
     return {
       args: `(${args.join(',')})`,
       bindings: `(${bindings.join(',')})`,
+      pagination: source.params.pagination ? 'pagination { totalResults }' : null,
     };
   }
 
@@ -44,12 +45,14 @@ const getQueryFields = (source) => {
 const getQuery = (source) => {
   const name = source.name;
   const params = getQueryParams(source);
+  const pagination = params.pagination || '';
 
   return `query ${name}${params.args} { 
     ${name}${params.bindings} {
       items {
         ${getQueryFields(source)}
       }
+      ${pagination}
     }
   }`;
 };
