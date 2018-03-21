@@ -158,9 +158,7 @@ export default {
     const url = connector.options.endpoint;
     return http.post(url, {
       query: getQuery(source),
-      variables: {
-        options,
-      },
+      variables: options.params,
     }, getMeta()).then((response) => {
       const result = response.data.data;
       return result;

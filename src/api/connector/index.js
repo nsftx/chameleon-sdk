@@ -2,15 +2,18 @@ import { isNil } from 'lodash';
 import * as connectorTypes from './internal';
 
 const parseSourceData = (connector, source, options, data) => {
+  const collection = data[source.name];
+
   const result = {
-    name: source.name,
     connector: {
       name: connector.name,
       type: connector.type,
     },
+    name: source.name,
     model: source.model,
-    items: data[source.name].items,
     schema: source.schema,
+    items: collection.items,
+    pagination: collection.pagination,
   };
 
   return result;
