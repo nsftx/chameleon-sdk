@@ -1,6 +1,6 @@
 {
   "name": "chameleon-sdk",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Chameleon Software Development Kit",
   "author": "Chameleon Team <chameleon@nsoft.com>",
   "contributors": [
@@ -12,7 +12,8 @@
   "main": "./src/index.js",
   "scripts": {
     "lint": "eslint --ext .js,.vue src test/unit/specs",
-    "test": "npm run lint && jest test"
+    "test": "npm run lint && jest test",
+    "prepublish": "npm test"
   },
   "repository": {
     "type": "git",
