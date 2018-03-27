@@ -21,7 +21,7 @@ export default {
       return {
         [source.name]: {
           items: result,
-        }
+        },
       };
     });
   },
