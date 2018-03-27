@@ -1,4 +1,4 @@
-import { assign, merge } from 'lodash';
+import { assign, isNil, merge } from 'lodash';
 
 export default {
   data() {
@@ -15,7 +15,7 @@ export default {
       return this.dataSource.connector;
     },
     isDataSourceRemoteValid() {
-      return this.dataSource && this.dataConnector;
+      return !isNil(this.dataSource) && !isNil(this.dataConnector);
     },
     isDataSourceLocal() {
       return this.dataSource.local === true;
@@ -31,7 +31,7 @@ export default {
       return new Promise((resolve) => {
         if (
           this.isDataSourceLocal ||
-          !this.$chameleon.connectors ||
+          !this.options.connectors ||
           !this.isDataSourceRemoteValid
         ) {
           resolve({
@@ -42,7 +42,7 @@ export default {
 
         const connector = assign({},
           this.dataConnector,
-          this.$chameleon.connectors[this.dataConnector.name],
+          this.options.connectors[this.dataConnector.name],
         );
 
         const source = merge({}, {
@@ -50,7 +50,7 @@ export default {
         }, connector.sources[this.dataSource.name]);
 
         this.loadingDataSource = true;
-        return this.$chameleon.connector.getSourceData(
+        return this.options.connector.getSourceData(
           connector,
           source,
           this.getMergedDataSourceParams(),

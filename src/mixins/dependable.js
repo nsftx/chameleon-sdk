@@ -23,7 +23,7 @@ const isGlobalAvailable = (dep) => {
 };
 
 const setGlobal = (context) => {
-  const deps = context.$chameleon.bundle || 'material';
+  const deps = context.options.bundle || 'material';
   globalDeps = `__CHAMELEON_${deps.toUpperCase()}_DEPS__`;
 
   window[globalDeps] = window[globalDeps] || {};
