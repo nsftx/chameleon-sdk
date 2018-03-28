@@ -3,7 +3,7 @@ This mixin is shared by all components.
 Do not place any component specific logic here!
 */
 import uuid from 'uuid/v4';
-import { assign, kebabCase, map } from 'lodash';
+import { assign, map } from 'lodash';
 
 export default {
   props: {
@@ -36,6 +36,19 @@ export default {
   },
   methods: {
     /*
+    DEPRECATED:
+    Helper function to support element types which are
+    not namespaces. This should be only used in base
+    material bundle.
+    */
+    getElementTag(type) {
+      if (type.indexOf('-') <= 2) {
+        return type;
+      }
+
+      return `${this.$options.namespace}${type}`;
+    },
+    /*
     Generates data attributes needed
     for chameleon builder.
     */
@@ -55,7 +68,7 @@ export default {
       const children = this.definition.elements;
       return map(children, (child) => {
         const el = createElement(
-          `${this.$options.namespace}${kebabCase(child.type)}`,
+          this.getElementTag(),
           {
             key: `${child.type}_${uuid()}`,
             staticClass: `${this.$options.name}-item`,
