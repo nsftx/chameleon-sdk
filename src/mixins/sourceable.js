@@ -18,7 +18,7 @@ export default {
       return !isNil(this.dataSource) && !isNil(this.dataConnector);
     },
     isDataSourceLocal() {
-      return this.dataSource.local === true;
+      return isNil(this.dataSource) ? null : this.dataSource.local === true;
     },
   },
   methods: {
@@ -35,7 +35,7 @@ export default {
           !this.isDataSourceRemoteValid
         ) {
           resolve({
-            items: this.dataSource.items,
+            items: isNil(this.dataSource) ? null : this.dataSource.items,
             pagination: {},
           });
         }
