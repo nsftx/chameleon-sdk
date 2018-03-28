@@ -42,7 +42,8 @@ export default {
     material bundle.
     */
     getElementTag(type) {
-      if (type.indexOf('-') <= 2) {
+      const separatorIndex = type.indexOf('-');
+      if (separatorIndex > -1 && separatorIndex <= 2) {
         return type;
       }
 
@@ -68,7 +69,7 @@ export default {
       const children = this.definition.elements;
       return map(children, (child) => {
         const el = createElement(
-          this.getElementTag(),
+          this.getElementTag(child.type),
           {
             key: `${child.type}_${uuid()}`,
             staticClass: `${this.$options.name}-item`,
