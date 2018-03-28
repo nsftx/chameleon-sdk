@@ -20,7 +20,12 @@ export default {
       }, this.definition._schema);
     },
     options() {
-      return this.$chameleon;
+      /*
+      Bundle can access store registry.
+      If store is not available then fallback to prototype vue instance.
+      Prototype vue instance is created for testing bundle without builder.
+      */
+      return this.$store ? this.$store.getters.registry : this.$chameleon;
     },
   },
   data() {
