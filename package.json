@@ -1,6 +1,6 @@
 {
   "name": "@nsoft/chameleon-sdk",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Chameleon Software Development Kit",
   "author": "Chameleon Team <chameleon@nsoft.com>",
   "contributors": [
@@ -34,5 +34,10 @@
     "eslint-plugin-html": "^3.0.0",
     "eslint-plugin-import": "^2.9.0",
     "jest": "^22.4.3"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.js$": "<rootDir>/test/jest.transform.js"
+    }
   }
 }
