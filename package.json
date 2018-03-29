@@ -1,6 +1,6 @@
 {
   "name": "@nsoft/chameleon-sdk",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "Chameleon Software Development Kit",
   "author": "Chameleon Team <chameleon@nsoft.com>",
   "contributors": [
@@ -20,12 +20,10 @@
     "url": "https://github.com/chmjs/chameleon-sdk"
   },
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "axios": "^0.18.0",
     "lodash": "^4.17.0",
-    "uuid": "^3.2.0"
-  },
-  "devDependencies": {
+    "uuid": "^3.2.0",
     "babel-jest": "^23.0.0-alpha.4",
     "babel-preset-env": "^1.6.1",
     "eslint": "^3.19.0",
