@@ -35,7 +35,8 @@ export default {
       Prototype vue instance is created for testing bundle without builder
       and/or for generated apps where this information is also needed.
       */
-      return this.$store ? this.$store.getters.registry : this.$chameleon;
+      const registry = this.$store && this.$store.getters.registry;
+      return registry || this.$chameleon;
     },
   },
   data() {
