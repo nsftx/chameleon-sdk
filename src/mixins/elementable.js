@@ -28,7 +28,11 @@ export default {
         parentUid: null,
       }, this.definition._schema);
     },
+    /* DEPRECATED: Use this.registry in components */
     options() {
+      return this.registry;
+    },
+    registry() {
       /*
       Bundle can access store registry.
       If store is not available then fallback to prototype vue instance.
