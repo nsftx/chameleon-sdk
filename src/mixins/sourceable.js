@@ -9,7 +9,12 @@ export default {
   },
   computed: {
     dataSource() {
-      return this.definition.dataSource;
+      const source = this.definition.dataSource;
+      if (isString(source)) {
+        return this.getBindingValue(source);
+      }
+
+      return source;
     },
     dataConnector() {
       return this.dataSource.connector;
@@ -18,8 +23,7 @@ export default {
       return !isNil(this.dataSource) && !isNil(this.dataConnector);
     },
     isDataSourceLocal() {
-      const source = this.dataSource;
-      return isNil(source) || isString(source) ? true : source.local === true;
+      return isNil(this.dataSource) ? true : this.dataSource.local === true;
     },
   },
   methods: {
@@ -35,14 +39,10 @@ export default {
           !this.options.connectors ||
           !this.isDataSourceRemoteValid
         ) {
-          if (isString(this.dataSource)) {
-            resolve(this.getBindingValue(this.dataSource));
-          } else {
-            resolve({
-              items: isNil(this.dataSource) ? null : this.dataSource.items,
-              pagination: {},
-            });
-          }
+          resolve({
+            items: isNil(this.dataSource) ? null : this.dataSource.items,
+            pagination: {},
+          });
         }
 
         const connector = assign({},
