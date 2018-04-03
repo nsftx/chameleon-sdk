@@ -37,12 +37,12 @@ export default {
         ) {
           if (isString(this.dataSource)) {
             resolve(this.getBindingValue(this.dataSource));
+          } else {
+            resolve({
+              items: isNil(this.dataSource) ? null : this.dataSource.items,
+              pagination: {},
+            });
           }
-
-          resolve({
-            items: isNil(this.dataSource) ? null : this.dataSource.items,
-            pagination: {},
-          });
         }
 
         const connector = assign({},
