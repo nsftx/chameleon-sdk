@@ -1,4 +1,4 @@
-import { assign, isNil, merge } from 'lodash';
+import { assign, isNil, isString, merge } from 'lodash';
 
 export default {
   data() {
@@ -18,7 +18,8 @@ export default {
       return !isNil(this.dataSource) && !isNil(this.dataConnector);
     },
     isDataSourceLocal() {
-      return isNil(this.dataSource) ? null : this.dataSource.local === true;
+      const source = this.dataSource;
+      return isNil(source) || isString(source) ? true : source.local === true;
     },
   },
   methods: {
@@ -34,6 +35,10 @@ export default {
           !this.options.connectors ||
           !this.isDataSourceRemoteValid
         ) {
+          if (isString(this.dataSource)) {
+            resolve(this.getBindingValue(this.dataSource));
+          }
+
           resolve({
             items: isNil(this.dataSource) ? null : this.dataSource.items,
             pagination: {},
