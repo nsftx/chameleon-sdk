@@ -22,16 +22,16 @@
   "license": "MIT",
   "devDependencies": {
     "axios": "^0.18.0",
-    "lodash": "^4.17.0",
-    "uuid": "^3.2.0",
     "babel-jest": "^23.0.0-alpha.4",
     "babel-preset-env": "^1.6.1",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.3.0",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-plugin-html": "^3.0.0",
-    "eslint-plugin-import": "^2.9.0",
-    "jest": "^22.4.3"
+    "eslint-plugin-import": "^2.10.0",
+    "jest": "^22.4.3",
+    "lodash": "^4.17.0",
+    "uuid": "^3.2.0"
   },
   "jest": {
     "transform": {
