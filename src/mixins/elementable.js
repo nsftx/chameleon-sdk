@@ -13,15 +13,6 @@ export default {
     },
   },
   computed: {
-    eventBus() {
-      /*
-      eventBus is a vue instance used for communication between
-      components. This bus will be used by all elements. Bus is
-      exposed as eventBus property of registry from builder state
-      or from bundle options (generated apps and test env).
-      */
-      return this.options ? this.options.eventBus : null;
-    },
     schema() {
       return assign({
         uid: uuid(),
