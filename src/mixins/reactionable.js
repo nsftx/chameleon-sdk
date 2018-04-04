@@ -1,6 +1,11 @@
 import { each, isArray } from 'lodash';
 
 export default {
+  data() {
+    return {
+      eventBusListeners: [],
+    };
+  },
   computed: {
     eventBus() {
       /*
@@ -29,7 +34,7 @@ export default {
       if (this.eventBus && isArray(this.reactions)) {
         each(this.reactions, (reaction) => {
           if (reaction.listener && reaction.action) {
-            this.eventBus.$on(reaction.listener, (payload) => {
+            const listener = (payload) => {
               /*
               TODO:
               Implement advanced options:
@@ -40,10 +45,36 @@ export default {
               if (method) {
                 method.call(this, payload);
               }
+            };
+
+            this.eventBusListeners.push({
+              name: reaction.listener,
+              callback: listener,
             });
+
+            this.eventBus.$on(reaction.listener, listener);
           }
         });
       }
     },
+    /*
+    Unregister listeners from event bus.
+    This needs to be called on component destroy.
+    */
+    removeReactions() {
+      if (this.eventBusListeners.length) {
+        each(this.eventBusListeners, (listener) => {
+          this.eventBus.$off(listener.name, listener.callback);
+        });
+
+        this.eventBusListeners = [];
+      }
+    },
+  },
+  mounted() {
+    this.setReactions();
+  },
+  beforeDestroy() {
+    this.removeReactions();
   },
 };
