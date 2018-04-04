@@ -9,7 +9,7 @@ export default {
   },
   computed: {
     dataSource() {
-      const source = this.definition.dataSource;
+      const source = this.config.dataSource;
       if (isString(source)) {
         return this.getBindingValue(source);
       }

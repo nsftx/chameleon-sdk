@@ -1,4 +1,4 @@
-import { each, isArray } from 'lodash';
+import { cloneDeep, each, isArray } from 'lodash';
 
 export default {
   data() {
@@ -17,7 +17,7 @@ export default {
       return this.registry ? this.registry.eventBus : null;
     },
     reactions() {
-      return this.definition._reactions;
+      return this.config._reactions;
     },
   },
   methods: {
@@ -25,12 +25,13 @@ export default {
     Send event using eventBus.
     This is a helper method that checks and adds component id
     to event name and basically simplifies process across
-    all components.
+    all components. We are cloning payload to pass value, not
+    reactive reference.
     */
     sendToEventBus(name, payload) {
-      const id = this.definition._id;
+      const id = this.config._id;
       if (id && this.eventBus) {
-        this.eventBus.$emit(`${id}.${name}`, payload);
+        this.eventBus.$emit(`${id}.${name}`, cloneDeep(payload));
       }
     },
     /*

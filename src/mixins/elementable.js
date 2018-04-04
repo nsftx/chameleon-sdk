@@ -3,7 +3,7 @@ This mixin is shared by all components.
 Do not place any component specific logic here!
 */
 import uuid from 'uuid/v4';
-import { assign, map } from 'lodash';
+import { assign, cloneDeep, map } from 'lodash';
 
 export default {
   props: {
@@ -17,7 +17,7 @@ export default {
       return assign({
         uid: uuid(),
         parentUid: null,
-      }, this.definition._schema);
+      }, this.config._schema);
     },
     /* DEPRECATED: Use this.registry in components */
     options() {
@@ -36,6 +36,13 @@ export default {
   },
   data() {
     return {
+      /*
+      This is a local copy of definition object.
+      If component uses reactions to change definition then
+      config should be mutated. Recommendation is that bundles
+      use config in their components.
+      */
+      config: {},
       /*
       Static classes needed for chameleon builder.
       This is required for all elements used in builder.
@@ -77,7 +84,7 @@ export default {
     has no specific children like panel, hlist, vlist.
     */
     renderChildren(createElement) {
-      const children = this.definition.elements;
+      const children = this.config.elements;
       return map(children, (child) => {
         const el = createElement(
           this.getElementTag(child.type),
@@ -93,5 +100,25 @@ export default {
         return el;
       });
     },
+    setConfig(value) {
+      this.config = cloneDeep(value);
+    },
+  },
+  watch: {
+    definition: {
+      handler(value) {
+        this.setConfig(value);
+      },
+      /*
+      Arghhhh!
+      This is not needed in generated apps.
+      Set it to false when using in generated apps by
+      setting env variable CHAMELEON_OPTIMIZE.
+      */
+      deep: !process.env.CHAMELEON_OPTIMIZE,
+    },
+  },
+  created() {
+    this.setConfig(this.definition);
   },
 };
