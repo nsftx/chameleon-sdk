@@ -22,6 +22,18 @@ export default {
   },
   methods: {
     /*
+    Send event using eventBus.
+    This is a helper method that checks and adds component id
+    to event name and basically simplifies process across
+    all components.
+    */
+    sendToEventBus(name, payload) {
+      const id = this.definition._id;
+      if (id && this.eventBus) {
+        this.eventBus.$emit(`${id}.${name}`, payload);
+      }
+    },
+    /*
     This method sets listeners on eventBus based on reactions
     defined in component. Reaction has signature:
     {
