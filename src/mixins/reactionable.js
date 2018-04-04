@@ -44,6 +44,9 @@ export default {
               const method = this[reaction.action];
               if (method) {
                 method.call(this, payload);
+              } else {
+                // eslint-disable-next-line
+                console.warn('[CHM] Missing reactionable action:', reaction.action);
               }
             };
 
