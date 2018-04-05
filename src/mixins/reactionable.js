@@ -38,6 +38,8 @@ export default {
     This method sets listeners on eventBus based on reactions
     defined in component. Reaction has signature:
     {
+      component: 'componentName',
+      event: 'eventName',
       listener: 'componentName.eventName',
       action: 'actionName',
       params: [],
