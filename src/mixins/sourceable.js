@@ -1,4 +1,4 @@
-import { assign, isNil, isString, merge } from 'lodash';
+import { assign, isNil, isString, map, each, merge } from 'lodash';
 
 export default {
   data() {
@@ -40,7 +40,7 @@ export default {
           !this.isDataSourceRemoteValid
         ) {
           resolve({
-            items: isNil(this.dataSource) ? null : this.dataSource.items,
+            items: isNil(this.dataSource) ? null : this.mapDataSourceItems(this.dataSource.items),
             pagination: {},
           });
         }
@@ -64,10 +64,35 @@ export default {
             pagination: result.pagination,
           };
 
+          if (result.items) {
+            assign(result, {
+              items: this.mapDataSourceItems(result.items),
+            });
+          }
+
           this.loadingDataSource = false;
           resolve(result);
         });
       });
+    },
+    mapDataSourceItems(items) {
+      if (this.dataSource.schema) {
+        const hasMapping = find(this.dataSource.schema, field => !isNil(field.mapName));
+        if (hasMapping) {
+          return map(items, (item) => {
+            const mappedItem = item;
+            each(this.dataSource.schema, (field) => {
+              if (field.mapName) {
+                mappedItem[field.mapName] = item[field.name];
+              }
+            });
+
+            return item;
+          });
+        }
+      }
+
+      return items;
     },
   },
 };
