@@ -1,4 +1,4 @@
-import { assign, isNil, isString, map, each, merge } from 'lodash';
+import { assign, isNil, isString, find, map, each, merge } from 'lodash';
 
 export default {
   data() {
