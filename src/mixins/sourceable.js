@@ -85,7 +85,7 @@ export default {
     },
     mapDataSourceItems(items) {
       if (this.dataSource.schema) {
-        const hasMapping = find(this.dataSource.schema, field => !isNil(field.mapName));
+        const hasMapping = !isNil(find(this.dataSource.schema, field => !isNil(field.mapName)));
         if (hasMapping) {
           /*
           TODO:
