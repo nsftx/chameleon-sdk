@@ -1,4 +1,12 @@
-import { assign, isNil, isString, find, map, each, merge } from 'lodash';
+import {
+  assign,
+  isNil,
+  isString,
+  find,
+  map,
+  each,
+  merge,
+} from 'lodash';
 
 export default {
   data() {
@@ -79,11 +87,16 @@ export default {
       if (this.dataSource.schema) {
         const hasMapping = find(this.dataSource.schema, field => !isNil(field.mapName));
         if (hasMapping) {
+          /*
+          TODO:
+          Implement mapping for nested objects.
+          */
           return map(items, (item) => {
             const mappedItem = item;
             each(this.dataSource.schema, (field) => {
               if (field.mapName) {
                 mappedItem[field.mapName] = item[field.name];
+                delete mappedItem[field.name];
               }
             });
 

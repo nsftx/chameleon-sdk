@@ -1,4 +1,8 @@
-import { cloneDeep, each, isArray } from 'lodash';
+import {
+  cloneDeep,
+  each,
+  isArray,
+} from 'lodash';
 
 export default {
   data() {
@@ -50,15 +54,28 @@ export default {
         each(this.reactions, (reaction) => {
           if (reaction.listener && reaction.action) {
             const listener = (payload) => {
-              /*
-              TODO:
-              Implement advanced options:
-              - Payload mapping
-              - Additional params inside reaction
-              */
               const method = this[reaction.action];
+
               if (method) {
-                method.call(this, payload);
+                /*
+                If reaction has schema attached then map
+                payload. Payload input schema can be definied by
+                bundle inside meta of action. If schema is not
+                defined user would have to know payload structure
+                and bind manually.
+
+                TODO:
+                Implement mapping of nested objects.
+                */
+                const outputPayload = payload;
+                if (isArray(reaction.schema)) {
+                  each(reaction.schema, (field) => {
+                    outputPayload[field.mapName] = outputPayload[field.name];
+                    delete outputPayload[field.name];
+                  });
+                }
+
+                method.call(this, outputPayload, reaction.data);
               } else {
                 // eslint-disable-next-line
                 console.warn('[CHM] Missing reactionable action:', reaction.action);
