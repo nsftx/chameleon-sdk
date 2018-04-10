@@ -101,6 +101,7 @@ export default {
             resolve();
             setFlag(dep, 'loading', false);
           }).catch((error) => {
+            // eslint-disable-next-line
             console.warn('[CSDK] Script rejected =>', error);
           });
         } else if (isGlobalAvailable(dep)) {

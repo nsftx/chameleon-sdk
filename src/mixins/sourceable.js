@@ -100,7 +100,7 @@ export default {
               }
             });
 
-            return item;
+            return mappedItem;
           });
         }
       }
