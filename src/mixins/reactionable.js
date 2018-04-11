@@ -46,7 +46,8 @@ export default {
       event: 'eventName',
       listener: 'componentName.eventName',
       action: 'actionName',
-      params: [],
+      schema: [],
+      data: {},
     }
     */
     setReactions() {
