@@ -46,8 +46,13 @@ export default {
       event: 'eventName',
       listener: 'componentName.eventName',
       action: 'actionName',
-      schema: [],
-      data: {},
+      schema: [{
+        name: "name",
+        "mapName", "mapName",
+      }],
+      data: {
+        key: value,
+      },
     }
     */
     setReactions() {
