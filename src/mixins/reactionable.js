@@ -43,15 +43,16 @@ export default {
     defined in component. Reaction has signature:
     {
       component: 'componentName',
+      componentType: 'componentType',
       event: 'eventName',
       listener: 'componentName.eventName',
       action: 'actionName',
       schema: [{
-        name: "name",
-        mapName, "mapName",
+        name: 'name',
+        mapName, 'mapName',
       }],
       data: {
-        key: value,
+        key: 'value',
       },
     }
     */
