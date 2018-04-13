@@ -11,8 +11,8 @@
   "private": false,
   "main": "./src/index.js",
   "scripts": {
-    "lint": "eslint --ext .js,.vue src test/unit/specs",
-    "test": "npm run lint && jest test",
+    "lint": "eslint --ext .js,.vue src",
+    "test": "npm run lint && jest",
     "prepublish": "npm test"
   },
   "repository": {
