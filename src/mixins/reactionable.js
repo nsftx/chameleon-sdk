@@ -2,6 +2,7 @@ import {
   cloneDeep,
   each,
   isArray,
+  isNil,
 } from 'lodash';
 
 export default {
@@ -77,8 +78,10 @@ export default {
                 const outputPayload = payload;
                 if (isArray(reaction.schema)) {
                   each(reaction.schema, (field) => {
-                    outputPayload[field.mapName] = outputPayload[field.name];
-                    delete outputPayload[field.name];
+                    if (!isNil(field.mapName)) {
+                      outputPayload[field.mapName] = outputPayload[field.name];
+                      delete outputPayload[field.name];
+                    }
                   });
                 }
 
