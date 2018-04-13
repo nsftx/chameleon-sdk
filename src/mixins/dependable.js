@@ -4,46 +4,45 @@ required library for component is loaded (for example youtube API).
 Mixin sets global flags to make sure dependencies are loaded only once.
 */
 import {
+  get,
   isArray,
-  isUndefined,
+  isNil,
   merge,
   map,
 } from 'lodash';
 
-let globalDeps = null;
+let globalDependencies = null;
 
-const isGlobalAvailable = (dep) => {
-  if (dep.indexOf('.') < 0) {
-    return !!window[dep];
+const isGlobalAvailable = (dependency) => {
+  if (dependency.indexOf('.') < 0) {
+    return !isNil(window[dependency]);
   }
 
-  // Handle dot notation, e.g. google.maps
-  const parts = dep.split('.');
-  return !!window[parts[0]] && !!window[parts[0]][parts[1]];
+  return !isNil(get(window, dependency));
 };
 
 const setGlobal = (context) => {
-  const deps = context.options.bundle || 'material';
-  globalDeps = `__CHAMELEON_${deps.toUpperCase()}_DEPS__`;
+  const dependencies = context.options.bundle || 'material';
+  globalDependencies = `__CHAMELEON_${dependencies.toUpperCase()}_DEPS__`;
 
-  window[globalDeps] = window[globalDeps] || {};
+  window[globalDependencies] = window[globalDependencies] || {};
 };
 
-const setFlag = (global, prop, value) => {
-  merge(window[globalDeps], {
+const setFlag = (global, globalProperty, value) => {
+  merge(window[globalDependencies], {
     [global]: {
-      [prop]: value,
+      [globalProperty]: value,
     },
   });
 };
 
-const startAvailabilityInterval = (dep, resolve, reject) => {
+const startAvailabilityInterval = (dependency, resolve, reject) => {
   const availabilityInterval = setInterval(() => {
-    if (isGlobalAvailable(dep)) {
+    if (isGlobalAvailable(dependency)) {
       resolve();
-      setFlag(dep, 'loading', false);
+      setFlag(dependency, 'loading', false);
       clearInterval(availabilityInterval);
-    } else if (window[globalDeps][dep].rejected) {
+    } else if (window[globalDependencies][dependency].rejected) {
       reject();
       clearInterval(availabilityInterval);
     }
@@ -51,8 +50,8 @@ const startAvailabilityInterval = (dep, resolve, reject) => {
 };
 
 const addDependency = (url, globals) => {
-  const type = url.type === 'script' || isUndefined(url.type) ? 'script' : 'link';
-  const attr = url.type === 'script' || isUndefined(url.type) ? 'src' : 'href';
+  const type = url.type === 'script' || isNil(url.type) ? 'script' : 'link';
+  const attr = url.type === 'script' || isNil(url.type) ? 'src' : 'href';
   const resource = document.createElement(type);
 
   resource.setAttribute(attr, url.src || url);
@@ -92,25 +91,25 @@ const initDependencies = (url, globals) => {
 
 export default {
   methods: {
-    loadDependencies(srcs, dep) {
+    loadDependencies(sources, dependency) {
       return new Promise((resolve, reject) => {
-        if (!window[globalDeps][dep]) {
+        if (!window[globalDependencies][dependency]) {
           // Start dependency intialization
-          setFlag(dep, 'loading', true);
-          initDependencies(srcs, dep).then(() => {
+          setFlag(dependency, 'loading', true);
+          initDependencies(sources, dependency).then(() => {
             resolve();
-            setFlag(dep, 'loading', false);
+            setFlag(dependency, 'loading', false);
           }).catch((error) => {
             // eslint-disable-next-line
             console.warn('[CSDK] Script rejected =>', error);
           });
-        } else if (isGlobalAvailable(dep)) {
+        } else if (isGlobalAvailable(dependency)) {
           // Resolve if global vairable is registered
-          setFlag(dep, 'loading', false);
+          setFlag(dependency, 'loading', false);
           resolve();
         } else {
           // Schedule checks if global variable is unregistered
-          startAvailabilityInterval(dep, resolve, reject);
+          startAvailabilityInterval(dependency, resolve, reject);
         }
       });
     },
