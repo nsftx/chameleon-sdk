@@ -53,4 +53,11 @@ describe('bindable mixin', () => {
     const bindingValue = wrapper.vm.getBindingValue(value);
     expect(bindingValue).toEqual('HelloBindableSource');
   });
+
+  test('resolves with empty registry', () => {
+    wrapper.vm.registry = null;
+    const value = 'myStaticValue';
+    const bindingValue = wrapper.vm.getBindingValue(value);
+    expect(bindingValue).toEqual(value);
+  });
 });
