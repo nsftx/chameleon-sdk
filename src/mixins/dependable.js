@@ -22,7 +22,7 @@ const isGlobalAvailable = (dependency) => {
 };
 
 const setGlobal = (context) => {
-  const dependencies = context.options.bundle || 'material';
+  const dependencies = context.dependableBundle || 'material';
   globalDependencies = `__CHAMELEON_${dependencies.toUpperCase()}_DEPS__`;
 
   window[globalDependencies] = window[globalDependencies] || {};

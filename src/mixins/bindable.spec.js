@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { shallow } from '@vue/test-utils';
 import bindable from './bindable';
 
 const component = {
@@ -27,7 +27,7 @@ const component = {
 let wrapper;
 describe('bindable mixin', () => {
   beforeEach(() => {
-    wrapper = mount(component);
+    wrapper = shallow(component);
   });
 
   test('resolves static value', () => {
