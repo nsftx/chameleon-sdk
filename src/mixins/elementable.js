@@ -63,9 +63,11 @@ export default {
       const separatorIndex = type.indexOf('-');
       if (separatorIndex > -1 && separatorIndex <= 2) {
         return type;
+      } else if (this.$options.namespace) {
+        return `${this.$options.namespace}${type}`;
       }
 
-      return `${this.$options.namespace}${type}`;
+      return type;
     },
     /*
     Generates data attributes needed

@@ -20,7 +20,7 @@ describe('dependable mixin', () => {
     wrapper = shallow(component);
   });
 
-  test('loads dependency', async () => {
+  it('loads dependency', async () => {
     await wrapper.vm.loadDependencies([
       {
         src: 'https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.6/quill.min.js',
