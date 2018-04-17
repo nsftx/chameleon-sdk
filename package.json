@@ -11,6 +11,7 @@
   "private": false,
   "main": "./src/index.js",
   "scripts": {
+    "build": "babel src --presets babel-preset-env --out-dir dist --ignore spec.js,test.js",
     "lint": "eslint --ext .js,.vue src",
     "test": "npm run lint && jest",
     "prepublish": "npm test"
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.14",
     "axios": "^0.18.0",
+    "babel-cli": "^6.26.0",
     "babel-jest": "^23.0.0-alpha.6r",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
