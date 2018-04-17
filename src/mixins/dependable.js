@@ -66,8 +66,8 @@ const addDependency = (url, globals) => {
 
   return new Promise((resolve, reject) => {
     resource.onerror = () => {
-      reject();
       setFlag(globals, 'rejected', true);
+      reject();
     };
 
     resource.onload = () => {

@@ -15,19 +15,28 @@ const component = {
 };
 
 let wrapper;
+let globalDependencyMock;
 describe('dependable mixin', () => {
   beforeEach(() => {
-    wrapper = shallow(component);
-  });
-
-  it('loads dependency', async () => {
-    await wrapper.vm.loadDependencies([
+    globalDependencyMock = [
       {
         src: 'https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.6/quill.min.js',
         type: 'script',
       },
-    ], 'Quill');
+    ];
 
+    wrapper = shallow(component);
+    delete window.Quill;
+  });
+
+  it('loads dependency', async () => {
+    await wrapper.vm.loadDependencies(globalDependencyMock, 'Quill');
+    expect(window.Quill).toBeTruthy();
+  });
+
+  it('loads dependency if already available', async () => {
+    window.Quill = {};
+    await wrapper.vm.loadDependencies(globalDependencyMock, 'Quill');
     expect(window.Quill).toBeTruthy();
   });
 });

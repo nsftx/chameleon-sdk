@@ -66,7 +66,8 @@ describe('bindable mixin', () => {
   });
 
   it('resolves with empty registry', () => {
-    localVue.$chameleon = null;
+    wrapper.vm.$chameleon = null;
+
     const value = 'myStaticValue';
     const bindingValue = wrapper.vm.getBindingValue(value);
     expect(bindingValue).toEqual(value);

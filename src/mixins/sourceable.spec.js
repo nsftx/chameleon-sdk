@@ -1,3 +1,7 @@
+/*
+TODO: Mock api call.
+Do not call external http endpoint.
+*/
 import { createLocalVue, shallow } from '@vue/test-utils';
 import { connector } from '../api';
 import elementable from './elementable';

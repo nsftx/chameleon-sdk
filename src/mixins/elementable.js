@@ -85,10 +85,10 @@ export default {
     Renders child components of container that
     has no specific children like panel, hlist, vlist.
     */
-    renderChildren(createElement) {
+    renderChildren() {
       const children = this.config.elements;
       return map(children, (child) => {
-        const el = createElement(
+        const el = this.$createElement(
           this.getElementTag(child.type),
           {
             key: `${child.type}_${uuid()}`,

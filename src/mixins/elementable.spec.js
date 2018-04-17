@@ -33,6 +33,10 @@ describe('elementable mixin', () => {
       propsData: {
         definition: {
           type: 'panel',
+          elements: [
+            { type: 'panel' },
+            { type: 'panel' },
+          ],
           _schema: componentSchema,
         },
       },
@@ -75,5 +79,24 @@ describe('elementable mixin', () => {
     const tag = 'table';
     const elementTag = wrapper.vm.getElementTag(tag);
     expect(elementTag).toEqual(`c-${tag}`);
+  });
+
+  it('resolves element namespaced tag', () => {
+    const tag = 'cc-line';
+    const elementTag = wrapper.vm.getElementTag(tag);
+    expect(elementTag).toEqual(tag);
+  });
+
+  it('resolves element tag without options namespace', () => {
+    wrapper.vm.$options.namespace = null;
+
+    const tag = 'table';
+    const elementTag = wrapper.vm.getElementTag(tag);
+    expect(elementTag).toEqual(tag);
+  });
+
+  it('renders children', () => {
+    const children = wrapper.vm.renderChildren();
+    expect(children.length).toEqual(2);
   });
 });
