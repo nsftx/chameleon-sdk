@@ -41,40 +41,56 @@ const component = {
   },
 };
 
-let wrapper;
-describe('sourceable mixin', () => {
-  beforeEach(() => {
-    wrapper = shallow(component, {
-      localVue,
-      propsData: {
-        definition: {
-          type: 'table',
-          dataSource: {
-            name: 'populationPerAge',
-            model: 'PopulationPerAge',
-            connector: {
-              name: 'local',
-              type: 'internalLocal',
-            },
-            schema: [
-              {
-                name: 'age',
-                type: 'String',
-                label: 'Age',
-              },
-              {
-                name: 'population',
-                type: 'Number',
-                label: 'Population',
-              },
-            ],
-          },
+const wrapper = shallow(component, {
+  localVue,
+  propsData: {
+    definition: {
+      type: 'table',
+      dataSource: {
+        name: 'populationPerAge',
+        model: 'PopulationPerAge',
+        connector: {
+          name: 'local',
+          type: 'internalLocal',
         },
+        schema: [
+          {
+            name: 'age',
+            type: 'String',
+            label: 'Age',
+          },
+          {
+            name: 'population',
+            type: 'Number',
+            label: 'Population',
+          },
+        ],
       },
-    });
+    },
+  },
+});
+
+describe('sourceable mixin', () => {
+  it('sets dataSource', () => {
+    expect(wrapper.vm.dataSource).toBeTruthy();
   });
 
-  it('gets dataSource', () => {
-    expect(wrapper.vm.dataSource).toBeTruthy();
+  it('sets valid remote dataSource', () => {
+    expect(wrapper.vm.isDataSourceLocal).toBeFalsy();
+    expect(wrapper.vm.isDataSourceRemoteValid).toBeTruthy();
+  });
+
+  it('sets exact dataConnector', () => {
+    expect(wrapper.vm.dataConnector.type).toEqual('internalLocal');
+  });
+
+  it('loads data from remote', (done) => {
+    wrapper.vm.loadConnectorData().then((result) => {
+      done();
+      expect(result.name).toBeTruthy();
+      expect(result.model).toBeTruthy();
+      expect(result.schema instanceof Array).toBeTruthy();
+      expect(result.items.length).toBeGreaterThan(0);
+    });
   });
 });
