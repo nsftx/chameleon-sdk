@@ -4,6 +4,7 @@ Do not call external http endpoint.
 */
 import { createLocalVue, shallow } from '@vue/test-utils';
 import { connector } from '../api';
+import bindable from './bindable';
 import elementable from './elementable';
 import sourceable from './sourceable';
 
@@ -38,6 +39,7 @@ const component = {
   },
   mixins: [
     elementable,
+    bindable,
     sourceable,
   ],
   render(h) {
@@ -45,7 +47,7 @@ const component = {
   },
 };
 
-const wrapper = shallow(component, {
+let wrapper = shallow(component, {
   localVue,
   propsData: {
     definition: {
@@ -62,6 +64,7 @@ const wrapper = shallow(component, {
             name: 'age',
             type: 'String',
             label: 'Age',
+            mapName: 'ageMapped',
           },
           {
             name: 'population',
@@ -95,6 +98,43 @@ describe('sourceable mixin', () => {
       expect(result.model).toBeTruthy();
       expect(result.schema instanceof Array).toBeTruthy();
       expect(result.items.length).toBeGreaterThan(0);
+      expect(result.items[0].ageMapped).toBeTruthy();
+    });
+  });
+
+  it('sets dataSource reference', () => {
+    wrapper = shallow(component, {
+      localVue,
+      propsData: {
+        definition: {
+          type: 'table',
+          dataSource: '=myReference',
+        },
+      },
+    });
+
+    expect(wrapper.vm.dataSource).toEqual('=myReference');
+  });
+
+  it('sets local dataSource', (done) => {
+    wrapper = shallow(component, {
+      localVue,
+      propsData: {
+        definition: {
+          type: 'table',
+          dataSource: {
+            local: true,
+            items: [
+              { field: true },
+            ],
+          },
+        },
+      },
+    });
+
+    wrapper.vm.loadConnectorData().then((result) => {
+      done();
+      expect(result.items.length).toEqual(1);
     });
   });
 });
