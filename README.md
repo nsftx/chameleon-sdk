@@ -9,6 +9,24 @@ The preferred way to install the Chameleon SDK for is to use the [npm](http://np
 npm install @nsoft/chameleon-sdk
 ```
 
-## Usage and Getting Started
+## Modules
 
-TODO.
+### API
+
+This module contains implemented data connectors. These connectors are used by `sourceable` mixin to load local and remote data. Currently we support only internal connectors to Chameleon and Ride infrastructure. Also, we have `local` connector that loads dummy data which can be used in local development of bundle.
+
+### Mixins
+
+Apply mixins to get out of the box functionality for bundle and interaction with Chameleon Builder. Basic mixin is `elementable` and each element in bundle should apply it. Some other mixins depend on `elementable` mixin.
+
+- `elementable`: Basic mixin for all elements used in Builder
+- `bindable`: Adds support for dynamic value binding of options
+- `dependable`: Lazy loads external dependencies like Quill, GoogleMaps API, etc.
+- `reactionable`: Adds support for Chameleon reaction system
+- `sourceable`: Add helper methods for loading local and remote data sources
+
+### Utility
+
+Module for commom utility functions that are used internally or can be used in third-party bundle:
+
+- `localStorage`: Writing and reading data from localStorage
