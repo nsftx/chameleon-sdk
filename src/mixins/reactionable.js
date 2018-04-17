@@ -50,7 +50,7 @@ export default {
       action: 'actionName',
       schema: [{
         name: 'name',
-        mapName, 'mapName',
+        mapName: 'mapName',
       }],
       data: {
         key: 'value',
