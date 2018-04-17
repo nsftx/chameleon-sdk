@@ -39,6 +39,13 @@
     "vue-template-compiler": "^2.5.16"
   },
   "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.{js}"
+    ],
+    "coverageReporters": [
+      "text"
+    ],
     "setupFiles": [
       "jest-localstorage-mock"
     ],

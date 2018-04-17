@@ -42,4 +42,14 @@ describe('localStorage utility', () => {
     storage.setItem('auth', JSON.stringify(authValue));
     expect(storage.getAuthToken()).toEqual('MySecretBearer');
   });
+
+  it('should not break when not supported', () => {
+    storage.isSupported = false;
+
+    storage.setItem('test', 'testValue');
+    expect(storage.getItem('test')).toBeFalsy();
+
+    storage.removeItem('test');
+    expect(storage.getItem('test')).toBeFalsy();
+  });
 });
