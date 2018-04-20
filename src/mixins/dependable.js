@@ -22,7 +22,7 @@ const isGlobalAvailable = (dependency) => {
 };
 
 const setGlobal = (context) => {
-  const dependencies = context.dependableBundle || 'material';
+  const dependencies = context.dependableBundle || 'global';
   globalDependencies = `__CHAMELEON_${dependencies.toUpperCase()}_DEPS__`;
 
   window[globalDependencies] = window[globalDependencies] || {};
@@ -118,7 +118,7 @@ export default {
       });
     },
   },
-  beforeMount() {
+  beforeCreate() {
     setGlobal(this);
   },
 };
