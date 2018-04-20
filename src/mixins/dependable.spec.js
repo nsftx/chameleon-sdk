@@ -22,6 +22,7 @@ describe('dependable mixin', () => {
       {
         src: 'https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.6/quill.min.js',
         type: 'script',
+        async: true,
       },
     ];
 
@@ -38,5 +39,6 @@ describe('dependable mixin', () => {
     window.Quill = {};
     await wrapper.vm.loadDependencies(globalDependencyMock, 'Quill');
     expect(window.Quill).toBeTruthy();
+    expect(document.scripts[0].getAttribute('async')).toBeTruthy();
   });
 });

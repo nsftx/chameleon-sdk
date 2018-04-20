@@ -49,18 +49,22 @@ const startAvailabilityInterval = (dependency, resolve, reject) => {
   }, 100);
 };
 
-const addDependency = (url, globals) => {
-  const type = url.type === 'script' || isNil(url.type) ? 'script' : 'link';
-  const attr = url.type === 'script' || isNil(url.type) ? 'src' : 'href';
+const addDependency = (dependency, globals) => {
+  const type = dependency.type === 'script' || isNil(dependency.type) ? 'script' : 'link';
+  const attr = dependency.type === 'script' || isNil(dependency.type) ? 'src' : 'href';
   const resource = document.createElement(type);
 
-  resource.setAttribute(attr, url.src || url);
+  resource.setAttribute(attr, dependency.src);
 
   if (type === 'script') {
+    if (dependency.async) {
+      resource.setAttribute('async', true);
+    }
+
     document.body.appendChild(resource);
-  } else if (url.type === 'link') {
-    resource.rel = 'stylesheet';
-    resource.type = 'text/css';
+  } else if (dependency.type === 'link') {
+    resource.setAttribute('stylesheet');
+    resource.setAttribute('text/css');
     document.head.appendChild(resource);
   }
 
@@ -82,8 +86,8 @@ const addDependency = (url, globals) => {
   });
 };
 
-const initDependencies = (url, globals) => {
-  const items = isArray(url) ? url : [url];
+const initDependencies = (dependencies, globals) => {
+  const items = isArray(dependencies) ? dependencies : [dependencies];
   const promises = map(items, item => addDependency(item, globals));
 
   return Promise.all(promises);
