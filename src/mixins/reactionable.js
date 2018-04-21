@@ -5,6 +5,8 @@ import {
   isNil,
 } from 'lodash';
 
+import { logger } from '../utility';
+
 export default {
   data() {
     return {
@@ -87,8 +89,7 @@ export default {
 
                 method.call(this, outputPayload, reaction.data);
               } else {
-                // eslint-disable-next-line
-                console.warn('[CHM] Missing reactionable action:', reaction.action);
+                logger.warn('Missing reactionable action', reaction.action);
               }
             };
 

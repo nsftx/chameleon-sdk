@@ -11,6 +11,8 @@ import {
   map,
 } from 'lodash';
 
+import { logger } from '../utility';
+
 let globalDependencies = null;
 
 const isGlobalAvailable = (dependency) => {
@@ -105,7 +107,7 @@ export default {
             setFlag(dependency, 'loading', false);
           }).catch((error) => {
             // eslint-disable-next-line
-            console.warn('[CSDK] Script rejected =>', error);
+            logger.warn('Script rejected', error);
           });
         } else if (isGlobalAvailable(dependency)) {
           // Resolve if global vairable is registered
