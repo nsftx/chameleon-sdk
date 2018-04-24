@@ -65,8 +65,8 @@ const addDependency = (dependency, globals) => {
 
     document.body.appendChild(resource);
   } else if (dependency.type === 'link') {
-    resource.setAttribute('stylesheet');
-    resource.setAttribute('text/css');
+    resource.setAttribute('rel', 'stylesheet');
+    resource.setAttribute('type', 'text/css');
     document.head.appendChild(resource);
   }
 
