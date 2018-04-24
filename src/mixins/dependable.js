@@ -4,12 +4,12 @@ required library for component is loaded (for example youtube API).
 Mixin sets global flags to make sure dependencies are loaded only once.
 */
 import {
-  get,
   isArray,
   isNil,
   isString,
   merge,
   map,
+  reduce,
 } from 'lodash';
 
 import { logger } from '../utility';
@@ -21,7 +21,10 @@ const isGlobalAvailable = (dependency) => {
     return !isNil(window[dependency]);
   }
 
-  return !isNil(get(window, dependency));
+  return reduce(dependency.split('.'), (path, part) => {
+    const current = path;
+    return current && current[part] ? current[part] : false;
+  }, window);
 };
 
 const setGlobal = (context) => {
@@ -49,7 +52,7 @@ const startAvailabilityInterval = (dependency, resolve, reject) => {
       reject();
       clearInterval(availabilityInterval);
     }
-  }, 100);
+  }, 5000);
 };
 
 const addDependency = (dependency, globals) => {
