@@ -7,6 +7,7 @@ import {
   get,
   isArray,
   isNil,
+  isString,
   merge,
   map,
 } from 'lodash';
@@ -55,8 +56,9 @@ const addDependency = (dependency, globals) => {
   const type = dependency.type === 'script' || isNil(dependency.type) ? 'script' : 'link';
   const attr = dependency.type === 'script' || isNil(dependency.type) ? 'src' : 'href';
   const resource = document.createElement(type);
+  const dependencySource = isString(dependency) ? dependency : dependency.src;
 
-  resource.setAttribute(attr, dependency.src);
+  resource.setAttribute(attr, dependencySource);
 
   if (type === 'script') {
     if (dependency.async) {
