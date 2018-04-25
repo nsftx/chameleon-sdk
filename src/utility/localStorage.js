@@ -31,6 +31,18 @@ export default {
 
     return token;
   },
+  getAuthHeader() {
+    let header;
+    const authStorage = this.getItem('auth');
+    if (authStorage) {
+      const auth = JSON.parse(authStorage);
+      if (auth.token_type === 'bearer') {
+        header = `Bearer ${auth.access_token}`;
+      }
+    }
+
+    return header;
+  },
   getItem(key) {
     if (this.isSupported) {
       return localStorage.getItem(key);
