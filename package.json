@@ -25,7 +25,7 @@
     "@vue/test-utils": "^1.0.0-beta.15",
     "axios": "^0.18.0",
     "babel-cli": "^6.26.0",
-    "babel-jest": "^23.0.0-beta.2",
+    "babel-jest": "^23.0.0-charlie.1",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "eslint": "^3.19.0",
