@@ -2,8 +2,10 @@
 This mixin is shared by all components.
 Do not place any component specific logic here!
 */
-import uuid from 'uuid/v4';
+import { v4 } from 'uuid';
 import { assign, cloneDeep, map } from 'lodash';
+
+const uuid = () => v4();
 
 export default {
   props: {
