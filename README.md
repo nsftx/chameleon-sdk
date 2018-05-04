@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/chmjs/chameleon-sdk/tree/master.svg?style=shield)](https://circleci.com/gh/chmjs/chameleon-sdk/tree/master)
+
 # chameleon-sdk
 Chameleon Software Development Kit is a package for rapid development of Chameleon bundles. It also serves as an integral part of Chameleon Builder. This package is already used if you use [chameleon-bundle](https://github.com/chmjs/chameleon-bundle) for scaffolding bundle projects.
 
