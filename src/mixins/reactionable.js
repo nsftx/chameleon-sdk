@@ -23,6 +23,9 @@ export default {
       */
       return this.registry ? this.registry.eventBus : null;
     },
+    isReactionable() {
+      return !isNil(this.eventBus) && isArray(this.reactions);
+    },
     reactions() {
       return this.config._reactions;
     },
@@ -60,48 +63,56 @@ export default {
     }
     */
     setReactions() {
-      if (this.eventBus && isArray(this.reactions)) {
-        each(this.reactions, (reaction) => {
-          if (reaction.listener && reaction.action) {
-            const listener = (payload) => {
-              const method = this[reaction.action];
-
-              if (method) {
-                /*
-                If reaction has schema attached then map
-                payload. Payload input schema can be definied by
-                bundle inside meta of action. If schema is not
-                defined user would have to know payload structure
-                and bind manually.
-
-                TODO:
-                Implement mapping of nested objects.
-                */
-                const outputPayload = payload;
-                if (isArray(reaction.schema)) {
-                  each(reaction.schema, (field) => {
-                    if (!isNil(field.mapName)) {
-                      outputPayload[field.mapName] = outputPayload[field.name];
-                      delete outputPayload[field.name];
-                    }
-                  });
-                }
-
-                method.call(this, outputPayload, reaction.data);
-              } else {
-                logger.warn('Missing reactionable action', reaction.action);
-              }
-            };
-
-            this.eventBusListeners.push({
-              name: reaction.listener,
-              callback: listener,
-            });
-
-            this.eventBus.$on(reaction.listener, listener);
-          }
-        });
+      if (!this.isReactionable) {
+        return false;
       }
+
+      each(this.reactions, (reaction) => {
+        if (isNil(reaction.listener) || isNil(reaction.action)) {
+          return false;
+        }
+
+        const listener = (payload) => {
+          const method = this[reaction.action];
+          if (isNil(method)) {
+            logger.warn('Missing reactionable action', reaction.action);
+            return false;
+          }
+
+          /*
+          If reaction has schema attached then map
+          payload. Payload input schema can be definied by
+          bundle inside meta of action. If schema is not
+          defined user would have to know payload structure
+          and bind manually.
+
+          TODO:
+          Implement mapping of nested objects.
+          */
+          const outputPayload = payload;
+          if (isArray(reaction.schema)) {
+            each(reaction.schema, (field) => {
+              if (!isNil(field.mapName)) {
+                outputPayload[field.mapName] = outputPayload[field.name];
+                delete outputPayload[field.name];
+              }
+            });
+          }
+
+          return method.call(this, outputPayload, reaction.data);
+        };
+
+        this.eventBusListeners.push({
+          name: reaction.listener,
+          callback: listener,
+        });
+
+        this.eventBus.$on(reaction.listener, listener);
+
+        return true;
+      });
+
+      return true;
     },
     /*
     Unregister listeners from event bus.
