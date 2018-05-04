@@ -6,7 +6,8 @@
   "contributors": [
     "Jadranko Dragoje <dragoje.jadranko@nsoft.com>",
     "Snježana Drežnjak <dreznjak.snjezana@nsoft.com>",
-    "Lana Džidić <dzidic.lana@nsoft.com>"
+    "Lana Džidić <dzidic.lana@nsoft.com>",
+    "Macić Ahmet <macic.ahmet@nsoft.com>"
   ],
   "private": false,
   "main": "./src/index.js",
