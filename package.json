@@ -50,7 +50,9 @@
     ],
     "coverageDirectory": "./test/coverage/",
     "coverageReporters": [
-      "text"
+      "text",
+      "lcov",
+      "json"
     ],
     "setupFiles": [
       "jest-localstorage-mock"
