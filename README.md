@@ -1,4 +1,7 @@
-[![CircleCI](https://circleci.com/gh/chmjs/chameleon-sdk/tree/master.svg?style=shield)](https://circleci.com/gh/chmjs/chameleon-sdk/tree/master) [![Build Status](https://travis-ci.org/chmjs/chameleon-sdk.svg?branch=master)](https://travis-ci.org/chmjs/chameleon-sdk)
+[![CircleCI](https://circleci.com/gh/chmjs/chameleon-sdk/tree/master.svg?style=shield)](https://circleci.com/gh/chmjs/chameleon-sdk/tree/master)
+[![Build Status](https://travis-ci.org/chmjs/chameleon-sdk.svg?branch=master)](https://travis-ci.org/chmjs/chameleon-sdk) 
+[![codebeat badge](https://codebeat.co/badges/690f689b-87eb-42f4-a656-cc3400ac3c0d)](https://codebeat.co/projects/github-com-chmjs-chameleon-sdk-master)
+[![codecov](https://codecov.io/gh/chmjs/chameleon-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/chmjs/chameleon-sdk)
 
 # chameleon-sdk
 Chameleon Software Development Kit is a package for rapid development of Chameleon bundles. It also serves as an integral part of Chameleon Builder. This package is already used if you use [chameleon-bundle](https://github.com/chmjs/chameleon-bundle) for scaffolding bundle projects.

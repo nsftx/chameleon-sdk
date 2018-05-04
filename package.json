@@ -15,6 +15,7 @@
     "build": "babel src --presets babel-preset-env --out-dir dist --ignore spec.js,test.js",
     "lint": "eslint --ext .js,.vue src",
     "test": "npm run lint && jest",
+    "coverage": "npm test && codecov",
     "prepublish": "npm test && npm run build"
   },
   "repository": {
@@ -29,6 +30,7 @@
     "babel-jest": "^23.0.0-charlie.1",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
+    "codecov": "^3.0.1",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.3.0",
     "eslint-friendly-formatter": "^3.0.0",
@@ -46,6 +48,7 @@
     "collectCoverageFrom": [
       "src/**/*.{js}"
     ],
+    "coverageDirectory": "./test/coverage/",
     "coverageReporters": [
       "text"
     ],
