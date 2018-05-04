@@ -19,8 +19,6 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: npm test
       - run: npm run build
-      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-      - run: npm publish
   publish:
     docker:
       - image: circleci/node:7.10
