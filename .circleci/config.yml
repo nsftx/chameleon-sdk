@@ -43,7 +43,7 @@ workflows:
       - build:
         filters:
           tags:
-            only: /^v.*/
+            ignore: /.*/
       - publish:
           filters:
             tags:
