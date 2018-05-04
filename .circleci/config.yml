@@ -41,9 +41,9 @@ workflows:
   tagged-build:
     jobs:
       - build:
-        filters:
-          tags:
-            ignore: /.*/
+          filters:
+            tags:
+              ignore: /.*/
       - publish:
           filters:
             tags:
