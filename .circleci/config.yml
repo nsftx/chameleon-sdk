@@ -1,11 +1,15 @@
 # Javascript Node CircleCI 2.0 configuration file
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 version: 2
+
+defaults: &defaults
+  working_directory: ~/project
+  docker:
+    - image: circleci/node:7.10
+
 jobs:
   build:
-    docker:
-      - image: circleci/node:7.10
-    working_directory: ~/project
+    <<: *defaults
     steps:
       - checkout
       - restore_cache:
@@ -20,22 +24,13 @@ jobs:
       - run: npm test
       - run: npm run build
   publish:
-    docker:
-      - image: circleci/node:7.10
-    working_directory: ~/project
+    <<: *defaults
     steps:
       - checkout
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
       - run: npm install
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - run: npm publish
+
 workflows:
   version: 2
   tagged-build:
