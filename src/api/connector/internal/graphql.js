@@ -158,7 +158,7 @@ export default {
     });
   },
   getSourceData(connector, source, options) {
-    const url = connector.options.endpoint;
+    const url = `${connector.options.endpoint}/${connector.name}`;
     return http.post(url, {
       query: getQuery(source),
       variables: options.params,
@@ -168,7 +168,7 @@ export default {
     });
   },
   getSourceSchema(connector, source) {
-    const url = connector.options.endpoint;
+    const url = `${connector.options.endpoint}/${connector.name}`;
     return http.post(url, {
       query: getSchemaTypeQuery(),
       variables: {
