@@ -120,7 +120,7 @@ const getSourceModel = (source) => {
 
 export default {
   getSources(connector) {
-    const url = connector.options.endpoint;
+    const url = `${connector.options.endpoint}/${connector.name}`;
     return http.post(url, {
       query: getSchemaTypeQuery(),
       variables: {
