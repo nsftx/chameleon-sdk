@@ -30,7 +30,7 @@
     "babel-jest": "^23.0.0-charlie.1",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
-    "codecov": "^3.0.1",
+    "codecov": "^3.0.2",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-friendly-formatter": "^4.0.1",

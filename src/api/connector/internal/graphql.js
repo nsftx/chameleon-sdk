@@ -43,7 +43,7 @@ const getQueryFields = (source) => {
 };
 
 const getQuery = (source) => {
-  const name = source.name;
+  const { name } = source;
   const params = getQueryParams(source);
   const pagination = params.pagination || '';
 
@@ -102,7 +102,7 @@ const getSchemaTypeQuery = () => {
 };
 
 const getRootType = (response) => {
-  const data = response.data;
+  const { data } = response;
   // eslint-disable-next-line
   return data.data.__type;
 };
