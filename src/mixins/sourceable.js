@@ -53,7 +53,8 @@ export default {
           });
         }
 
-        const connector = assign({},
+        const connector = assign(
+          {},
           this.dataConnector,
           this.options.connectors[this.dataConnector.name],
         );

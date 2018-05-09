@@ -38,7 +38,7 @@ describe('connector', () => {
 
   it('should get source schema with options', (done) => {
     const source = connectorMock.sources.populationPerAge;
-    const options = connectorMock.options;
+    const { options } = connectorMock;
     connector.getSourceSchema(connectorMock, source, options).then((result) => {
       done();
       expect(result.schema).toBeTruthy();
