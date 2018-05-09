@@ -5,6 +5,8 @@
 [![npm](https://img.shields.io/npm/v/@nsoft/chameleon-sdk.svg)](https://www.npmjs.com/package/@nsoft/chameleon-sdk) 
 
 # chameleon-sdk
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/chmjs/chameleon-sdk.svg)](https://greenkeeper.io/)
 Chameleon Software Development Kit is a package for rapid development of Chameleon bundles. It also serves as an integral part of Chameleon Builder. This package is already used if you use [chameleon-bundle](https://github.com/chmjs/chameleon-bundle) for scaffolding bundle projects.
 
 ## Installing
