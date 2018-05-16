@@ -3,7 +3,18 @@ import elementable from './elementable';
 import bindable from './bindable';
 
 const localVue = createLocalVue();
+
+/*
+Fake store just to test dynamic
+reference resolve.
+*/
 localVue.prototype.$chameleon = {
+  app: {
+    pages: [
+      { name: 'Page A' },
+      { name: 'Page B' },
+    ],
+  },
   bindableElements: {
     element: {
       myDynamicProp: 'HelloBindable',
@@ -63,6 +74,12 @@ describe('bindable mixin', () => {
     const value = '=element.dataSource.myDynamicProp';
     const bindingValue = wrapper.vm.getBindingValue(value);
     expect(bindingValue).toEqual('HelloBindableSource');
+  });
+
+  it('resolves dynamic reference', () => {
+    const value = '=$app.pages';
+    const bindingValue = wrapper.vm.getBindingValue(value);
+    expect(bindingValue).toHaveLength(2);
   });
 
   it('resolves with empty registry', () => {
