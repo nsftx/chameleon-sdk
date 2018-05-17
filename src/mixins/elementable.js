@@ -90,10 +90,12 @@ export default {
     renderChildren() {
       const children = this.config.elements;
       return map(children, (child) => {
+        const key = child._schema ? child._schema.uid : uuid();
+
         const el = this.$createElement(
           this.getElementTag(child.type),
           {
-            key: `${child.type}_${uuid()}`,
+            key: `${child.type}_${key}`,
             staticClass: `${this.$options.name}-item`,
             props: {
               definition: child,
