@@ -18,18 +18,15 @@ export default {
     For source of binding use registry or entire store.
     If there is a $ reference then use store first.
     If there is no $ reference then look in bindableElements registry.
+    Cover both cases of usage. In Builder and in generated app.
     */
-    let source;
+    const isRegistryAvailable = !isNil(context.$store) && !isNil(context.$store.getters.registry);
+    let source = isRegistryAvailable ? context.$store.getters.registry : context.registry;
+
     if (startsWith(binding, '$')) {
-      /*
-      Fallback to registry or context for testing.
-      Context can also be any object passed (if not actuall context).
-      */
-      const hasStore = !isNil(context.$store);
-      source = hasStore ? context.$store.state : (context.registry || context);
       binding = binding.substring(1);
-    } else if (context.registry) {
-      source = context.registry.bindableElements;
+    } else {
+      source = source.bindableElements;
     }
 
     if (source) {
