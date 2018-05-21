@@ -1,4 +1,4 @@
-import { startsWith } from 'lodash';
+import { isNil, startsWith } from 'lodash';
 
 export default {
   /*
@@ -21,8 +21,12 @@ export default {
     */
     let source;
     if (startsWith(binding, '$')) {
-      // Fallback to registry or context for testing
-      source = context.$store || context.registry || context;
+      /*
+      Fallback to registry or context for testing.
+      Context can also be any object passed (if not actuall context).
+      */
+      const hasStore = !isNil(context.$store);
+      source = hasStore ? context.$store.state : (context.registry || context);
       binding = binding.substring(1);
     } else if (context.registry) {
       source = context.registry.bindableElements;
