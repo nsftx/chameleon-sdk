@@ -1,4 +1,4 @@
-import { isNil, startsWith } from 'lodash';
+import { isNil, isString, startsWith } from 'lodash';
 
 export default {
   /*
@@ -8,7 +8,7 @@ export default {
   Currently it only supports resolving references from store.
   */
   resolveDynamicValue(value, context) {
-    if (isNil(context) || !startsWith(value, '=')) {
+    if (isNil(context) || !isString(value) || !startsWith(value, '=')) {
       return value;
     }
 
