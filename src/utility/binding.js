@@ -8,7 +8,7 @@ export default {
   Currently it only supports resolving references from store.
   */
   resolveDynamicValue(value, context) {
-    if (!startsWith(value, '=')) {
+    if (isNil(context) || !startsWith(value, '=')) {
       return value;
     }
 
