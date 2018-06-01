@@ -1,5 +1,8 @@
-import { isNil } from 'lodash';
-import * as connectorTypes from './internal';
+import { assign, isNil } from 'lodash';
+import * as internalTypes from './internal';
+import * as externalTypes from './external';
+
+const connectorTypes = assign({}, internalTypes, externalTypes);
 
 const parseSourceData = (connector, source, options, data) => {
   const collection = data[source.name];
