@@ -128,8 +128,11 @@ export default {
       }
     },
   },
-  mounted() {
-    this.setReactions();
+  watch: {
+    reactions() {
+      this.removeReactions();
+      this.setReactions();
+    },
   },
   beforeDestroy() {
     this.removeReactions();
