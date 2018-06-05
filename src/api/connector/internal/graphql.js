@@ -106,6 +106,9 @@ const getSourceModel = (source) => {
 };
 
 export default {
+  changeSourceData(connector) {
+    throw new Error(`Method changeSourceData is not implemented on ${connector.name} connector!`);
+  },
   getSources(connector) {
     const url = `${connector.options.endpoint}/${connector.name}`;
     return http.post(url, {

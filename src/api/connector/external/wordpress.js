@@ -4,7 +4,7 @@ Use generic REST connector here when implemented.
 Path: /connectors/wordpress
 */
 import http from 'axios';
-import { assign } from 'lodash';
+import { assign, toLower } from 'lodash';
 import { getCommonMeta } from '../utility';
 
 const getBaseUrl = (connector) => {
@@ -12,7 +12,25 @@ const getBaseUrl = (connector) => {
   return url;
 };
 
+const getChangeMethod = (options) => {
+  const action = toLower(options.action);
+  switch (action) {
+    case 'delete':
+      return action;
+    default:
+      return 'post';
+  }
+};
+
 export default {
+  changeSourceData(connector, source, options) {
+    const url = `${getBaseUrl(connector)}/${source.name}`;
+    const method = getChangeMethod(options);
+    return http[method](url, assign(getCommonMeta(), options.payload)).then((response) => {
+      const result = response.data;
+      return result;
+    });
+  },
   getSources(connector) {
     const url = getBaseUrl(connector);
     return http.get(url, getCommonMeta()).then((response) => {

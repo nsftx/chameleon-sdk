@@ -22,7 +22,35 @@ const parseSourceData = (connector, source, options, data) => {
   return result;
 };
 
+const parseChangeSourceData = (connector, source, options, data) => {
+  const result = {
+    connector: {
+      name: connector.name,
+      type: connector.type,
+    },
+    name: source.name,
+    model: source.model,
+    schema: source.schema,
+    data,
+  };
+
+  return result;
+};
+
 export default {
+  changeSourceData(connector, source, options) {
+    /*
+    Options object should have `action` and `payload` properties.
+    Action is used to differentiate methods on connector backend API.
+    */
+    const opts = isNil(options) ? {} : options;
+    const connectorType = this.getConnectorType(connector);
+
+    return connectorType.changeSourceData(connector, source, opts).then((data) => {
+      const result = parseChangeSourceData(connector, source, opts, data);
+      return result;
+    });
+  },
   getConnectorType(connector) {
     const type = connectorTypes[connector.type];
     return type;
@@ -34,6 +62,7 @@ export default {
   getSourceData(connector, source, options) {
     const opts = isNil(options) ? {} : options;
     const connectorType = this.getConnectorType(connector);
+
     return connectorType.getSourceData(connector, source, opts).then((data) => {
       const result = parseSourceData(connector, source, opts, data);
       return result;
