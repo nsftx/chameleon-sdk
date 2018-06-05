@@ -52,7 +52,7 @@ const startAvailabilityInterval = (dependency, resolve, reject) => {
       reject();
       clearInterval(availabilityInterval);
     }
-  }, 5000);
+  }, 100);
 };
 
 const addDependency = (dependency, globals) => {
@@ -108,8 +108,8 @@ export default {
           // Start dependency intialization
           setFlag(dependency, 'loading', true);
           initDependencies(sources, dependency).then(() => {
-            resolve();
             setFlag(dependency, 'loading', false);
+            resolve();
           }).catch((error) => {
             // eslint-disable-next-line
             logger.warn('Script rejected', error);

@@ -1,12 +1,21 @@
-/*
-TODO: Mock api call.
-Do not call external http endpoint.
-*/
-import { createLocalVue, shallow } from '@vue/test-utils';
+import axiosMock from 'axios';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 import { connector } from '../api';
 import bindable from './bindable';
 import elementable from './elementable';
 import sourceable from './sourceable';
+
+axiosMock.get.mockImplementation(() => Promise.resolve({
+  data: [
+    { population: 2704659, age: '<5' },
+    { population: 4499890, age: '5-13' },
+    { population: 2159981, age: '14-17' },
+    { population: 3853788, age: '18-24' },
+    { population: 14106543, age: '25-44' },
+    { population: 8819342, age: '45-64' },
+    { population: 1712463, age: '≥65' },
+  ],
+}));
 
 const connectors = {
   local: {
@@ -47,7 +56,7 @@ const component = {
   },
 };
 
-let wrapper = shallow(component, {
+let wrapper = shallowMount(component, {
   localVue,
   propsData: {
     definition: {
@@ -98,12 +107,12 @@ describe('sourceable mixin', () => {
       expect(result.model).toBeTruthy();
       expect(result.schema instanceof Array).toBeTruthy();
       expect(result.items.length).toBeGreaterThan(0);
-      expect(result.items[0].ageMapped).toBeTruthy();
+      expect(result.items[0].ageMapped).toEqual('<5');
     });
   });
 
   it('sets dataSource reference', () => {
-    wrapper = shallow(component, {
+    wrapper = shallowMount(component, {
       localVue,
       propsData: {
         definition: {
@@ -117,7 +126,7 @@ describe('sourceable mixin', () => {
   });
 
   it('sets local dataSource', (done) => {
-    wrapper = shallow(component, {
+    wrapper = shallowMount(component, {
       localVue,
       propsData: {
         definition: {
