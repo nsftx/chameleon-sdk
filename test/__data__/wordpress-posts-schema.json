@@ -1,0 +1,69 @@
+{
+  "name": "posts",
+  "schema": [
+    {
+      "name": "id",
+      "type": "Number"
+    },
+    {
+      "name": "guid",
+      "type": "String"
+    },
+    {
+      "name": "slug",
+      "type": "String"
+    },
+    {
+      "name": "title",
+      "type": "String"
+    },
+    {
+      "name": "description",
+      "type": "String"
+    },
+    {
+      "name": "descriptionPlain",
+      "type": "String"
+    },
+    {
+      "name": "content",
+      "type": "String"
+    },
+    {
+      "name": "createdAt",
+      "type": "DateTime"
+    },
+    {
+      "name": "modifiedAt",
+      "type": "DateTime"
+    },
+    {
+      "name": "status",
+      "type": "String"
+    },
+    {
+      "name": "commentStatus",
+      "type": "String"
+    },
+    {
+      "name": "pingStatus",
+      "type": "String"
+    },
+    {
+      "name": "link",
+      "type": "String"
+    },
+    {
+      "name": "thumbnail",
+      "type": "String"
+    },
+    {
+      "name": "categories",
+      "type": "Array"
+    },
+    {
+      "name": "tags",
+      "type": "Array"
+    }
+  ]
+}

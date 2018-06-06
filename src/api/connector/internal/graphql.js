@@ -1,19 +1,6 @@
 import http from 'axios';
-import { each, find, isEmpty, isNil, map } from 'lodash';
-import { localStorage } from '../../../utility';
-
-const getMeta = () => {
-  const token = localStorage.getAuthToken();
-  const headers = {};
-
-  if (!isNil(token)) {
-    headers.authorization = `Bearer ${token}`;
-  }
-
-  return {
-    headers,
-  };
-};
+import { each, find, isEmpty, map } from 'lodash';
+import { getCommonMeta } from '../utility';
 
 const getQueryParams = (source) => {
   if (!isEmpty(source.params)) {
@@ -119,6 +106,9 @@ const getSourceModel = (source) => {
 };
 
 export default {
+  changeSourceData(connector) {
+    throw new Error(`Method changeSourceData is not implemented on ${connector.name} connector!`);
+  },
   getSources(connector) {
     const url = `${connector.options.endpoint}/${connector.name}`;
     return http.post(url, {
@@ -126,7 +116,7 @@ export default {
       variables: {
         name: 'Query',
       },
-    }, getMeta()).then((response) => {
+    }, getCommonMeta()).then((response) => {
       const data = getRootType(response);
       const sources = {};
 
@@ -162,7 +152,7 @@ export default {
     return http.post(url, {
       query: getQuery(source),
       variables: options.params,
-    }, getMeta()).then((response) => {
+    }, getCommonMeta()).then((response) => {
       const result = response.data.data;
       return result;
     });
@@ -174,7 +164,7 @@ export default {
       variables: {
         name: source.model,
       },
-    }, getMeta()).then((response) => {
+    }, getCommonMeta()).then((response) => {
       const data = getRootType(response);
       const schema = [];
 
