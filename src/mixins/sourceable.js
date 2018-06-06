@@ -85,23 +85,34 @@ export default {
       });
     },
     mapDataSourceItems(items) {
-      if (this.dataSource.schema) {
-        const hasMapping = !isNil(find(this.dataSource.schema, field => !isNil(field.mapName)));
+      /*
+      TODO:
+      Implement mapping for nested objects.
+      */
+      const { schema } = this.dataSource;
+
+      if (schema) {
+        const hasMapping = !isNil(find(schema, field => !isNil(field.mapName)));
         if (hasMapping) {
-          /*
-          TODO:
-          Implement mapping for nested objects.
-          */
+          const originalSuffix = '_$';
+          /* eslint no-param-reassign:"off" */
           return map(items, (item) => {
-            const mappedItem = item;
-            each(this.dataSource.schema, (field) => {
+            /*
+            To handle all kinds of mapping we are creating original
+            properties for each item. This is double loop and maybe
+            should be optimized once nesting is implemented.
+            */
+            each(schema, (field) => {
+              item[`${field.name}${originalSuffix}`] = item[field.name];
+            });
+
+            each(schema, (field) => {
               if (field.mapName) {
-                mappedItem[field.mapName] = item[field.name];
-                delete mappedItem[field.name];
+                item[field.mapName] = item[`${field.name}${originalSuffix}`];
               }
             });
 
-            return mappedItem;
+            return item;
           });
         }
       }

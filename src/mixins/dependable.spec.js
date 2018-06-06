@@ -1,4 +1,4 @@
-import { shallow } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import dependable from './dependable';
 
 const component = {
@@ -26,7 +26,7 @@ describe('dependable mixin', () => {
       },
     ];
 
-    wrapper = shallow(component);
+    wrapper = shallowMount(component);
     delete window.Quill;
   });
 

@@ -1,4 +1,4 @@
-import { createLocalVue, shallow } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 import elementable from './elementable';
 import bindable from './bindable';
 
@@ -42,7 +42,7 @@ const component = {
 let wrapper;
 describe('bindable mixin', () => {
   beforeEach(() => {
-    wrapper = shallow(component, {
+    wrapper = shallowMount(component, {
       localVue,
       propsData: {
         definition: {

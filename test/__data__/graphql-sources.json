@@ -1,0 +1,31 @@
+{
+  "data": {
+    "__type": {
+      "name": "Query",
+      "kind": "OBJECT",
+      "fields": [
+        {
+          "name": "noYesChoices",
+          "args": [],
+          "type": {
+            "name": "NoYesChoices",
+            "kind": "OBJECT",
+            "fields": [
+              {
+                "name": "items",
+                "type": {
+                  "name": null,
+                  "ofType": {
+                    "name": "NoYesChoice",
+                    "kind": "OBJECT"
+                  }
+                }
+              }
+            ],
+            "ofType": null
+          }
+        }
+      ]
+    }
+  }
+}

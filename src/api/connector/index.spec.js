@@ -1,8 +1,23 @@
-/*
-TODO: Mock api call.
-Do not call external http endpoint.
-*/
+import axiosMock from 'axios';
 import connector from './index';
+
+axiosMock.get.mockImplementation(() => Promise.resolve({
+  data: {
+    PopulationPerAge: {
+      name: 'PopulationPerAge',
+      schema: [
+        {
+          name: 'age',
+          type: 'String',
+        },
+        {
+          name: 'population',
+          type: 'Number',
+        },
+      ],
+    },
+  },
+}));
 
 const connectorMock = {
   name: 'local',

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { createLocalVue, shallow } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 import elementable from './elementable';
 import reactionable from './reactionable';
 
@@ -38,7 +38,7 @@ const component = {
   },
 };
 
-const wrapper = shallow(component, {
+const wrapper = shallowMount(component, {
   localVue,
   propsData: {
     definition: {
