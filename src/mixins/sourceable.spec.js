@@ -68,17 +68,19 @@ let wrapper = shallowMount(component, {
           name: 'local',
           type: 'internalLocal',
         },
+        /* We are switching property names to check mapping */
         schema: [
           {
             name: 'age',
             type: 'String',
             label: 'Age',
-            mapName: 'ageMapped',
+            mapName: 'population',
           },
           {
             name: 'population',
             type: 'Number',
             label: 'Population',
+            mapName: 'age',
           },
         ],
       },
@@ -102,12 +104,12 @@ describe('sourceable mixin', () => {
 
   it('loads data from remote', (done) => {
     wrapper.vm.loadConnectorData().then((result) => {
-      done();
       expect(result.name).toBeTruthy();
       expect(result.model).toBeTruthy();
       expect(result.schema instanceof Array).toBeTruthy();
       expect(result.items.length).toBeGreaterThan(0);
-      expect(result.items[0].ageMapped).toEqual('<5');
+      expect(result.items[0].population).toEqual('<5');
+      done();
     });
   });
 
