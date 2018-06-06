@@ -1,0 +1,22 @@
+{
+  "sources": {
+    "categories": {
+      "name": "categories",
+      "model": "Category"
+    },
+    "posts": {
+      "name": "posts",
+      "model": "Post",
+      "params": {
+        "id": {
+          "name": "id",
+          "type": "Number"
+        },
+        "title": {
+          "name": "title",
+          "type": "String"
+        }
+      }
+    }
+  }
+}

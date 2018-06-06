@@ -54,6 +54,9 @@
       "lcov",
       "json"
     ],
+    "moduleNameMapper": {
+      "data(.*)$": "<rootDir>/test/__data__/$1"
+    },
     "setupFiles": [
       "jest-localstorage-mock"
     ],
