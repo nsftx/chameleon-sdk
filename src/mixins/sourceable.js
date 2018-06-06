@@ -97,7 +97,9 @@ export default {
             each(this.dataSource.schema, (field) => {
               if (field.mapName) {
                 mappedItem[field.mapName] = item[field.name];
-                delete mappedItem[field.name];
+                if (field.mapName !== field.name) {
+                  delete mappedItem[field.name];
+                }
               }
             });
 
