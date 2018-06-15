@@ -1,11 +1,5 @@
-import {
-  cloneDeep,
-  each,
-  isArray,
-  isNil,
-} from 'lodash';
-
-import { logger } from '../utility';
+import { cloneDeep, each, isArray, isNil } from 'lodash';
+import { logger, mapping } from '../utility';
 
 export default {
   data() {
@@ -85,21 +79,12 @@ export default {
           bundle inside meta of action. If schema is not
           defined user would have to know payload structure
           and bind manually.
-
-          TODO:
-          Implement mapping of nested objects.
           */
-          const outputPayload = payload;
-          if (isArray(reaction.schema)) {
-            each(reaction.schema, (field) => {
-              if (!isNil(field.mapName)) {
-                outputPayload[field.mapName] = outputPayload[field.name];
-                delete outputPayload[field.name];
-              }
-            });
-          }
-
-          return method.call(this, outputPayload, reaction.data);
+          return method.call(
+            this,
+            mapping.mapWithSchema(reaction.schema, payload),
+            reaction.data,
+          );
         };
 
         this.eventBusListeners.push({
