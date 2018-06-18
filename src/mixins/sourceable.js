@@ -1,12 +1,5 @@
-import {
-  assign,
-  isNil,
-  isString,
-  find,
-  map,
-  each,
-  merge,
-} from 'lodash';
+import { assign, isNil, isString, merge } from 'lodash';
+import { mapping } from '../utility';
 
 export default {
   data() {
@@ -85,39 +78,8 @@ export default {
       });
     },
     mapDataSourceItems(items) {
-      /*
-      TODO:
-      Implement mapping for nested objects.
-      */
       const { schema } = this.dataSource;
-
-      if (schema) {
-        const hasMapping = !isNil(find(schema, field => !isNil(field.mapName)));
-        if (hasMapping) {
-          const originalSuffix = '_$';
-          /* eslint no-param-reassign:"off" */
-          return map(items, (item) => {
-            /*
-            To handle all kinds of mapping we are creating original
-            properties for each item. This is double loop and maybe
-            should be optimized once nesting is implemented.
-            */
-            each(schema, (field) => {
-              item[`${field.name}${originalSuffix}`] = item[field.name];
-            });
-
-            each(schema, (field) => {
-              if (field.mapName) {
-                item[field.mapName] = item[`${field.name}${originalSuffix}`];
-              }
-            });
-
-            return item;
-          });
-        }
-      }
-
-      return items;
+      return mapping.mapWithSchema(schema, items);
     },
   },
 };
