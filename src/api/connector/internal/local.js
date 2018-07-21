@@ -15,7 +15,8 @@ export default {
     });
   },
   getSourceData(connector, source) {
-    const url = `${connector.options.endpoint}/${source.name}.json`;
+    const connectorType = connector.type;
+    const url = `${connectorType.options.endpoint}/${source.name}.json`;
     return http.get(url).then((response) => {
       const result = response.data;
       return {

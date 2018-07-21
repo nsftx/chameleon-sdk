@@ -9,6 +9,7 @@ const parseSourceData = (connector, source, options, data) => {
 
   const result = {
     connector: {
+      id: connector.id,
       name: connector.name,
       type: connector.type,
     },
@@ -56,12 +57,12 @@ export default {
     return type;
   },
   getSources(connector) {
-    const connectorType = this.getConnectorType(connector);
-    return connectorType.getSources(connector);
+    const connectorType = this.getConnectorType(connector.type);
+    return connectorType.getSources(connector.type);
   },
   getSourceData(connector, source, options) {
     const opts = isNil(options) ? {} : options;
-    const connectorType = this.getConnectorType(connector);
+    const connectorType = this.getConnectorType(connector.type);
 
     return connectorType.getSourceData(connector, source, opts).then((data) => {
       const result = parseSourceData(connector, source, opts, data);
@@ -69,7 +70,7 @@ export default {
     });
   },
   getSourceSchema(connector, source) {
-    const connectorType = this.getConnectorType(connector);
-    return connectorType.getSourceSchema(connector, source);
+    const connectorType = this.getConnectorType(connector.type);
+    return connectorType.getSourceSchema(connector.type, source);
   },
 };

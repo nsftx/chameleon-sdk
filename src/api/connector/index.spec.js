@@ -20,17 +20,23 @@ axiosMock.get.mockImplementation(() => Promise.resolve({
 }));
 
 const connectorMock = {
-  name: 'local',
-  type: 'internalLocal',
-  description: 'Local Connector',
-  disabled: false,
-  options: {
-    endpoint: 'https://chameleon.nsoft.com/static/data',
+  name: 'My local',
+  id: '1334',
+  type: {
+    name: 'local',
+    type: 'internalLocal',
+    description: 'Local Connector',
+    disabled: false,
+    options: {
+      endpoint: 'https://chameleon.nsoft.com/static/data',
+    },
+    schema: null,
+    multipleInstances: false,
   },
   sources: {
     populationPerAge: {
       name: 'populationPerAge',
-      model: 'PopulationPerAge',
+      model: 'populationPerAge',
     },
   },
 };

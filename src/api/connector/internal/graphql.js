@@ -34,7 +34,7 @@ const getQuery = (source) => {
   const params = getQueryParams(source);
   const pagination = params.pagination || '';
 
-  return `query ${name}${params.args} { 
+  return `query ${name}${params.args} {
     ${name}${params.bindings} {
       items {
         ${getQueryFields(source)}
@@ -148,7 +148,8 @@ export default {
     });
   },
   getSourceData(connector, source, options) {
-    const url = `${connector.options.endpoint}/${connector.name}`;
+    const connectorType = connector.type;
+    const url = `${connectorType.options.endpoint}/${connectorType.name}`;
     return http.post(url, {
       query: getQuery(source),
       variables: options.params,

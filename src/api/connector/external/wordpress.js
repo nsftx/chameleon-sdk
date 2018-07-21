@@ -39,7 +39,7 @@ export default {
     });
   },
   getSourceData(connector, source, options) {
-    const url = `${getBaseUrl(connector)}/${source.name}`;
+    const url = `${getBaseUrl(connector.type)}/${source.name}`;
     return http.get(url, assign(getCommonMeta(), {
       params: options.params,
     })).then((response) => {
