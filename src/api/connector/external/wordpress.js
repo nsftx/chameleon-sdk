@@ -24,9 +24,9 @@ const getChangeMethod = (options) => {
 
 export default {
   changeSourceData(connector, source, options) {
-    const url = `${getBaseUrl(connector)}/${source.name}`;
+    const url = `${getBaseUrl(connector.type)}/${source.name}`;
     const method = getChangeMethod(options);
-    return http[method](url, assign(getCommonMeta(), options.payload)).then((response) => {
+    return http[method](url, assign(getCommonMeta(connector), options.payload)).then((response) => {
       const result = response.data;
       return result;
     });
@@ -40,7 +40,7 @@ export default {
   },
   getSourceData(connector, source, options) {
     const url = `${getBaseUrl(connector.type)}/${source.name}`;
-    return http.get(url, assign(getCommonMeta(), {
+    return http.get(url, assign(getCommonMeta(connector), {
       params: options.params,
     })).then((response) => {
       const result = response.data;

@@ -153,7 +153,7 @@ export default {
     return http.post(url, {
       query: getQuery(source),
       variables: options.params,
-    }, getCommonMeta()).then((response) => {
+    }, getCommonMeta(connector)).then((response) => {
       const result = response.data.data;
       return result;
     });
