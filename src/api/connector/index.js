@@ -58,7 +58,7 @@ export default {
   },
   getSources(connector) {
     const connectorType = this.getConnectorType(connector.type);
-    return connectorType.getSources(connector.type);
+    return connectorType.getSources(connector);
   },
   getSourceData(connector, source, options) {
     const opts = isNil(options) ? {} : options;
@@ -71,6 +71,6 @@ export default {
   },
   getSourceSchema(connector, source) {
     const connectorType = this.getConnectorType(connector.type);
-    return connectorType.getSourceSchema(connector.type, source);
+    return connectorType.getSourceSchema(connector, source);
   },
 };

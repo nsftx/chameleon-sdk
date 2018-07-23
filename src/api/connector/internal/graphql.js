@@ -110,13 +110,14 @@ export default {
     throw new Error(`Method changeSourceData is not implemented on ${connector.name} connector!`);
   },
   getSources(connector) {
-    const url = `${connector.options.endpoint}/${connector.name}`;
+    const connectorType = connector.type;
+    const url = `${connectorType.options.endpoint}/${connectorType.name}`;
     return http.post(url, {
       query: getSchemaTypeQuery(),
       variables: {
         name: 'Query',
       },
-    }, getCommonMeta()).then((response) => {
+    }, getCommonMeta(connector)).then((response) => {
       const data = getRootType(response);
       const sources = {};
 
@@ -159,13 +160,14 @@ export default {
     });
   },
   getSourceSchema(connector, source) {
-    const url = `${connector.options.endpoint}/${connector.name}`;
+    const connectorType = connector.type;
+    const url = `${connectorType.options.endpoint}/${connectorType.name}`;
     return http.post(url, {
       query: getSchemaTypeQuery(),
       variables: {
         name: source.model,
       },
-    }, getCommonMeta()).then((response) => {
+    }, getCommonMeta(connector)).then((response) => {
       const data = getRootType(response);
       const schema = [];
 

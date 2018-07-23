@@ -33,7 +33,7 @@ describe('wordpress connector', () => {
     }));
 
     const options = {};
-    wordpress.getSources(connectorMock.type, options).then((result) => {
+    wordpress.getSources(connectorMock, options).then((result) => {
       expect(result).toEqual(sourcesMock.sources);
       done();
     });
@@ -45,7 +45,7 @@ describe('wordpress connector', () => {
     }));
 
     const options = {};
-    wordpress.getSourceSchema(connectorMock.type, options).then((result) => {
+    wordpress.getSourceSchema(connectorMock, options).then((result) => {
       expect(result).toEqual(postsSchemaMock);
       done();
     });

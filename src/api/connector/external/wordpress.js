@@ -32,8 +32,8 @@ export default {
     });
   },
   getSources(connector) {
-    const url = getBaseUrl(connector);
-    return http.get(url, getCommonMeta()).then((response) => {
+    const url = getBaseUrl(connector.type);
+    return http.get(url, getCommonMeta(connector)).then((response) => {
       const result = response.data;
       return result.sources;
     });
@@ -48,8 +48,8 @@ export default {
     });
   },
   getSourceSchema(connector, source) {
-    const url = `${getBaseUrl(connector)}/${source.name}/schema`;
-    return http.get(url, getCommonMeta()).then((response) => {
+    const url = `${getBaseUrl(connector.type)}/${source.name}/schema`;
+    return http.get(url, getCommonMeta(connector)).then((response) => {
       const result = response.data;
       return result;
     });
