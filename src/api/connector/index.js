@@ -11,7 +11,7 @@ const parseSourceData = (connector, source, options, data) => {
     connector: {
       id: connector.id,
       name: connector.name,
-      type: connector.type,
+      type: connector.type.name,
     },
     name: source.name,
     model: source.model,
@@ -26,8 +26,9 @@ const parseSourceData = (connector, source, options, data) => {
 const parseChangeSourceData = (connector, source, options, data) => {
   const result = {
     connector: {
+      id: connector.id,
       name: connector.name,
-      type: connector.type,
+      type: connector.type.name,
     },
     name: source.name,
     model: source.model,
