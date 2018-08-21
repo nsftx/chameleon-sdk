@@ -23,7 +23,7 @@ export default {
 
       return {
         [source.name]: {
-          items: map(result, (m) => pick(m, columns)),
+          items: map(result, m => pick(m, columns)),
         },
       };
     });
