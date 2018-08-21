@@ -5,6 +5,7 @@ schema and data over time.
 */
 
 import http from 'axios';
+import { map, pick } from 'lodash';
 
 export default {
   getSources(connector) {
@@ -18,9 +19,11 @@ export default {
     const url = `${connector.type.options.endpoint}/${source.name}.json`;
     return http.get(url).then((response) => {
       const result = response.data;
+      const columns = map(source.schema, n => n.name);
+
       return {
         [source.name]: {
-          items: result,
+          items: map(result, m => pick(m, columns)),
         },
       };
     });
