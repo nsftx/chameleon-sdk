@@ -1,5 +1,14 @@
-import { cloneDeep, each, isArray, isNil } from 'lodash';
-import { logger, mapping } from '../utility';
+import {
+  cloneDeep,
+  each,
+  isArray,
+  isNil,
+} from 'lodash';
+
+import {
+  logger,
+  mapping,
+} from '../utility';
 
 export default {
   data() {

@@ -1,4 +1,10 @@
-import { assign, isNil, isString, merge } from 'lodash';
+import {
+  assign,
+  isNil,
+  isString,
+  merge,
+} from 'lodash';
+
 import { mapping } from '../utility';
 
 export default {
@@ -36,9 +42,9 @@ export default {
     loadConnectorData() {
       return new Promise((resolve) => {
         if (
-          this.isDataSourceLocal ||
-          !this.options.connectors ||
-          !this.isDataSourceRemoteValid
+          this.isDataSourceLocal
+          || !this.options.connectors
+          || !this.isDataSourceRemoteValid
         ) {
           resolve({
             items: isNil(this.dataSource) ? null : this.mapDataSourceItems(this.dataSource.items),
@@ -49,7 +55,7 @@ export default {
         const connector = assign(
           {},
           this.dataConnector,
-          this.options.connectors[this.dataConnector.name],
+          this.options.connectors[this.dataConnector.id],
         );
 
         const source = merge({}, {

@@ -18,18 +18,24 @@ axiosMock.get.mockImplementation(() => Promise.resolve({
 }));
 
 const connectors = {
-  local: {
-    name: 'local',
-    type: 'internalLocal',
-    description: 'Local Connector',
-    disabled: false,
-    options: {
-      endpoint: 'https://chameleon.nsoft.com/static/data',
+  1334: {
+    name: 'My local',
+    id: '1334',
+    type: {
+      name: 'local',
+      type: 'internalLocal',
+      description: 'Local Connector',
+      disabled: false,
+      options: {
+        endpoint: 'https://chameleon.nsoft.com/static/data',
+      },
+      schema: null,
+      multipleInstances: false,
     },
     sources: {
       populationPerAge: {
         name: 'populationPerAge',
-        model: 'PopulationPerAge',
+        model: 'populationPerAge',
       },
     },
   },
@@ -65,8 +71,19 @@ let wrapper = shallowMount(component, {
         name: 'populationPerAge',
         model: 'PopulationPerAge',
         connector: {
-          name: 'local',
-          type: 'internalLocal',
+          id: '1334',
+          name: 'My local',
+          type: {
+            name: 'local',
+            type: 'internalLocal',
+            description: 'Local Connector',
+            disabled: false,
+            options: {
+              endpoint: 'https://chameleon.nsoft.com/static/data',
+            },
+            schema: null,
+            multipleInstances: false,
+          },
         },
         /* We are switching property names to check mapping */
         schema: [
@@ -99,7 +116,7 @@ describe('sourceable mixin', () => {
   });
 
   it('sets exact dataConnector', () => {
-    expect(wrapper.vm.dataConnector.type).toEqual('internalLocal');
+    expect(wrapper.vm.dataConnector.type.type).toEqual('internalLocal');
   });
 
   it('loads data from remote', (done) => {

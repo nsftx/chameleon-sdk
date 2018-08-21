@@ -1,5 +1,12 @@
 import http from 'axios';
-import { each, find, isEmpty, map } from 'lodash';
+
+import {
+  each,
+  find,
+  isEmpty,
+  map,
+} from 'lodash';
+
 import { getCommonMeta } from '../utility';
 
 const getQueryParams = (source) => {
@@ -34,7 +41,7 @@ const getQuery = (source) => {
   const params = getQueryParams(source);
   const pagination = params.pagination || '';
 
-  return `query ${name}${params.args} { 
+  return `query ${name}${params.args} {
     ${name}${params.bindings} {
       items {
         ${getQueryFields(source)}
@@ -110,13 +117,14 @@ export default {
     throw new Error(`Method changeSourceData is not implemented on ${connector.name} connector!`);
   },
   getSources(connector) {
-    const url = `${connector.options.endpoint}/${connector.name}`;
+    const connectorType = connector.type;
+    const url = `${connectorType.options.endpoint}/${connectorType.name}`;
     return http.post(url, {
       query: getSchemaTypeQuery(),
       variables: {
         name: 'Query',
       },
-    }, getCommonMeta()).then((response) => {
+    }, getCommonMeta(connector)).then((response) => {
       const data = getRootType(response);
       const sources = {};
 
@@ -148,23 +156,25 @@ export default {
     });
   },
   getSourceData(connector, source, options) {
-    const url = `${connector.options.endpoint}/${connector.name}`;
+    const connectorType = connector.type;
+    const url = `${connectorType.options.endpoint}/${connectorType.name}`;
     return http.post(url, {
       query: getQuery(source),
       variables: options.params,
-    }, getCommonMeta()).then((response) => {
+    }, getCommonMeta(connector)).then((response) => {
       const result = response.data.data;
       return result;
     });
   },
   getSourceSchema(connector, source) {
-    const url = `${connector.options.endpoint}/${connector.name}`;
+    const connectorType = connector.type;
+    const url = `${connectorType.options.endpoint}/${connectorType.name}`;
     return http.post(url, {
       query: getSchemaTypeQuery(),
       variables: {
         name: source.model,
       },
-    }, getCommonMeta()).then((response) => {
+    }, getCommonMeta(connector)).then((response) => {
       const data = getRootType(response);
       const schema = [];
 
