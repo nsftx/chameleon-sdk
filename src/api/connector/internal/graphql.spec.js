@@ -4,11 +4,13 @@ import sourcesMock from 'data/graphql-sources.json';
 import graphql from './graphql';
 
 const connectorMock = {
-  name: 'chameleon',
-  type: 'graphql',
-  disabled: false,
-  options: {
-    endpoint: null,
+  type: {
+    name: 'chameleon',
+    type: 'graphql',
+    disabled: false,
+    options: {
+      endpoint: null,
+    },
   },
 };
 

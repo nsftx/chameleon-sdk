@@ -49,7 +49,7 @@ export default {
         const connector = assign(
           {},
           this.dataConnector,
-          this.options.connectors[this.dataConnector.name],
+          this.options.connectors[this.dataConnector.id],
         );
 
         const source = merge({}, {

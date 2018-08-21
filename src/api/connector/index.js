@@ -9,8 +9,9 @@ const parseSourceData = (connector, source, options, data) => {
 
   const result = {
     connector: {
+      id: connector.id,
       name: connector.name,
-      type: connector.type,
+      type: connector.type.name,
     },
     name: source.name,
     model: source.model,
@@ -25,8 +26,9 @@ const parseSourceData = (connector, source, options, data) => {
 const parseChangeSourceData = (connector, source, options, data) => {
   const result = {
     connector: {
+      id: connector.id,
       name: connector.name,
-      type: connector.type,
+      type: connector.type.name,
     },
     name: source.name,
     model: source.model,
@@ -56,12 +58,12 @@ export default {
     return type;
   },
   getSources(connector) {
-    const connectorType = this.getConnectorType(connector);
+    const connectorType = this.getConnectorType(connector.type);
     return connectorType.getSources(connector);
   },
   getSourceData(connector, source, options) {
     const opts = isNil(options) ? {} : options;
-    const connectorType = this.getConnectorType(connector);
+    const connectorType = this.getConnectorType(connector.type);
 
     return connectorType.getSourceData(connector, source, opts).then((data) => {
       const result = parseSourceData(connector, source, opts, data);
@@ -69,7 +71,7 @@ export default {
     });
   },
   getSourceSchema(connector, source) {
-    const connectorType = this.getConnectorType(connector);
+    const connectorType = this.getConnectorType(connector.type);
     return connectorType.getSourceSchema(connector, source);
   },
 };

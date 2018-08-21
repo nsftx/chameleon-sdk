@@ -6,11 +6,15 @@ import postsMock from 'data/wordpress-posts.json';
 import wordpress from './wordpress';
 
 const connectorMock = {
-  name: 'wordpress',
-  type: 'rest',
-  disabled: false,
-  options: {
-    endpoint: null,
+  id: '1234',
+  name: 'Test Wordpress',
+  type: {
+    name: 'wordpress',
+    type: 'rest',
+    disabled: false,
+    options: {
+      endpoint: null,
+    },
   },
 };
 
