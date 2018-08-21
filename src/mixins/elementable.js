@@ -3,7 +3,13 @@ This mixin is shared by all components.
 Do not place any component specific logic here!
 */
 import { v4 } from 'uuid';
-import { assign, cloneDeep, map } from 'lodash';
+
+import {
+  assign,
+  cloneDeep,
+  isNil,
+  map,
+} from 'lodash';
 
 const uuid = () => v4();
 
@@ -63,9 +69,12 @@ export default {
     */
     getElementTag(type) {
       const separatorIndex = type.indexOf('-');
+
       if (separatorIndex > -1 && separatorIndex <= 2) {
         return type;
-      } else if (this.$options.namespace) {
+      }
+
+      if (!isNil(this.$options.namespace)) {
         return `${this.$options.namespace}${type}`;
       }
 

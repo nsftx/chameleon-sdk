@@ -1,4 +1,10 @@
-import { each, find, isArray, isNil, map } from 'lodash';
+import {
+  each,
+  find,
+  isArray,
+  isNil,
+  map,
+} from 'lodash';
 
 const originalSuffix = '_$';
 
@@ -31,9 +37,9 @@ export default {
       const hasMapping = !isNil(find(schema, field => !isNil(field.mapName)));
 
       if (hasMapping) {
-        return isArray(source) ?
-          map(source, item => mapItem(schema, item)) :
-          mapItem(schema, source);
+        return isArray(source)
+          ? map(source, item => mapItem(schema, item))
+          : mapItem(schema, source);
       }
     }
 
