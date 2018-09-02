@@ -101,7 +101,6 @@ describe('reactionable mixin', () => {
     expect(wrapper.vm.myActionResult).toEqual({
       payload: {
         field: true,
-        field_$: true,
         mapField: true,
       },
       data: {

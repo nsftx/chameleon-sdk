@@ -1,4 +1,5 @@
 import {
+  clone,
   each,
   find,
   isArray,
@@ -8,16 +9,24 @@ import {
 
 const originalSuffix = '_$';
 
+/*
+There is a lot of cloning here to handle mapping.
+When implementing nesting we need to use cloneDeep.
+This method should be optimized if possible as it
+would be slow on large datasets. Test performance.
+*/
 const mapItem = (schema, item) => {
   /* eslint no-param-reassign:"off" */
   each(schema, (field) => {
-    item[`${field.name}${originalSuffix}`] = item[field.name];
+    item[`${field.name}${originalSuffix}`] = clone(item[field.name]);
   });
 
   each(schema, (field) => {
     if (field.mapName) {
-      item[field.mapName] = item[`${field.name}${originalSuffix}`];
+      item[field.mapName] = clone(item[`${field.name}${originalSuffix}`]);
     }
+
+    delete item[`${field.name}${originalSuffix}`];
   });
 
   return item;
