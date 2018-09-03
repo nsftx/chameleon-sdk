@@ -1,4 +1,5 @@
 import axiosMock from 'axios';
+import { keys } from 'lodash';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import { connector } from '../api';
 import bindable from './bindable';
@@ -7,13 +8,13 @@ import sourceable from './sourceable';
 
 axiosMock.get.mockImplementation(() => Promise.resolve({
   data: [
-    { population: 2704659, age: '<5' },
-    { population: 4499890, age: '5-13' },
-    { population: 2159981, age: '14-17' },
-    { population: 3853788, age: '18-24' },
-    { population: 14106543, age: '25-44' },
-    { population: 8819342, age: '45-64' },
-    { population: 1712463, age: '≥65' },
+    { population: 2704659, age: '<5', active: true },
+    { population: 4499890, age: '5-13', active: true },
+    { population: 2159981, age: '14-17', active: true },
+    { population: 3853788, age: '18-24', active: false },
+    { population: 14106543, age: '25-44', active: false },
+    { population: 8819342, age: '45-64', active: true },
+    { population: 1712463, age: '≥65', active: true },
   ],
 }));
 
@@ -99,6 +100,11 @@ let wrapper = shallowMount(component, {
             label: 'Population',
             mapName: 'age',
           },
+          {
+            name: 'active',
+            type: 'Boolean',
+            label: 'Active',
+          },
         ],
       },
     },
@@ -124,8 +130,11 @@ describe('sourceable mixin', () => {
       expect(result.name).toBeTruthy();
       expect(result.model).toBeTruthy();
       expect(result.schema instanceof Array).toBeTruthy();
+      expect(result.schema[1].mapName).toEqual('age');
+      expect(result.schema[2].mapName).toBeUndefined();
       expect(result.items.length).toBeGreaterThan(0);
       expect(result.items[0].population).toEqual('<5');
+      expect(keys(result.items[0]).length).toEqual(3);
       done();
     });
   });
