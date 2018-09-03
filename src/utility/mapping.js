@@ -22,8 +22,15 @@ const mapItem = (schema, item) => {
   });
 
   each(schema, (field) => {
+    let isSwitch = false;
+
     if (field.mapName) {
+      isSwitch = !isNil(item[field.mapName]);
       item[field.mapName] = clone(item[`${field.name}${originalSuffix}`]);
+
+      if (!isSwitch) {
+        delete item[field.name];
+      }
     }
 
     delete item[`${field.name}${originalSuffix}`];

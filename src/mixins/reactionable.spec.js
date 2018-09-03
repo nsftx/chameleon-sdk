@@ -100,7 +100,6 @@ describe('reactionable mixin', () => {
     expect(spy).toHaveBeenCalled();
     expect(wrapper.vm.myActionResult).toEqual({
       payload: {
-        field: true,
         mapField: true,
       },
       data: {
