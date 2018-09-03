@@ -130,6 +130,8 @@ describe('sourceable mixin', () => {
       expect(result.name).toBeTruthy();
       expect(result.model).toBeTruthy();
       expect(result.schema instanceof Array).toBeTruthy();
+      expect(result.schema[1].mapName).toEqual('age');
+      expect(result.schema[2].mapName).toBeUndefined();
       expect(result.items.length).toBeGreaterThan(0);
       expect(result.items[0].population).toEqual('<5');
       expect(keys(result.items[0]).length).toEqual(3);
