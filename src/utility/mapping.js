@@ -31,6 +31,8 @@ const mapItem = (schema, item) => {
       if (!isSwitch) {
         delete item[field.name];
       }
+    } else {
+      field.mapName = field.name;
     }
 
     delete item[`${field.name}${originalSuffix}`];
