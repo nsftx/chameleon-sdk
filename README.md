@@ -35,7 +35,7 @@ Apply mixins to get out of the box functionality for bundle and interaction with
 
 ### Utility
 
-Module for commom utility functions that are used internally or can be used in third-party bundle:
+Module for common utility functions that are used internally or can be used in third-party bundle:
 
 - `localStorage`: Writing and reading data from localStorage
 
