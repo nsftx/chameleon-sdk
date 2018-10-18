@@ -35,6 +35,134 @@ Apply mixins to get out of the box functionality for bundle and interaction with
 
 ### Utility
 
-Module for commom utility functions that are used internally or can be used in third-party bundle:
+Module for common utility functions that are used internally or can be used in third-party bundle:
 
 - `localStorage`: Writing and reading data from localStorage
+
+### Implementing RESTful connector
+
+To create compatible RESTful API that can be used in Chameleon system, API must create four methods that conform to methods currently used in our SDK:
+
+- getSources
+- getSourceSchema
+- getSourceData
+- changeSourceData
+
+#### getSources
+
+Example path: GET `/sources` 
+
+```json
+{
+  "sources": {
+    "categories": {
+      "name": "categories",
+      "model": "Category"
+    },
+    "posts": {
+      "name": "posts",
+      "model": "Post",
+      "params": {
+        "id": {
+          "name": "id",
+          "type": "Number"
+        },
+        "title": {
+          "name": "title",
+          "type": "String"
+        }
+      }
+    }
+  }
+}
+```
+
+#### getSourceSchema
+
+Example path: GET `/sources/categories/schema` 
+
+```json
+{
+  "source": {
+    "name": "categories",
+    "schema": [
+      {
+        "name": "id",
+        "type": "Number"
+      },
+      {
+        "name": "count",
+        "type": "Count"
+      },
+      {
+        "name": "title",
+        "type": "String"
+      },
+      {
+        "name": "description",
+        "type": "String"
+      },
+      {
+        "name": "link",
+        "type": "String"
+      },
+      {
+        "name": "slug",
+        "type": "String"
+      }
+    ]
+  }
+}
+```
+
+#### getSourceData
+
+Example path: GET `/sources/categories` 
+
+```json
+{
+  "categories": {
+    "items": [
+      {
+        "id": 2,
+        "count": 5,
+        "title": "Rants",
+        "description": "Random rants",
+        "link": "http://my.com/category/rants",
+        "slug": "rants"
+      },
+      {
+        "id": 1,
+        "count": 4,
+        "title": "Uncategorized",
+        "description": "",
+        "link": "http://my.com/category/uncategorized",
+        "slug": "uncategorized"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "pageSize": 10,
+      "totalPages": 1,
+      "totalResults": 2
+    }
+  }
+}
+```
+
+#### changeSourceData
+
+Example path: POST `/sources/categories` 
+
+```json
+{
+  "Category": {
+    "id": 2,
+    "count": 5,
+    "title": "Rants",
+    "description": "Random rants",
+    "link": "http://my.com/category/rants",
+    "slug": "rants"
+  }
+}
+```
