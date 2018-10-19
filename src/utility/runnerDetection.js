@@ -20,7 +20,7 @@ export default {
     const runner = window[RUNNER_NAME];
 
     if (isNil(runner)) {
-      logger.warn('ChameleonRunner detected but has nil value.');
+      logger.warn('ChameleonRunner detected but has nullish value.');
       return false;
     }
 
