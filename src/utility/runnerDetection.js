@@ -1,7 +1,7 @@
 /* eslint no-prototype-builtins: "off" */
 
 import { isNil } from 'lodash';
-import { logger } from '@/utility';
+import logger from './logger';
 
 const RUNNER_NAME = 'ChameleonRunner';
 
