@@ -20,11 +20,11 @@ export default {
     const runner = window[RUNNER_NAME];
 
     if (isNil(runner)) {
-      logger.warn('ChameleonRunner detected but has nullish value.');
+      logger.warn('ChameleonRunner detected but has nullish value.', runner);
       return false;
     }
 
-    logger.info('ChameleonRunner detected.');
+    logger.info('ChameleonRunner detected.', runner);
     return runner;
   },
 };
