@@ -5,6 +5,8 @@ import logger from './logger';
 
 const RUNNER_NAME = 'ChameleonRunner';
 
+const validateRunner = runner => typeof runner.sendMessage === 'function';
+
 export default {
   /*
   Detects is app running inside runner device.
@@ -21,6 +23,11 @@ export default {
 
     if (isNil(runner)) {
       logger.warn('ChameleonRunner detected but has nullish value.', runner);
+      return false;
+    }
+
+    if (!validateRunner(runner)) {
+      logger.warn('ChameleonRunner detected but is missing sendMessage method.', runner);
       return false;
     }
 
