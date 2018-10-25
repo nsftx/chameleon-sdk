@@ -7,7 +7,6 @@ import { v4 } from 'uuid';
 import {
   assign,
   cloneDeep,
-  isNil,
   map,
 } from 'lodash';
 
@@ -77,12 +76,8 @@ export default {
       if (separatorIndex > -1 && separatorIndex <= 2) {
         return type;
       }
-
-      if (!isNil(this.$options.namespace)) {
-        return `${this.$options.namespace}${type}`;
-      }
-
-      return type;
+      const namespace = this.$options.namespace || 'c-';
+      return `${namespace}${type}`;
     },
     /*
     Generates data attributes needed
