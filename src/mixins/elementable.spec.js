@@ -92,7 +92,7 @@ describe('elementable mixin', () => {
 
     const tag = 'table';
     const elementTag = wrapper.vm.getElementTag(tag);
-    expect(elementTag).toEqual(tag);
+    expect(elementTag).toEqual(`c-${tag}`);
   });
 
   it('renders children', () => {
