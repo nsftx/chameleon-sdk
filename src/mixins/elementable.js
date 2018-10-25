@@ -19,6 +19,10 @@ export default {
       type: Object,
       required: true,
     },
+    unselectable: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     schema() {
