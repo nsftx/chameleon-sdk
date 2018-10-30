@@ -12,6 +12,18 @@ const getBaseBlueprintUrl = (connectorOptions, connectorType) => {
   return url;
 };
 
+// Attach necessary data for READ implementation
+const formatViewModel = (viewModel, dataPackageId) => {
+  const viewData = {
+    id: viewModel.id,
+    name: viewModel.name,
+    dataPackage: dataPackageId,
+    record: viewModel.rootRecordId,
+  };
+
+  return viewData;
+};
+
 export default {
   changeSourceData() {
   },
@@ -22,21 +34,12 @@ export default {
     // TODO: Change implementation after https://github.com/chmjs/ride-storage-blueprint/issues/40
     return http.get(`${baseUrl}/data-packages`).then((response) => {
       const dataPackage = response.data.dataPackages[0];
-      const latestSchemaUrl = `${baseUrl}/data-packages/${dataPackage.id}/schema-versions/latest`;
+      const latestSchemaUrl = `${baseUrl}/data-packages/${dataPackage.id}/schema-versions/uncommitted`;
 
       // Take first data package and fetch its latest schema
       return http.get(latestSchemaUrl).then((result) => {
-        const viewModels = map(result.data.schema.views, (view) => {
-          // Attach necessary data for READ implementation
-          const viewData = {
-            id: view.id,
-            name: view.name,
-            dataPackage: result.data.dataPackageId,
-            record: view.rootRecordId,
-          };
-
-          return viewData;
-        });
+        const { views } = result.data.schema;
+        const viewModels = map(views, view => formatViewModel(view, dataPackage.id));
 
         return viewModels;
       });
