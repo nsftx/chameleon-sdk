@@ -1,10 +1,46 @@
 /*
 Reserved for Ride Core connector.
 */
+import http from 'axios';
+import { map } from 'lodash';
+
+const getBaseBlueprintUrl = (connectorOptions, connectorType) => {
+  const api = connectorType.options.endpoint;
+  const blueprintEndpoint = api.blueprint;
+  const url = `${blueprintEndpoint}/api/v1/${connectorOptions.space}`;
+
+  return url;
+};
+
 export default {
   changeSourceData() {
   },
-  getSources() {
+  getSources(connector) {
+    const baseUrl = getBaseBlueprintUrl(connector.options, connector.type);
+
+    // Get all data packages
+    // TODO: Change implementation after https://github.com/chmjs/ride-storage-blueprint/issues/40
+    return http.get(`${baseUrl}/data-packages`).then((response) => {
+      const dataPackage = response.data.dataPackages[0];
+      const latestSchemaUrl = `${baseUrl}/data-packages/${dataPackage.id}/schema-versions/latest`;
+
+      // Take first data package and fetch its latest schema
+      return http.get(latestSchemaUrl).then((result) => {
+        const viewModels = map(result.data.schema.views, (view) => {
+          // Attach necessary data for READ implementation
+          const viewData = {
+            id: view.id,
+            name: view.name,
+            dataPackage: result.data.dataPackageId,
+            record: view.rootRecordId,
+          };
+
+          return viewData;
+        });
+
+        return viewModels;
+      });
+    });
   },
   getSourceData() {
   },
