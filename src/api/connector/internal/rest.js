@@ -2,7 +2,20 @@
 Reserved for Ride Core connector.
 */
 import http from 'axios';
-import { map } from 'lodash';
+import { filter, find, map } from 'lodash';
+
+const formatSourceSchema = (record, view) => {
+  const formatted = map(view.fields, (field) => {
+    const fieldSchema = find(record.fields, { id: field.displayFieldId });
+    fieldSchema.name = field.displayName;
+
+    return fieldSchema;
+  });
+
+  const filteredFields = filter(formatted, field => field.type !== 'primary');
+
+  return filteredFields;
+};
 
 const getBaseBlueprintUrl = (connectorOptions, connectorType) => {
   const api = connectorType.options.endpoint;
@@ -12,18 +25,25 @@ const getBaseBlueprintUrl = (connectorOptions, connectorType) => {
   return url;
 };
 
-const getViewModels = (baseUrl, dataPackageId) => {
+const getLatestSchema = (baseUrl, dataPackageId) => {
   const latestSchemaUrl = `${baseUrl}/data-packages/${dataPackageId}/schema-versions/uncommitted`;
-  const viewModelsReq = http.get(latestSchemaUrl).then((result) => {
-    const { views } = result.data.schema;
+  return http.get(latestSchemaUrl);
+};
+
+const getViewModels = (baseUrl, dataPackageId) => {
+  const latestSchemaReq = getLatestSchema(baseUrl, dataPackageId).then((result) => {
+    const { data } = result;
+    const { views } = data.schema;
 
     // Attach necessary data for READ implementation
     const viewModels = map(views, (view) => {
       const viewData = {
         id: view.id,
         name: view.name,
+        model: view.name,
         dataPackage: dataPackageId,
         record: view.rootRecordId,
+        schemaVersionId: data.versionId,
       };
 
       return viewData;
@@ -32,7 +52,7 @@ const getViewModels = (baseUrl, dataPackageId) => {
     return viewModels;
   });
 
-  return viewModelsReq;
+  return latestSchemaReq;
 };
 
 export default {
@@ -52,6 +72,14 @@ export default {
   },
   getSourceData() {
   },
-  getSourceSchema() {
+  getSourceSchema(connector, source) {
+    const baseUrl = getBaseBlueprintUrl(connector.options, connector.type);
+    return getLatestSchema(baseUrl, source.dataPackage).then((result) => {
+      const { records, views } = result.data.schema;
+      const viewSchema = find(views, { id: source.id });
+      const schema = find(records, { id: source.record });
+
+      return { schema: formatSourceSchema(schema, viewSchema) };
+    });
   },
 };
