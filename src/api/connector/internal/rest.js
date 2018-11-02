@@ -54,7 +54,7 @@ const getViewModels = (baseUrl, dataPackageId) => {
       return viewData;
     });
 
-    return viewModels;
+    return keyBy(viewModels, item => item.name);
   });
 
   return latestSchemaReq;
@@ -72,11 +72,7 @@ export default {
       const dataPackage = response.data.dataPackages[0];
 
       // Take first data package and fetch its latest schema
-      return getViewModels(baseUrl, dataPackage.id).then((viewModels) => {
-        const formatted = keyBy(viewModels, item => item.name);
-
-        return formatted;
-      });
+      return getViewModels(baseUrl, dataPackage.id);
     });
   },
   getSourceData() {
