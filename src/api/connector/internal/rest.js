@@ -2,7 +2,12 @@
 Reserved for Ride Core connector.
 */
 import http from 'axios';
-import { filter, find, map } from 'lodash';
+import {
+  filter,
+  find,
+  keyBy,
+  map,
+} from 'lodash';
 
 const formatSourceSchema = (record, view) => {
   const formatted = map(view.fields, (field) => {
@@ -67,7 +72,11 @@ export default {
       const dataPackage = response.data.dataPackages[0];
 
       // Take first data package and fetch its latest schema
-      return getViewModels(baseUrl, dataPackage.id);
+      return getViewModels(baseUrl, dataPackage.id).then((viewModels) => {
+        const formatted = keyBy(viewModels, item => item.name);
+
+        return formatted;
+      });
     });
   },
   getSourceData() {
