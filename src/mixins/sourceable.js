@@ -37,6 +37,7 @@ export default {
     getMergedDataSourceParams() {
       return {
         params: merge(this.dataSourceParams, this.dataSource.params),
+        seed: this.registry.isPreviewMode,
       };
     },
     loadConnectorData() {
