@@ -28,7 +28,7 @@ const updateSourceData = (connector, source, options) => {
   const identifier = getIdentifier(source, options);
   const { payload } = options;
 
-  const url = `${connector.url}/sources/${source.name}/schema/${identifier}`;
+  const url = `${connector.url}/sources/${source.name}/${identifier}`;
 
   return http.put(url, payload).then(response => response.data);
 };
@@ -36,14 +36,14 @@ const updateSourceData = (connector, source, options) => {
 const deleteSourceData = (connector, source, options) => {
   const identifier = getIdentifier(source, options);
 
-  const url = `${connector.url}/sources/${source.name}/schema/${identifier}`;
+  const url = `${connector.url}/sources/${source.name}/${identifier}`;
 
   return http.delete(url).then(response => response.data);
 };
 
 export default {
-  getSources(connector, source) {
-    const url = `${connector.url}/sources/${source.name}/schema`;
+  getSources(connector) {
+    const url = `${connector.url}/sources/`;
 
     return http.get(url).then(response => response.data);
   },
