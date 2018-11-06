@@ -17,6 +17,27 @@ const getIdentifier = (source, options) => {
   return identifier;
 };
 
+const getSortParams = (sort, sortBy) => {
+  let sortPrefix = '';
+
+  if (sortBy === 'desc') sortPrefix = '-';
+  else if (sortBy === 'asc') sortPrefix = '+';
+
+  return `${sortPrefix}${sort}`;
+};
+
+const getApiParams = (clientParams) => {
+  const apiParams = {};
+
+  // TODO: Add field filter handling
+  apiParams.sort = getSortParams(clientParams.sort, clientParams.sortBy);
+  apiParams.limit = clientParams.limit || clientParams.pageSize;
+  apiParams.page = clientParams.page || clientParams.currentPage;
+  apiParams.search = clientParams.search;
+};
+
+// API Methods
+
 const createSourceData = (connector, source, options) => {
   const url = `${connector.url}/sources/${source.name}`;
   const { payload } = options;
@@ -43,7 +64,7 @@ const deleteSourceData = (connector, source, options) => {
 
 export default {
   getSources(connector) {
-    const url = `${connector.url}/sources/`;
+    const url = `${connector.url}/sources`;
 
     return http.get(url).then(response => response.data);
   },
@@ -52,10 +73,13 @@ export default {
 
     return http.get(url).then(response => response.data);
   },
-  getSourceData(connector, source) {
+  getSourceData(connector, source, options) {
     const url = `${connector.url}/sources/${source.name}`;
+    const params = getApiParams(options.params);
 
-    return http.get(url).then(response => response.data);
+    return http.get(url, {
+      params,
+    }).then(response => response.data);
   },
   // deleteSourceData,
   // updateSourceData,
