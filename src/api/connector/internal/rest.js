@@ -71,8 +71,28 @@ const getLatestSchema = (baseUrl, dataPackageId) => {
   return http.get(latestSchemaUrl);
 };
 
-const getSeedData = (connectorType, source, options) => {
-  const api = connectorType.options.endpoint.read;
+const getSourceDataReqDefinition = (connector, source) => {
+  const baseUrl = getBaseUrl(
+    connector.options,
+    connector.type,
+    'read',
+  );
+
+  const fields = map(source.schema, field => field.id);
+  const url = `${baseUrl}/schema-versions/${source.schemaVersion}/records/${source.record}/instances`;
+  const params = {
+    viewId: source.id,
+    fields: JSON.stringify(fields),
+  };
+
+  return {
+    url,
+    params,
+  };
+};
+
+const getSourceSeedReqDefinition = (connector, source, options) => {
+  const api = connector.type.options.endpoint.read;
   const schema = map(source.schema, (field) => {
     const fieldData = {
       name: field.name,
@@ -88,19 +108,10 @@ const getSeedData = (connectorType, source, options) => {
     schema: JSON.stringify({ name: 'test', schema }),
   };
 
-  return http.get(`${api}/api/v1/misc/seed`, {
+  return {
+    url: `${api}/api/v1/misc/seed`,
     params,
-    paramsSerializer: uriEncoder.encode,
-  }).then((response) => {
-    const result = response.data;
-
-    return {
-      [source.name]: {
-        items: result.data,
-        pagination: result.metadata,
-      },
-    };
-  });
+  };
 };
 
 const getViewModels = (baseUrl, dataPackageId) => {
@@ -162,24 +173,16 @@ export default {
   },
   getSourceData(connector, source, options) {
     const isSeed = options.seed;
+    let requestDefinition;
 
-    if (isSeed) return getSeedData(connector.type, source, options);
+    if (isSeed) {
+      requestDefinition = getSourceSeedReqDefinition(connector, source, options);
+    } else {
+      requestDefinition = getSourceDataReqDefinition(connector, source);
+    }
 
-    const baseUrl = getBaseUrl(
-      connector.options,
-      connector.type,
-      'read',
-    );
-
-    const fields = map(source.schema, field => field.id);
-    const url = `${baseUrl}/schema-versions/${source.schemaVersion}/records/${source.record}/instances`;
-    const params = {
-      viewId: source.id,
-      fields: JSON.stringify(fields),
-    };
-
-    return http.get(url, {
-      params,
+    return http.get(requestDefinition.url, {
+      params: requestDefinition.params,
       paramsSerializer: uriEncoder.encode,
     }).then((response) => {
       const result = response.data;
