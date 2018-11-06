@@ -3,19 +3,25 @@ Reserved for Ride Core connector.
 */
 import http from 'axios';
 import {
+  each,
   filter,
   find,
   keyBy,
   map,
+  toLower,
 } from 'lodash';
 import { uriEncoder } from '../../../utility';
 
 const formatSourceSchema = (record, view) => {
   const formatted = map(view.fields, (field) => {
+    const viewField = field;
     const fieldSchema = find(record.fields, { id: field.displayFieldId });
     fieldSchema.name = field.displayName;
 
-    return fieldSchema;
+    viewField.type = fieldSchema.type;
+    viewField.name = field.displayName;
+
+    return viewField;
   });
 
   const filteredFields = filter(formatted, field => field.type !== 'primary');
@@ -25,10 +31,39 @@ const formatSourceSchema = (record, view) => {
 
 const getBaseUrl = (connectorOptions, connectorType, type) => {
   const api = connectorType.options.endpoint;
-  const blueprintEndpoint = api[type];
-  const url = `${blueprintEndpoint}/api/v1/${connectorOptions.space}`;
+  const serviceEndpoint = api[type];
+  const url = `${serviceEndpoint}/api/v1/${connectorOptions.space}`;
 
   return url;
+};
+
+const getChangeMethod = (options) => {
+  const action = toLower(options.action);
+  switch (action) {
+    case 'delete':
+      return action;
+    case 'update':
+      return 'patch';
+    default:
+      return 'post';
+  }
+};
+
+/*
+This will most probably be changed, as it's not certain
+yet in which form will the payload be sent from UI components
+*/
+const getChangePayload = (payload, schema) => {
+  if (!payload) return null;
+
+  const change = {};
+
+  each(payload, (value, key) => {
+    const schemaField = find(schema, { name: key });
+    change[schemaField.id] = value;
+  });
+
+  return change;
 };
 
 const getLatestSchema = (baseUrl, dataPackageId) => {
@@ -73,7 +108,7 @@ const getViewModels = (baseUrl, dataPackageId) => {
     const { data } = result;
     const { views } = data.schema;
 
-    // Attach necessary data for READ implementation
+    // Attach necessary data for READ & WRITE implementation
     const viewModels = map(views, (view) => {
       const viewData = {
         id: view.id,
@@ -81,7 +116,7 @@ const getViewModels = (baseUrl, dataPackageId) => {
         model: view.name,
         dataPackage: dataPackageId,
         record: view.rootRecordId,
-        schemaVersionId: data.versionId,
+        schemaVersion: data.versionId,
       };
 
       return viewData;
@@ -94,7 +129,20 @@ const getViewModels = (baseUrl, dataPackageId) => {
 };
 
 export default {
-  changeSourceData() {
+  changeSourceData(connector, source, options) {
+    const baseUrl = getBaseUrl(connector.options, connector.type, 'write');
+    const method = getChangeMethod(options);
+    const payload = getChangePayload(options.payload, options.schema);
+    let url = `${baseUrl}/schema-versions/${source.schemaVersion}/records/${source.record}`;
+
+    if (payload.recordInstanceId) {
+      url += `/instances/${payload.recordInstanceId}`;
+    }
+
+    return http[method](url, payload).then((response) => {
+      const result = response.data;
+      return result;
+    });
   },
   getSources(connector) {
     const baseUrl = getBaseUrl(
@@ -123,10 +171,17 @@ export default {
       'read',
     );
 
-    return http.get(
-      `${baseUrl}/${source.schemaVersionId}/${source.record}`,
-      { params: { viewId: source.id } },
-    ).then((response) => {
+    const fields = map(source.schema, field => field.id);
+    const url = `${baseUrl}/schema-versions/${source.schemaVersion}/records/${source.record}/instances`;
+    const params = {
+      viewId: source.id,
+      fields: JSON.stringify(fields),
+    };
+
+    return http.get(url, {
+      params,
+      paramsSerializer: uriEncoder.encode,
+    }).then((response) => {
       const result = response.data;
 
       return {
@@ -143,12 +198,17 @@ export default {
       connector.type,
       'blueprint',
     );
-    return getLatestSchema(baseUrl, source.dataPackage).then((result) => {
-      const { records, views } = result.data.schema;
+
+    return getLatestSchema(baseUrl, source.dataPackage).then((response) => {
+      const result = response.data;
+      const { records, views } = result.schema;
       const viewSchema = find(views, { id: source.id });
       const schema = find(records, { id: source.record });
 
-      return { schema: formatSourceSchema(schema, viewSchema) };
+      return {
+        schema: formatSourceSchema(schema, viewSchema),
+        schemaVersion: result.versionId,
+      };
     });
   },
 };
