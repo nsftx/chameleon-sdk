@@ -125,9 +125,11 @@ const getViewModels = (baseUrl, dataPackageId) => {
         id: view.id,
         name: view.name,
         model: view.name,
-        dataPackage: dataPackageId,
-        record: view.rootRecordId,
-        schemaVersion: data.versionId,
+        meta: {
+          dataPackage: dataPackageId,
+          record: view.rootRecordId,
+          schemaVersion: data.versionId,
+        },
       };
 
       return viewData;
@@ -202,15 +204,16 @@ export default {
       'blueprint',
     );
 
-    return getLatestSchema(baseUrl, source.dataPackage).then((response) => {
+    return getLatestSchema(baseUrl, source.meta.dataPackage).then((response) => {
       const result = response.data;
       const { records, views } = result.schema;
       const viewSchema = find(views, { id: source.id });
-      const schema = find(records, { id: source.record });
+      const schema = find(records, { id: source.meta.record });
 
       return {
+        id: source.id,
         schema: formatSourceSchema(schema, viewSchema),
-        schemaVersion: result.versionId,
+        meta: source.meta,
       };
     });
   },

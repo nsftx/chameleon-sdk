@@ -26,8 +26,10 @@ const connectorMock = {
 
 const sourceMock = {
   id: 'c98a699b-5c14-4211-ae8c-7a6306ebfa13',
-  record: '5059bdd6-2bda-4ccc-9bdd-7106cb705b2c',
   name: 'Test (Default)',
+  meta: {
+    record: '5059bdd6-2bda-4ccc-9bdd-7106cb705b2c',
+  },
 };
 
 describe('internal rest connector', () => {
