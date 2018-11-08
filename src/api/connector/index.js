@@ -13,9 +13,11 @@ const parseSourceData = (connector, source, options, data) => {
       name: connector.name,
       type: connector.type.name,
     },
+    id: source.id,
     name: source.name,
     model: source.model,
     schema: source.schema,
+    meta: source.meta,
     items: collection.items,
     pagination: collection.pagination,
   };
@@ -30,8 +32,10 @@ const parseChangeSourceData = (connector, source, options, data) => {
       name: connector.name,
       type: connector.type.name,
     },
+    id: source.id,
     name: source.name,
     model: source.model,
+    meta: source.meta,
     schema: source.schema,
     data,
   };
