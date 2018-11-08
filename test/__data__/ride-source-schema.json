@@ -1,0 +1,109 @@
+{
+  "response": {
+    "versionId": "1ea195bb-95ba-3a73-bb7c-c03d87662500",
+    "schema": {
+      "records": [{
+        "id": "5059bdd6-2bda-4ccc-9bdd-7106cb705b2c",
+        "type": "entity",
+        "name": "Test",
+        "fields": [{
+          "id": "123afc09-f32a-4c6c-b77c-0fa7b52f5da7",
+          "name": "ID",
+          "type": "primary",
+          "multiValue": false,
+          "validation": {
+            "required": true,
+            "unique": false
+          }
+        }, {
+          "id": "2398fdc4-2777-42da-9c0e-b294146cbd05",
+          "name": "address",
+          "type": "text",
+          "multiValue": false,
+          "validation": {
+            "required": false,
+            "unique": false
+          }
+        }, {
+          "id": "8d4d20f0-161e-4ec5-8e1d-902e30d51464",
+          "name": "name",
+          "type": "text",
+          "multiValue": false,
+          "validation": {
+            "required": false,
+            "unique": false
+          }
+        }, {
+          "id": "a95a5fbc-890a-44b2-895f-9a586eddce34",
+          "name": "mail",
+          "type": "text",
+          "multiValue": false,
+          "validation": {
+            "required": false,
+            "unique": false
+          }
+        }]
+      }],
+      "views": [{
+        "id": "c98a699b-5c14-4211-ae8c-7a6306ebfa13",
+        "rootRecordId": "5059bdd6-2bda-4ccc-9bdd-7106cb705b2c",
+        "name": "Test (Default)",
+        "defaultViewModel": true,
+        "fields": [{
+          "id": "3e776270-08c2-4299-bf84-4fd17ae8df4f",
+          "recordId": "5059bdd6-2bda-4ccc-9bdd-7106cb705b2c",
+          "displayFieldId": "123afc09-f32a-4c6c-b77c-0fa7b52f5da7",
+          "displayName": "ID"
+        }, {
+          "id": "b2895a01-b939-4415-98ef-0b804ee34d7a",
+          "recordId": "5059bdd6-2bda-4ccc-9bdd-7106cb705b2c",
+          "displayFieldId": "2398fdc4-2777-42da-9c0e-b294146cbd05",
+          "displayName": "address"
+        }, {
+          "id": "91e1ce4d-f05a-4ea3-9ed6-105154823ca5",
+          "recordId": "5059bdd6-2bda-4ccc-9bdd-7106cb705b2c",
+          "displayFieldId": "8d4d20f0-161e-4ec5-8e1d-902e30d51464",
+          "displayName": "name"
+        }, {
+          "id": "f90b2284-ee76-46c6-abe6-a56d7426d1e4",
+          "recordId": "5059bdd6-2bda-4ccc-9bdd-7106cb705b2c",
+          "displayFieldId": "a95a5fbc-890a-44b2-895f-9a586eddce34",
+          "displayName": "mail"
+        }],
+        "filters": []
+      }]
+    }
+  },
+  "result": {
+    "id": "c98a699b-5c14-4211-ae8c-7a6306ebfa13",
+    "schema": [
+      {
+        "id": "b2895a01-b939-4415-98ef-0b804ee34d7a",
+        "recordId": "5059bdd6-2bda-4ccc-9bdd-7106cb705b2c",
+        "displayFieldId": "2398fdc4-2777-42da-9c0e-b294146cbd05",
+        "displayName": "address",
+        "type": "text",
+        "name": "address"
+      },
+      {
+        "id": "91e1ce4d-f05a-4ea3-9ed6-105154823ca5",
+        "recordId": "5059bdd6-2bda-4ccc-9bdd-7106cb705b2c",
+        "displayFieldId": "8d4d20f0-161e-4ec5-8e1d-902e30d51464",
+        "displayName": "name",
+        "type": "text",
+        "name": "name"
+      },
+      {
+        "id": "f90b2284-ee76-46c6-abe6-a56d7426d1e4",
+        "recordId": "5059bdd6-2bda-4ccc-9bdd-7106cb705b2c",
+        "displayFieldId": "a95a5fbc-890a-44b2-895f-9a586eddce34",
+        "displayName": "mail",
+        "type": "text",
+        "name": "mail"
+      }
+    ],
+    "meta": {
+      "record": "5059bdd6-2bda-4ccc-9bdd-7106cb705b2c"
+    }
+  }
+}
