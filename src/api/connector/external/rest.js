@@ -17,20 +17,20 @@ const getIdentifier = (source, options) => {
   return identifier;
 };
 
-const getSortParams = (sort, sortBy) => {
+const getSortPrefix = (sortBy) => {
   let sortPrefix = '';
 
   if (sortBy === 'desc') sortPrefix = '-';
   else if (sortBy === 'asc') sortPrefix = '+';
 
-  return `${sortPrefix}${sort}`;
+  return sortPrefix;
 };
 
 const getApiParams = (clientParams) => {
   const apiParams = {};
 
   // TODO: Add field filter handling
-  apiParams.sort = getSortParams(clientParams.sort, clientParams.sortBy);
+  apiParams.sort = `${getSortPrefix(clientParams.sortBy)}${clientParams.sort}`;
   apiParams.limit = clientParams.limit || clientParams.pageSize;
   apiParams.page = clientParams.page || clientParams.currentPage;
   apiParams.search = clientParams.search;
@@ -39,7 +39,7 @@ const getApiParams = (clientParams) => {
 // API Methods
 
 const createSourceData = (connector, source, options) => {
-  const url = `${connector.url}/sources/${source.name}`;
+  const url = `${connector.options.endpoint}/sources/${source.name}`;
   const { payload } = options;
 
   return http.post(url, payload).then(response => response.data);
@@ -49,7 +49,7 @@ const updateSourceData = (connector, source, options) => {
   const identifier = getIdentifier(source, options);
   const { payload } = options;
 
-  const url = `${connector.url}/sources/${source.name}/${identifier}`;
+  const url = `${connector.options.endpoint}/sources/${source.name}/${identifier}`;
 
   return http.put(url, payload).then(response => response.data);
 };
@@ -57,24 +57,24 @@ const updateSourceData = (connector, source, options) => {
 const deleteSourceData = (connector, source, options) => {
   const identifier = getIdentifier(source, options);
 
-  const url = `${connector.url}/sources/${source.name}/${identifier}`;
+  const url = `${connector.options.endpoint}/sources/${source.name}/${identifier}`;
 
   return http.delete(url).then(response => response.data);
 };
 
 export default {
   getSources(connector) {
-    const url = `${connector.url}/sources`;
+    const url = `${connector.options.endpoint}/sources`;
 
-    return http.get(url).then(response => response.data);
+    return http.get(url).then(response => response.data.sources);
   },
   getSourceSchema(connector, source) {
-    const url = `${connector.url}/sources/${source.name}/schema`;
+    const url = `${connector.options.endpoint}/sources/${source.name}/schema`;
 
     return http.get(url).then(response => response.data);
   },
   getSourceData(connector, source, options) {
-    const url = `${connector.url}/sources/${source.name}`;
+    const url = `${connector.options.endpoint}/sources/${source.name}`;
     const params = getApiParams(options.params);
 
     return http.get(url, {
@@ -85,16 +85,15 @@ export default {
   // updateSourceData,
   // createSourceData,
   changeSourceData(connector, source, options) {
-    const action = toLower(options.action);
-    switch (action) {
-      case 'delete':
-        return deleteSourceData(connector, source);
-      case 'update':
-        return updateSourceData(connector, source);
-      case 'create':
-        return createSourceData(connector, source);
-      default:
-        throw new Error('Undefined Generic HTTP method');
-    }
+    const actionName = toLower(options.action);
+    const actionMap = {
+      delete: deleteSourceData,
+      update: updateSourceData,
+      create: createSourceData,
+    };
+
+    if (!actionMap[actionName]) throw new Error('Undefined Generic HTTP changeSource action');
+
+    return actionMap[actionName](connector, source, options);
   },
 };
