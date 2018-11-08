@@ -75,7 +75,7 @@ export default {
   },
   getSourceData(connector, source, options) {
     const url = `${connector.options.endpoint}/sources/${source.name}`;
-    const params = getApiParams(options.params);
+    const params = options && options.params ? getApiParams(options.params) : null;
 
     return http.get(url, {
       params,
