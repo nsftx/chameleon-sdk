@@ -78,32 +78,35 @@ describe('rest connector', () => {
   });
 
   it('should throw an error if invalid changeSourceData action passed', () => {
+    const sourceMock = {
+      schema: {
+        identifier: 'id',
+      },
+    };
+    const optionsMock = {
+      action: 'someInvalidActionName',
+    };
+
     expect(() => {
-      rest.changeSourceData(connectorMock, {
-        schema: {
-          identifier: 'id',
-        },
-      }, {
-        action: 'someInvalidActionName',
-        params: {
-          id: 1,
-        },
-      });
+      rest.changeSourceData(connectorMock, sourceMock, optionsMock);
     }).toThrow(Error('Undefined Generic HTTP changeSource action'));
   });
 
   it('should throw an error if changeSourceData identifier not passed when applicable', () => {
+    const sourceMock = {
+      schema: {
+        identifier: 'id',
+      },
+    };
+    const optionsMock = {
+      action: 'update',
+      params: {
+        someParamNotId: 1,
+      },
+    };
+
     expect(() => {
-      rest.changeSourceData(connectorMock, {
-        schema: {
-          identifier: 'id',
-        },
-      }, {
-        action: 'update',
-        params: {
-          someParamNotId: 1,
-        },
-      });
+      rest.changeSourceData(connectorMock, sourceMock, optionsMock);
     }).toThrow(Error('Identifier not found'));
   });
 });
