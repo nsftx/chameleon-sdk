@@ -78,11 +78,7 @@ describe('rest connector', () => {
   });
 
   it('should throw an error if invalid changeSourceData action passed', () => {
-    const sourceMock = {
-      schema: {
-        identifier: 'id',
-      },
-    };
+    const sourceMock = {};
     const optionsMock = {
       action: 'someInvalidActionName',
     };
