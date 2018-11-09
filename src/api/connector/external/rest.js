@@ -32,25 +32,29 @@ const getApiParams = (clientParams) => {
 // API Methods
 
 const createSourceData = (connector, source, options) => {
-  const url = `${connector.options.endpoint}/sources/${source.name}`;
+  const { endpoint } = connector.options;
   const { payload } = options;
+
+  const url = `${endpoint}/sources/${source.name}`;
 
   return http.post(url, payload).then(response => response.data);
 };
 
 const updateSourceData = (connector, source, options) => {
   const identifier = getIdentifier(source, options);
+  const { endpoint } = connector.options;
   const { payload } = options;
 
-  const url = `${connector.options.endpoint}/sources/${source.name}/${identifier}`;
+  const url = `${endpoint}/sources/${source.name}/${identifier}`;
 
   return http.put(url, payload).then(response => response.data);
 };
 
 const deleteSourceData = (connector, source, options) => {
   const identifier = getIdentifier(source, options);
+  const { endpoint } = connector.options;
 
-  const url = `${connector.options.endpoint}/sources/${source.name}/${identifier}`;
+  const url = `${endpoint}/sources/${source.name}/${identifier}`;
 
   return http.delete(url).then(response => response.data);
 };
@@ -67,7 +71,8 @@ export default {
     return http.get(url).then(response => response.data);
   },
   getSourceData(connector, source, options) {
-    const url = `${connector.options.endpoint}/sources/${source.name}`;
+    const { endpoint } = connector.options;
+    const url = `${endpoint}/sources/${source.name}`;
     const params = options && options.params ? getApiParams(options.params) : null;
 
     return http.get(url, {
