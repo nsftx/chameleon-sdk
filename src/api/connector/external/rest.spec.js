@@ -34,8 +34,8 @@ describe('rest connector', () => {
       data: sourcesMock,
     }));
 
-    const options = {};
-    rest.getSources(connectorMock, options).then((result) => {
+    const optionsMock = {};
+    rest.getSources(connectorMock, optionsMock).then((result) => {
       expect(result).toEqual(sourcesMock.sources);
       done();
     });
@@ -46,10 +46,10 @@ describe('rest connector', () => {
       data: sourceSchemaMock,
     }));
 
-    const source = {
+    const sourceMock = {
       name: 'articles',
     };
-    rest.getSourceSchema(connectorMock, source).then((result) => {
+    rest.getSourceSchema(connectorMock, sourceMock).then((result) => {
       expect(result).toEqual(sourceSchemaMock);
       done();
     });
@@ -60,12 +60,50 @@ describe('rest connector', () => {
       data: sourceDataMock,
     }));
 
-    const source = {
+    const sourceMock = {
       name: 'articles',
     };
-    rest.getSourceData(connectorMock, source).then((result) => {
+    const optionsMock = {
+
+      params: {
+        sort: 'desc',
+        sortBy: 'createdAt',
+      },
+    };
+
+    rest.getSourceData(connectorMock, sourceMock, optionsMock).then((result) => {
       expect(result).toEqual(sourceDataMock);
       done();
     });
+  });
+
+  it('should throw an error if invalid changeSourceData action passed', () => {
+    expect(() => {
+      rest.changeSourceData(connectorMock, {
+        schema: {
+          identifier: 'id',
+        },
+      }, {
+        action: 'someInvalidActionName',
+        params: {
+          id: 1,
+        },
+      });
+    }).toThrow(Error('Undefined Generic HTTP changeSource action'));
+  });
+
+  it('should throw an error if changeSourceData identifier not passed when applicable', () => {
+    expect(() => {
+      rest.changeSourceData(connectorMock, {
+        schema: {
+          identifier: 'id',
+        },
+      }, {
+        action: 'update',
+        params: {
+          someParamNotId: 1,
+        },
+      });
+    }).toThrow(Error('Identifier not found'));
   });
 });

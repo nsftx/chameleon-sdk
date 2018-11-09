@@ -79,9 +79,6 @@ export default {
       params,
     }).then(response => response.data);
   },
-  // deleteSourceData,
-  // updateSourceData,
-  // createSourceData,
   changeSourceData(connector, source, options) {
     const actionName = toLower(options.action);
     const actionMap = {
