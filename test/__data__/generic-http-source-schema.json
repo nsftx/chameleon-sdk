@@ -1,0 +1,23 @@
+{
+  "schema": {
+    "name": "articles",
+    "actions": ["read"],
+    "identifier": "id",
+    "tags": [],
+    "fields": [{
+      "name": "id",
+      "type": "Number",
+      "sortable": false
+    }, {
+      "name": "title",
+      "type": "String"
+    }, {
+      "name": "createdAt",
+      "type": "Date"
+    }],
+    "filters": {
+      "operators": ["eq"],
+      "searchable": true
+    }
+  }
+}

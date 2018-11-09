@@ -1,0 +1,29 @@
+{
+  "articles": {
+    "items": [
+      {
+        "id": 1,
+        "title": "Lorem Ipsum",
+        "createdAt": "2018-10-04T14:03:44Z",
+        "updatedAt": "2018-10-04T14:03:44Z",
+        "author": "JohnnyDoe",
+        "category": 1
+      },
+      {
+        "id": 2,
+        "title": "Lorem Ipsum Dolor Sit Amet",
+        "createdAt": "2018-10-05T11:02:32Z",
+        "updatedAt": "2018-10-05T11:02:32Z",
+        "author": "JohnnyDoe",
+        "category": 2
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "pages": 1,
+      "limit": 10,
+      "size": 2,
+      "total": 2
+    }
+  }
+}
