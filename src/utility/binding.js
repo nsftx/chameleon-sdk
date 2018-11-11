@@ -1,4 +1,11 @@
-import { isNil, isString, startsWith } from 'lodash';
+import {
+  isNil,
+  isString,
+  startsWith,
+  template,
+} from 'lodash';
+
+import logger from './logger';
 
 export default {
   /*
@@ -34,6 +41,30 @@ export default {
         if (o[i]) return o[i];
         return value;
       }, source);
+    }
+
+    return value;
+  },
+  /*
+  Sets expression as a compiled template function.
+  Method can receive template options as second parameter.
+  https://lodash.com/docs/4.17.11#templateSettings
+  */
+  setExpression(expression, options) {
+    return template(expression, options);
+  },
+  /*
+  Resolves expression by executing compiled template function.
+  Second parameter is context that serves as data to template function.
+  */
+  resolveExpression(expressionFunction, context, defaultValue) {
+    let value;
+
+    try {
+      value = expressionFunction(context);
+    } catch (error) {
+      logger.warn('Error resolving expression');
+      value = defaultValue;
     }
 
     return value;
