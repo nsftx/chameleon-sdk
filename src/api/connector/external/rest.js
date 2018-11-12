@@ -14,12 +14,12 @@ const getIdentifier = (source, options) => {
   return identifier;
 };
 
-const getSortPrefix = (sortBy) => {
-  const sortByParam = toLower(sortBy);
+const getSortPrefix = (sortOrder) => {
+  const sortOrderParam = toLower(sortOrder);
   let sortPrefix = '';
 
-  if (sortByParam === 'desc') sortPrefix = '-';
-  else if (sortByParam === 'asc') sortPrefix = '+';
+  if (sortOrderParam === 'desc') sortPrefix = '-';
+  else if (sortOrderParam === 'asc') sortPrefix = '+';
 
   return sortPrefix;
 };
@@ -28,7 +28,7 @@ const getApiParams = (clientParams) => {
   const apiParams = {};
 
   // TODO: Add field filter handling
-  apiParams.sort = `${getSortPrefix(clientParams.sortBy)}${clientParams.sort}`;
+  apiParams.sort = `${getSortPrefix(clientParams.sort)}${clientParams.sortBy}`;
   apiParams.limit = clientParams.limit || clientParams.pageSize;
   apiParams.page = clientParams.page || clientParams.currentPage;
   apiParams.search = clientParams.search;

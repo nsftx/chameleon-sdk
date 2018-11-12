@@ -64,7 +64,6 @@ describe('rest connector', () => {
       name: 'articles',
     };
     const optionsMock = {
-
       params: {
         sort: 'desc',
         sortBy: 'createdAt',
