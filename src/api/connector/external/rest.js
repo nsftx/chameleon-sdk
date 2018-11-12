@@ -17,8 +17,8 @@ const getIdentifier = (source, options) => {
 const getSortPrefix = (sortBy) => {
   let sortPrefix = '';
 
-  if (sortBy === 'desc') sortPrefix = '-';
-  else if (sortBy === 'asc') sortPrefix = '+';
+  if (toLower(sortBy) === 'desc') sortPrefix = '-';
+  else if (toLower(sortBy) === 'asc') sortPrefix = '+';
 
   return sortPrefix;
 };
