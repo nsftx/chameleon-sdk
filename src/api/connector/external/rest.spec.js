@@ -77,6 +77,41 @@ describe('rest connector', () => {
     });
   });
 
+  it('should create source data', (done) => {
+    axiosMock.post.mockImplementation(() => Promise.resolve({
+      data: sourceDataMock,
+    }));
+
+    const sourceMock = {
+      name: 'articles',
+      schema: {
+        identifier: 'id',
+      },
+    };
+    const optionsMock = {
+      action: 'create',
+      params: {
+        items: [
+          {
+            title: 'Lorem Ipsum Updated',
+            author: 'JohnnyDoe',
+            category: 1,
+          },
+          {
+            title: 'Lorem Ipsum Dolor Sit Amet',
+            author: 'JohnnyDoe',
+            category: 1,
+          },
+        ],
+      },
+    };
+
+    rest.changeSourceData(connectorMock, sourceMock, optionsMock).then((result) => {
+      expect(result).toEqual(sourceDataMock);
+      done();
+    });
+  });
+
   it('should throw an error if invalid changeSourceData action passed', () => {
     const sourceMock = {};
     const optionsMock = {
@@ -103,6 +138,6 @@ describe('rest connector', () => {
 
     expect(() => {
       rest.changeSourceData(connectorMock, sourceMock, optionsMock);
-    }).toThrow(Error('Identifier not found'));
+    }).toThrow(Error('Identifier field not found in params'));
   });
 });

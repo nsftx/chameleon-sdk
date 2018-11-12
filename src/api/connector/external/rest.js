@@ -1,11 +1,15 @@
 import http from 'axios';
 import { toLower } from 'lodash';
+import { logger } from '../../../utility';
 
 const getIdentifier = (source, options) => {
   const identifierName = source.schema.identifier;
   const identifier = options.params[identifierName];
 
-  if (!identifier) throw new Error('Identifier not found');
+  if (!identifier) {
+    logger.error('Identifier field not found in params');
+    throw new Error('Identifier field not found in params');
+  }
 
   return identifier;
 };
@@ -87,7 +91,10 @@ export default {
       create: createSourceData,
     };
 
-    if (!actionMap[actionName]) throw new Error('Undefined Generic HTTP changeSource action');
+    if (!actionMap[actionName]) {
+      logger.error('Undefined Generic HTTP changeSource action');
+      throw new Error('Undefined Generic HTTP changeSource action');
+    }
 
     return actionMap[actionName](connector, source, options);
   },
