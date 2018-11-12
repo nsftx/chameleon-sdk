@@ -15,10 +15,11 @@ const getIdentifier = (source, options) => {
 };
 
 const getSortPrefix = (sortBy) => {
+  const sortByParam = toLower(sortBy);
   let sortPrefix = '';
 
-  if (toLower(sortBy) === 'desc') sortPrefix = '-';
-  else if (toLower(sortBy) === 'asc') sortPrefix = '+';
+  if (sortByParam === 'desc') sortPrefix = '-';
+  else if (sortByParam === 'asc') sortPrefix = '+';
 
   return sortPrefix;
 };
