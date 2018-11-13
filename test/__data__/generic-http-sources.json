@@ -1,0 +1,12 @@
+{
+  "sources": {
+    "articles": {
+      "name": "articles",
+      "model": "Article"
+    },
+    "categories": {
+      "name": "categories",
+      "model": "Category"
+    }
+  }
+}
