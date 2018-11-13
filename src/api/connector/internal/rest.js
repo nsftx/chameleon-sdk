@@ -151,7 +151,7 @@ const getViewModels = (baseUrl, dataPackageId) => {
       return viewData;
     });
 
-    return keyBy(viewModels, item => item.name);
+    return keyBy(viewModels, item => item.id);
   });
 
   return latestSchemaReq;
