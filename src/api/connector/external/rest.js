@@ -1,5 +1,6 @@
 import http from 'axios';
 import { toLower } from 'lodash';
+import { getSavedSources } from '../common';
 import { logger } from '../../../utility';
 
 const getIdentifier = (source, options) => {
@@ -65,7 +66,9 @@ const deleteSourceData = (connector, source, options) => {
 };
 
 export default {
-  getSources(connector) {
+  getSources(connector, { savedOnly }) {
+    if (savedOnly) return getSavedSources(connector);
+
     const url = `${connector.options.endpoint}/sources`;
 
     return http.get(url).then(response => response.data.sources);

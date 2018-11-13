@@ -6,9 +6,12 @@ schema and data over time.
 
 import http from 'axios';
 import { map, pick } from 'lodash';
+import { getSavedSources } from '../common';
 
 export default {
-  getSources(connector) {
+  getSources(connector, { savedOnly }) {
+    if (savedOnly) return getSavedSources(connector);
+
     const url = `${connector.type.options.endpoint}/sources.json`;
     return http.get(url).then((response) => {
       const result = response.data;

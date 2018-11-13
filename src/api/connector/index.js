@@ -61,9 +61,9 @@ export default {
     const type = connectorTypes[connector.type];
     return type;
   },
-  getSources(connector) {
+  getSources(connector, options) {
     const connectorType = this.getConnectorType(connector.type);
-    return connectorType.getSources(connector);
+    return connectorType.getSources(connector, options);
   },
   getSourceData(connector, source, options) {
     const opts = isNil(options) ? {} : options;

@@ -9,6 +9,7 @@ import {
   keyBy,
   map,
   toLower,
+  uniq,
 } from 'lodash';
 import { uriEncoder } from '../../../utility';
 
@@ -64,6 +65,21 @@ const getChangePayload = (payload, schema) => {
   });
 
   return change;
+};
+
+const getInstalledVersions = (baseUrl, versions) => {
+  const url = `${baseUrl}/installed-schema-versions`;
+  const params = {
+    versionIds: JSON.stringify(versions),
+  };
+
+  return http.get(url, {
+    params,
+    paramsSerializer: uriEncoder.encode,
+  }).then((response) => {
+    const result = response.data;
+    return result.installedSchemaVersions;
+  });
 };
 
 const getLatestSchema = (baseUrl, dataPackageId) => {
@@ -141,6 +157,41 @@ const getViewModels = (baseUrl, dataPackageId) => {
   return latestSchemaReq;
 };
 
+const getSavedViewModels = (baseUrl, dataPackageId, connector) => {
+  const viewModelsReq = getViewModels(baseUrl, dataPackageId).then((viewModels) => {
+    const missingVersions = [];
+    const result = map(connector.sources, (item) => {
+      const source = item;
+      const existsInNew = viewModels[source.id];
+
+      if (!existsInNew) {
+        missingVersions.push(source.meta.schemaVersion);
+        source.disabled = true;
+      }
+
+      return source;
+    });
+
+    if (missingVersions.length === 0) {
+      return result;
+    }
+
+    return getInstalledVersions(baseUrl, uniq(missingVersions)).then((versions) => {
+      const finalResult = map(result, (item) => {
+        const source = item;
+        if (!source.disabled) return source;
+
+        source.installed = versions.indexOf(source.meta.schemaVersion) >= 0;
+        return source;
+      });
+
+      return finalResult;
+    });
+  });
+
+  return viewModelsReq;
+};
+
 export default {
   changeSourceData(connector, source, options) {
     const baseUrl = getBaseUrl(connector.options, connector.type, 'write');
@@ -157,7 +208,7 @@ export default {
       return result;
     });
   },
-  getSources(connector) {
+  getSources(connector, { savedOnly }) {
     const baseUrl = getBaseUrl(
       connector.options,
       connector.type,
@@ -168,6 +219,10 @@ export default {
     // TODO: Change implementation after https://github.com/chmjs/ride-storage-blueprint/issues/40
     return http.get(`${baseUrl}/data-packages`).then((response) => {
       const dataPackage = response.data.dataPackages[0];
+
+      if (savedOnly) {
+        return getSavedViewModels(baseUrl, dataPackage.id, connector);
+      }
 
       // Take first data package and fetch its latest schema
       return getViewModels(baseUrl, dataPackage.id);

@@ -43,7 +43,8 @@ const connectorMock = {
 
 describe('connector', () => {
   it('should get sources', (done) => {
-    connector.getSources(connectorMock).then((result) => {
+    const optionsMock = {};
+    connector.getSources(connectorMock, optionsMock).then((result) => {
       done();
       expect(result).toBeTruthy();
     });
