@@ -7,7 +7,7 @@ import {
   map,
 } from 'lodash';
 
-import { getCommonMeta } from '../utility';
+import { getCommonMeta } from '../common';
 
 const getQueryParams = (source) => {
   if (!isEmpty(source.params)) {
