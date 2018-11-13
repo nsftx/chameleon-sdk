@@ -1,4 +1,4 @@
-import { assign, isNil } from 'lodash';
+import { assign } from 'lodash';
 import * as internalTypes from './internal';
 import * as externalTypes from './external';
 
@@ -44,16 +44,15 @@ const parseChangeSourceData = (connector, source, options, data) => {
 };
 
 export default {
-  changeSourceData(connector, source, options) {
-    /*
+  /*
     Options object should have `action` and `payload` properties.
     Action is used to differentiate methods on connector backend API.
     */
-    const opts = isNil(options) ? {} : options;
+  changeSourceData(connector, source, options = {}) {
     const connectorType = this.getConnectorType(connector);
 
-    return connectorType.changeSourceData(connector, source, opts).then((data) => {
-      const result = parseChangeSourceData(connector, source, opts, data);
+    return connectorType.changeSourceData(connector, source, options).then((data) => {
+      const result = parseChangeSourceData(connector, source, options, data);
       return result;
     });
   },
@@ -61,16 +60,15 @@ export default {
     const type = connectorTypes[connector.type];
     return type;
   },
-  getSources(connector, options) {
+  getSources(connector, options = {}) {
     const connectorType = this.getConnectorType(connector.type);
     return connectorType.getSources(connector, options);
   },
-  getSourceData(connector, source, options) {
-    const opts = isNil(options) ? {} : options;
+  getSourceData(connector, source, options = {}) {
     const connectorType = this.getConnectorType(connector.type);
 
-    return connectorType.getSourceData(connector, source, opts).then((data) => {
-      const result = parseSourceData(connector, source, opts, data);
+    return connectorType.getSourceData(connector, source, options).then((data) => {
+      const result = parseSourceData(connector, source, options, data);
       return result;
     });
   },
