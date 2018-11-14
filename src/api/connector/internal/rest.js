@@ -70,12 +70,11 @@ const getChangePayload = (payload, schema) => {
 const getInstalledVersions = (baseUrl, versions) => {
   const url = `${baseUrl}/installed-schema-versions`;
   const params = {
-    versionIds: JSON.stringify(versions),
+    versionIds: versions.join(','),
   };
 
   return http.get(url, {
     params,
-    paramsSerializer: uriEncoder.encode,
   }).then((response) => {
     const result = response.data;
     return result.installedSchemaVersions;
@@ -163,10 +162,10 @@ const getSavedViewModels = (baseUrl, dataPackageId, connector) => {
     const result = map(connector.sources, (item) => {
       const source = item;
       const existsInNew = viewModels[source.id];
+      source.disabled = !existsInNew;
 
       if (!existsInNew) {
         missingVersions.push(source.meta.schemaVersion);
-        source.disabled = true;
       }
 
       return source;
@@ -181,7 +180,14 @@ const getSavedViewModels = (baseUrl, dataPackageId, connector) => {
         const source = item;
         if (!source.disabled) return source;
 
-        source.installed = versions.indexOf(source.meta.schemaVersion) >= 0;
+        const installedVersion = find(versions, {
+          schemaVersion: { versionId: source.meta.schemaVersion },
+        });
+        const installedSource = installedVersion
+          && find(installedVersion.schemaVersion.schema.views, { id: source.id });
+
+        source.installed = !!installedVersion && !!installedSource;
+
         return source;
       });
 
