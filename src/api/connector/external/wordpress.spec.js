@@ -32,8 +32,8 @@ describe('wordpress connector', () => {
       data: sourcesMock,
     }));
 
-    const options = {};
-    wordpress.getSources(connectorMock, options).then((result) => {
+    const optionsMock = {};
+    wordpress.getSources(connectorMock, optionsMock).then((result) => {
       expect(result).toEqual(sourcesMock.sources);
       done();
     });

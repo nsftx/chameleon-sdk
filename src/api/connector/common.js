@@ -18,3 +18,9 @@ export function getCommonMeta(connector) {
     headers,
   };
 }
+
+export function getSavedSources(connector) {
+  return new Promise((resolve) => {
+    resolve(connector.sources);
+  });
+}

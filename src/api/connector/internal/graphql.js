@@ -7,7 +7,7 @@ import {
   map,
 } from 'lodash';
 
-import { getCommonMeta } from '../utility';
+import { getCommonMeta, getSavedSources } from '../common';
 
 const getQueryParams = (source) => {
   if (!isEmpty(source.params)) {
@@ -116,7 +116,9 @@ export default {
   changeSourceData(connector) {
     throw new Error(`Method changeSourceData is not implemented on ${connector.name} connector!`);
   },
-  getSources(connector) {
+  getSources(connector, { savedOnly }) {
+    if (savedOnly) return getSavedSources(connector);
+
     const connectorType = connector.type;
     const url = `${connectorType.options.endpoint}/${connectorType.name}`;
     return http.post(url, {

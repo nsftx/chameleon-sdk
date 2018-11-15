@@ -5,7 +5,7 @@ Path: /connectors/wordpress
 */
 import http from 'axios';
 import { assign, toLower } from 'lodash';
-import { getCommonMeta } from '../utility';
+import { getCommonMeta, getSavedSources } from '../common';
 
 const getBaseUrl = (connector) => {
   const url = `${connector.options.endpoint}/${connector.name}`;
@@ -31,7 +31,9 @@ export default {
       return result;
     });
   },
-  getSources(connector) {
+  getSources(connector, { savedOnly }) {
+    if (savedOnly) return getSavedSources(connector);
+
     const url = getBaseUrl(connector.type);
     return http.get(url, getCommonMeta(connector)).then((response) => {
       const result = response.data;

@@ -27,8 +27,8 @@ describe('graphql connector', () => {
       data: sourcesMock,
     }));
 
-    const options = {};
-    graphql.getSources(connectorMock, options).then((result) => {
+    const optionsMock = {};
+    graphql.getSources(connectorMock, optionsMock).then((result) => {
       expect(result.noYesChoices.model).toEqual('NoYesChoice');
       done();
     });
