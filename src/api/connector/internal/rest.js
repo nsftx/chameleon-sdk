@@ -144,6 +144,7 @@ const getViewModels = (baseUrl, dataPackageId) => {
           dataPackage: dataPackageId,
           record: view.rootRecordId,
           schemaVersion: data.versionId,
+          schemaTag: data.versionTag,
         },
       };
 
@@ -161,11 +162,22 @@ const getSavedViewModels = (baseUrl, dataPackageId, connector) => {
     const missingVersions = [];
     const result = map(connector.sources, (item) => {
       const source = item;
+      const sourceVersion = source.meta.schemaVersion;
       const existsInNew = viewModels[source.id];
+      const versionChanged = existsInNew
+        ? existsInNew.meta.schemaVersion !== sourceVersion : true;
+
       source.disabled = !existsInNew;
 
-      if (!existsInNew) {
-        missingVersions.push(source.meta.schemaVersion);
+      if (versionChanged && existsInNew) {
+        source.meta.schemaVersions = [{
+          schemaVersion: existsInNew.meta.schemaVersion,
+          schemaTag: existsInNew.meta.schemaTag,
+        }];
+      }
+
+      if (!existsInNew || versionChanged) {
+        missingVersions.push(sourceVersion);
       }
 
       return source;
