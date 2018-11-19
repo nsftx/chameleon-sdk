@@ -1,3 +1,6 @@
+import { getSavedSources } from '../common';
+import { logger } from '../../../utility';
+
 const sourceSchemas = {
   currentApp: {
     name: 'currentApp',
@@ -62,19 +65,20 @@ const sourceSchemas = {
 };
 
 export default {
-  getSources(connector, { savedOnly }) {
-    console.log(connector, savedOnly);
-
-    return true;
+  getSources(connector) {
+    return getSavedSources(connector);
   },
-  getSourceData(connector, source) {
-    console.log(connector, source);
-
+  getSourceData() {
     return true;
   },
   getSourceSchema(connector, source) {
-    return new Promise((resolve) => {
-      resolve(sourceSchemas[source.name]);
+    return new Promise((resolve, reject) => {
+      if (sourceSchemas) {
+        return resolve(sourceSchemas[source.name]);
+      }
+
+      logger.error('Non-existent source schema');
+      return reject();
     });
   },
 };
