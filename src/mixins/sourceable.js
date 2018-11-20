@@ -38,6 +38,10 @@ export default {
       return {
         params: merge(this.dataSourceParams, this.dataSource.params),
         seed: this.registry.isPreviewMode,
+        context: {
+          registry: this.registry,
+          parent: this.$parent,
+        },
       };
     },
     loadConnectorData() {

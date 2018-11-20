@@ -1,5 +1,6 @@
+import { map, pick } from 'lodash';
 import { getSavedSources } from '../common';
-import { logger } from '../../../utility';
+import { binding, logger } from '../../../utility';
 
 const sourceSchemas = {
   currentApp: {
@@ -50,10 +51,6 @@ const sourceSchemas = {
         type: 'String',
       },
       {
-        name: 'description',
-        type: 'String',
-      },
-      {
         name: '_id',
         type: 'String',
       },
@@ -64,16 +61,60 @@ const sourceSchemas = {
   },
 };
 
+const sourceMeta = {
+  currentApp: {
+    context: 'registry',
+    path: '=$app.id',
+    parse(appId) {
+      return [{
+        id: appId,
+      }];
+    },
+  },
+  currentUser: {
+    context: 'registry',
+    path: '=$app.users',
+    parse(users) {
+      return map(users, userId => ({
+        id: userId,
+      }));
+    },
+  },
+  pages: {
+    context: 'registry',
+    path: '=$app.pages',
+    parse(pages) {
+      const schemaFields = map(sourceSchemas.pages.fields, field => field.name);
+
+      return map(pages, page => pick(page, schemaFields));
+    },
+  },
+};
+
 export default {
-  getSources(connector) {
+  async getSources(connector) {
     return getSavedSources(connector);
   },
-  getSourceData() {
-    return true;
+  async getSourceData(connector, source, options) {
+    return new Promise((resolve) => {
+      const { context, path, parse } = sourceMeta[source.name];
+
+      const data = binding.resolveDynamicValue(path, {
+        [context]: options.context[context],
+      });
+
+      console.log('DATA', data);
+
+      return resolve({
+        [source.name]: {
+          items: parse(data),
+        },
+      });
+    });
   },
-  getSourceSchema(connector, source) {
+  async getSourceSchema(connector, source) {
     return new Promise((resolve, reject) => {
-      if (sourceSchemas) {
+      if (sourceSchemas[source.name]) {
         return resolve(sourceSchemas[source.name]);
       }
 

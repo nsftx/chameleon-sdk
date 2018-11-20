@@ -57,9 +57,6 @@ export default {
     });
   },
   getConnectorType(connector) {
-    console.log(connector);
-    console.log('TYPEs', connectorTypes);
-
     const type = connectorTypes[connector.type];
     return type;
   },
@@ -76,7 +73,6 @@ export default {
     });
   },
   getSourceSchema(connector, source) {
-    console.log('SUP', connector);
     const connectorType = this.getConnectorType(connector.type);
     return connectorType.getSourceSchema(connector, source);
   },
