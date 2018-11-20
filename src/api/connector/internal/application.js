@@ -141,7 +141,9 @@ export default {
   async getSourceSchema(connector, source) {
     return new Promise((resolve, reject) => {
       if (sourceSchemas[source.name]) {
-        return resolve(sourceSchemas[source.name]);
+        return resolve({
+          schema: sourceSchemas[source.name],
+        });
       }
 
       logger.error('Non-existent source schema');
