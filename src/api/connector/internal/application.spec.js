@@ -74,12 +74,13 @@ describe('application connector', () => {
     const sourceMock = {
       name: 'pages',
     };
-
-    const result = await application.getSourceData(connectorInstanceMock, sourceMock, {
+    const optionsMock = {
       context: {
         registry: sourceRegistryMock,
       },
-    });
+    };
+
+    const result = await application.getSourceData(connectorInstanceMock, sourceMock, optionsMock);
 
     expect(result).toEqual(sourceDataMock);
     done();
