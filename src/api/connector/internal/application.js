@@ -124,7 +124,12 @@ export default {
     return getSavedSources(connector);
   },
   async getSourceData(connector, source, options) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
+      if (!sourceMeta[source.name] || !sourceSchemas[source.name]) {
+        logger.error('Non-existent source schema or meta');
+        return reject(new Error('Non-existent source schema or meta'));
+      }
+
       const { context, path, parse } = sourceMeta[source.name];
 
       const data = binding.resolveDynamicValue(path, {
@@ -147,7 +152,7 @@ export default {
       }
 
       logger.error('Non-existent source schema');
-      return reject();
+      return reject(new Error('Non-existent source schema'));
     });
   },
 };
