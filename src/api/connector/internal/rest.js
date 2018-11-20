@@ -6,6 +6,7 @@ import {
   each,
   filter,
   find,
+  isArray,
   keyBy,
   map,
   toLower,
@@ -83,7 +84,7 @@ const getInstalledVersions = (baseUrl, versions) => {
 
 const getLatestSchema = (baseUrl, dataPackageId) => {
   const latestSchemaUrl = `${baseUrl}/data-packages/${dataPackageId}/schema-versions/uncommitted`;
-  return http.get(latestSchemaUrl);
+  return http.get(latestSchemaUrl).then(response => response.data);
 };
 
 const getSourceDataReqDefinition = (connector, source) => {
@@ -131,7 +132,7 @@ const getSourceSeedReqDefinition = (connector, source, options) => {
 
 const getViewModels = (baseUrl, dataPackageId) => {
   const latestSchemaReq = getLatestSchema(baseUrl, dataPackageId).then((result) => {
-    const { data } = result;
+    const data = result;
     const { views } = data.schema;
 
     // Attach necessary data for READ & WRITE implementation
@@ -144,6 +145,7 @@ const getViewModels = (baseUrl, dataPackageId) => {
           dataPackage: dataPackageId,
           record: view.rootRecordId,
           schemaVersion: data.versionId,
+          schemaTag: data.versionTag,
         },
       };
 
@@ -161,11 +163,22 @@ const getSavedViewModels = (baseUrl, dataPackageId, connector) => {
     const missingVersions = [];
     const result = map(connector.sources, (item) => {
       const source = item;
+      const sourceVersion = source.meta.schemaVersion;
       const existsInNew = viewModels[source.id];
+      const versionChanged = existsInNew
+        ? existsInNew.meta.schemaVersion !== sourceVersion : true;
+
       source.disabled = !existsInNew;
 
-      if (!existsInNew) {
-        missingVersions.push(source.meta.schemaVersion);
+      if (versionChanged && existsInNew) {
+        source.meta.schemaVersions = [{
+          schemaVersion: existsInNew.meta.schemaVersion,
+          schemaTag: existsInNew.meta.schemaTag,
+        }];
+      }
+
+      if (!existsInNew || versionChanged) {
+        missingVersions.push(sourceVersion);
       }
 
       return source;
@@ -178,7 +191,6 @@ const getSavedViewModels = (baseUrl, dataPackageId, connector) => {
     return getInstalledVersions(baseUrl, uniq(missingVersions)).then((versions) => {
       const finalResult = map(result, (item) => {
         const source = item;
-        if (!source.disabled) return source;
 
         const installedVersion = find(versions, {
           schemaVersion: { versionId: source.meta.schemaVersion },
@@ -187,6 +199,9 @@ const getSavedViewModels = (baseUrl, dataPackageId, connector) => {
           && find(installedVersion.schemaVersion.schema.views, { id: source.id });
 
         source.installed = !!installedVersion && !!installedSource;
+        if (source.installed) {
+          source.meta.schemaTag = installedVersion.schemaVersion.versionTag;
+        }
 
         return source;
       });
@@ -259,14 +274,24 @@ export default {
     });
   },
   getSourceSchema(connector, source) {
+    let schemaRequest;
     const baseUrl = getBaseUrl(
       connector.options,
       connector.type,
       'blueprint',
     );
 
-    return getLatestSchema(baseUrl, source.meta.dataPackage).then((response) => {
-      const result = response.data;
+    if (source.installed && source.disabled) {
+      schemaRequest = getInstalledVersions(baseUrl, [source.meta.schemaVersion]);
+    } else {
+      schemaRequest = getLatestSchema(baseUrl, source.meta.dataPackage);
+    }
+
+    return schemaRequest.then((response) => {
+      let result = isArray(response) ? response[0] : response;
+
+      if (result && result.schemaVersion) result = result.schemaVersion;
+
       const { records, views } = result.schema;
       const viewSchema = find(views, { id: source.id });
       const schema = find(records, { id: source.meta.record });
