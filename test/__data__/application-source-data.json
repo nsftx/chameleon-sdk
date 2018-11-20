@@ -1,0 +1,21 @@
+{
+  "pages": {
+    "items": [
+      {
+        "_id": null,
+        "name": "Home",
+        "path": "/"
+      },
+      {
+        "_id": null,
+        "name": "About",
+        "path": "/about"
+      },
+      {
+        "_id": "contact",
+        "name": "Contact",
+        "path": "/contact"
+      }
+    ]
+  }
+}
