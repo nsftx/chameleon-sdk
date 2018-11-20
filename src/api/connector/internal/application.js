@@ -13,6 +13,10 @@ const sourceSchemas = {
         name: 'id',
         type: 'String',
       },
+      {
+        name: 'name',
+        type: 'String',
+      },
     ],
     filters: {
       operators: ['eq'],
@@ -25,10 +29,10 @@ const sourceSchemas = {
     name: 'currentUser',
     model: 'CurrentUser',
     actions: ['read'],
-    identifier: 'id',
+    identifier: 'email',
     fields: [
       {
-        name: 'id',
+        name: 'email',
         type: 'String',
       },
     ],
@@ -38,7 +42,7 @@ const sourceSchemas = {
   },
   pages: {
     name: 'pages',
-    model: 'Pages',
+    model: 'Page',
     actions: ['read'],
     identifier: 'id',
     fields: [
@@ -59,25 +63,45 @@ const sourceSchemas = {
       operators: ['eq'],
     },
   },
+  themes: {
+    name: 'themes',
+    model: 'Theme',
+    actions: ['read'],
+    identifier: 'id',
+    fields: [
+      {
+        name: 'name',
+        type: 'String',
+      },
+      {
+        name: 'value',
+        type: 'String',
+      },
+    ],
+    filters: {
+      operators: ['eq'],
+    },
+  },
 };
 
 const sourceMeta = {
   currentApp: {
     context: 'registry',
-    path: '=$app.id',
-    parse(appId) {
+    path: '=$app',
+    parse(app) {
       return [{
-        id: appId,
+        id: app.id,
+        name: app.name,
       }];
     },
   },
   currentUser: {
     context: 'registry',
     path: '=$app.users',
-    parse(users) {
-      return map(users, userId => ({
-        id: userId,
-      }));
+    parse(email) {
+      return [{
+        email,
+      }];
     },
   },
   pages: {
@@ -88,6 +112,10 @@ const sourceMeta = {
 
       return map(pages, page => pick(page, schemaFields));
     },
+  },
+  themes: {
+    context: 'registry',
+    path: '=$themes',
   },
 };
 
@@ -107,7 +135,7 @@ export default {
 
       return resolve({
         [source.name]: {
-          items: parse(data),
+          items: parse ? parse(data) : data,
         },
       });
     });
