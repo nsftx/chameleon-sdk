@@ -131,8 +131,6 @@ export default {
         [context]: options.context[context],
       });
 
-      console.log('DATA', data);
-
       return resolve({
         [source.name]: {
           items: parse ? parse(data) : data,
