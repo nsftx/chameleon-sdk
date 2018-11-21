@@ -1,0 +1,21 @@
+{
+  "schema": {
+    "name": "pages",
+    "model": "Page",
+    "actions": ["read"],
+    "identifier": "id",
+    "fields": [{
+      "name": "name",
+      "type": "String"
+    }, {
+      "name": "path",
+      "type": "String"
+    }, {
+      "name": "_id",
+      "type": "String"
+    }],
+    "filters": {
+      "operators": ["eq"]
+    }
+  }
+}
