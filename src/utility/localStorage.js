@@ -43,6 +43,13 @@ export default {
 
     return header;
   },
+  getAllKeys() {
+    if (this.isSupported) {
+      return Object.keys(localStorage);
+    }
+
+    return null;
+  },
   getItem(key) {
     if (this.isSupported) {
       return localStorage.getItem(key);
