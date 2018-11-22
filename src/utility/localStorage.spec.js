@@ -20,7 +20,7 @@ describe('localStorage utility', () => {
     expect(storage.getItem('test')).toEqual('testValue');
   });
 
-  it('should save get storage keys', () => {
+  it('should get storage keys', () => {
     storage.setItem('test', 'testValue');
     expect(storage.getAllKeys()).toEqual(['test']);
   });
