@@ -20,6 +20,11 @@ describe('localStorage utility', () => {
     expect(storage.getItem('test')).toEqual('testValue');
   });
 
+  it('should get storage keys', () => {
+    storage.setItem('test', 'testValue');
+    expect(storage.getAllKeys()).toEqual(['test']);
+  });
+
   it('should remove data', () => {
     storage.setItem('test', 'testValue');
     expect(storage.removeItem('test')).toBeFalsy();
