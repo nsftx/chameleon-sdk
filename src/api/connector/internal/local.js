@@ -19,7 +19,7 @@ export default {
     });
   },
   getSourceData(connector, source) {
-    const url = `${connector.type.options.endpoint}/${source.name}.json`;
+    const url = `${connector.type.options.endpoint}/${source.id}.json`;
     return http.get(url).then((response) => {
       const result = response.data;
       const columns = map(source.schema, n => n.name);
@@ -35,7 +35,7 @@ export default {
     const url = `${connector.type.options.endpoint}/sourceSchema.json`;
     return http.get(url).then((response) => {
       const result = response.data;
-      return result[source.model];
+      return result[source.id];
     });
   },
 };
