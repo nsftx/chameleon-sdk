@@ -1,6 +1,6 @@
 {
   "name": "@nsoft/chameleon-sdk",
-  "version": "1.0.71",
+  "version": "1.0.72",
   "description": "Chameleon Software Development Kit",
   "author": "Chameleon Team <chameleon@nsoft.com>",
   "contributors": [
@@ -24,7 +24,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@vue/test-utils": "^1.0.0-beta.25",
+    "@vue/test-utils": "^1.0.0-beta.26",
     "axios": "^0.18.0",
     "babel-cli": "^6.26.0",
     "babel-jest": "^23.6.0",
