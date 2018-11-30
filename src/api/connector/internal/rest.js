@@ -17,11 +17,17 @@ import { uriEncoder } from '../../../utility';
 const formatSourceSchema = (record, view) => {
   const formatted = map(view.fields, (field) => {
     const viewField = field;
+    viewField.name = field.displayName;
+
+    if (viewField.dependencyPath) {
+      viewField.type = 'relation';
+      return viewField;
+    }
+
     const fieldSchema = find(record.fields, { id: field.displayFieldId });
     fieldSchema.name = field.displayName;
 
     viewField.type = fieldSchema.type;
-    viewField.name = field.displayName;
 
     return viewField;
   });
