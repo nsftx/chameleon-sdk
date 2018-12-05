@@ -61,7 +61,13 @@ export default {
     let value;
 
     try {
+      // JSON.parse - expressionFunction is always returning String
       value = expressionFunction(context);
+      try {
+        value = JSON.parse(value);
+      } catch (error) {
+        return value;
+      }
     } catch (error) {
       logger.warn('Error resolving expression');
       value = defaultValue;
