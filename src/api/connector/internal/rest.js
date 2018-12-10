@@ -101,7 +101,7 @@ const getSourceDataReqDefinition = (connector, source) => {
   );
 
   const fields = map(source.schema, field => field.id);
-  const url = `${baseUrl}/schema-versions/${source.schemaVersion}/records/${source.record}/instances`;
+  const url = `${baseUrl}/schema-versions/${source.meta.schemaVersion}/records/${source.meta.record}/instances`;
   const params = {
     viewId: source.id,
     fields: JSON.stringify(fields),
