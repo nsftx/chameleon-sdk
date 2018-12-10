@@ -35,6 +35,7 @@ const connectors = {
     },
     sources: {
       populationPerAge: {
+        id: 'populationPerAge',
         name: 'populationPerAge',
         model: 'populationPerAge',
       },
@@ -69,6 +70,7 @@ let wrapper = shallowMount(component, {
     definition: {
       type: 'table',
       dataSource: {
+        id: 'populationPerAge',
         name: 'populationPerAge',
         model: 'PopulationPerAge',
         connector: {
