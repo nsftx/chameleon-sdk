@@ -40,7 +40,7 @@
     "jest-localstorage-mock": "^2.3.0",
     "lodash": "^4.17.11",
     "uuid": "^3.3.2",
-    "vue": "^2.5.17",
+    "vue": "^2.5.21",
     "vue-template-compiler": "^2.5.17"
   },
   "jest": {
