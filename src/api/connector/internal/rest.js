@@ -101,7 +101,7 @@ const getSourceDataReqDefinition = (connector, source) => {
   );
 
   const fields = map(source.schema, field => field.id);
-  const url = `${baseUrl}/schema-versions/${source.schemaVersion}/records/${source.record}/instances`;
+  const url = `${baseUrl}/schema-versions/${source.meta.schemaVersion}/records/${source.meta.record}/instances`;
   const params = {
     viewId: source.id,
     fields: JSON.stringify(fields),
@@ -136,87 +136,77 @@ const getSourceSeedReqDefinition = (connector, source, options) => {
   };
 };
 
-const getViewModels = (baseUrl, dataPackageId) => {
-  const latestSchemaReq = getLatestSchema(baseUrl, dataPackageId).then((result) => {
-    const data = result;
-    const { views } = data.schema;
+const formatViewModels = (views) => {
+  // Attach necessary data for READ & WRITE implementation
+  const viewModels = map(views, (view) => {
+    const viewData = {
+      id: view.id,
+      name: view.name,
+      model: view.name,
+      meta: {
+        dataPackage: view.dataPackageId,
+        dataPackageName: view.dataPackageName,
+        record: view.rootRecordId,
+        schemaVersion: view.versionId,
+        schemaTag: view.versionTag,
+      },
+    };
 
-    // Attach necessary data for READ & WRITE implementation
-    const viewModels = map(views, (view) => {
-      const viewData = {
-        id: view.id,
-        name: view.name,
-        model: view.name,
-        meta: {
-          dataPackage: dataPackageId,
-          record: view.rootRecordId,
-          schemaVersion: data.versionId,
-          schemaTag: data.versionTag,
-        },
-      };
-
-      return viewData;
-    });
-
-    return keyBy(viewModels, item => item.id);
+    return viewData;
   });
 
-  return latestSchemaReq;
+  return keyBy(viewModels, item => item.id);
 };
 
-const getSavedViewModels = (baseUrl, dataPackageId, connector) => {
-  const viewModelsReq = getViewModels(baseUrl, dataPackageId).then((viewModels) => {
-    const missingVersions = [];
-    const result = map(connector.sources, (item) => {
+const getSavedViewModels = (viewModels, connector, baseUrl) => {
+  const missingVersions = [];
+  const result = map(connector.sources, (item) => {
+    const source = item;
+    const sourceVersion = source.meta.schemaVersion;
+    const existsInNew = viewModels[source.id];
+    const versionChanged = existsInNew
+      ? existsInNew.meta.schemaVersion !== sourceVersion : true;
+
+    source.disabled = !existsInNew;
+
+    if (versionChanged && existsInNew) {
+      source.meta.schemaVersions = [{
+        schemaVersion: existsInNew.meta.schemaVersion,
+        schemaTag: existsInNew.meta.schemaTag,
+      }];
+    }
+
+    if (!existsInNew || versionChanged) {
+      missingVersions.push(sourceVersion);
+    }
+
+    return source;
+  });
+
+  if (missingVersions.length === 0) {
+    return Promise.resolve(result);
+  }
+
+  return getInstalledVersions(baseUrl, uniq(missingVersions)).then((versions) => {
+    const finalResult = map(result, (item) => {
       const source = item;
-      const sourceVersion = source.meta.schemaVersion;
-      const existsInNew = viewModels[source.id];
-      const versionChanged = existsInNew
-        ? existsInNew.meta.schemaVersion !== sourceVersion : true;
 
-      source.disabled = !existsInNew;
+      const installedVersion = find(versions, {
+        schemaVersion: { versionId: source.meta.schemaVersion },
+      });
+      const installedSource = installedVersion
+        && find(installedVersion.schemaVersion.schema.views, { id: source.id });
 
-      if (versionChanged && existsInNew) {
-        source.meta.schemaVersions = [{
-          schemaVersion: existsInNew.meta.schemaVersion,
-          schemaTag: existsInNew.meta.schemaTag,
-        }];
-      }
-
-      if (!existsInNew || versionChanged) {
-        missingVersions.push(sourceVersion);
+      source.installed = !!installedVersion && !!installedSource;
+      if (source.installed) {
+        source.meta.schemaTag = installedVersion.schemaVersion.versionTag;
       }
 
       return source;
     });
 
-    if (missingVersions.length === 0) {
-      return result;
-    }
-
-    return getInstalledVersions(baseUrl, uniq(missingVersions)).then((versions) => {
-      const finalResult = map(result, (item) => {
-        const source = item;
-
-        const installedVersion = find(versions, {
-          schemaVersion: { versionId: source.meta.schemaVersion },
-        });
-        const installedSource = installedVersion
-          && find(installedVersion.schemaVersion.schema.views, { id: source.id });
-
-        source.installed = !!installedVersion && !!installedSource;
-        if (source.installed) {
-          source.meta.schemaTag = installedVersion.schemaVersion.versionTag;
-        }
-
-        return source;
-      });
-
-      return finalResult;
-    });
+    return finalResult;
   });
-
-  return viewModelsReq;
 };
 
 export default {
@@ -242,17 +232,20 @@ export default {
       'blueprint',
     );
 
-    // Get all data packages
-    // TODO: Change implementation after https://github.com/chmjs/ride-storage-blueprint/issues/40
-    return http.get(`${baseUrl}/data-packages`).then((response) => {
-      const dataPackage = response.data.dataPackages[0];
+    // Get available view models from all data packages in space
+    return http.get(`${baseUrl}/available-view-models`, {
+      params: {
+        types: ['uncommitted', 'foreign'].join(','),
+      },
+    }).then((response) => {
+      const { viewModels } = response.data;
+      const formattedViewModels = formatViewModels(viewModels);
 
       if (savedOnly) {
-        return getSavedViewModels(baseUrl, dataPackage.id, connector);
+        return getSavedViewModels(formattedViewModels, connector, baseUrl);
       }
 
-      // Take first data package and fetch its latest schema
-      return getViewModels(baseUrl, dataPackage.id);
+      return formattedViewModels;
     });
   },
   getSourceData(connector, source, options) {

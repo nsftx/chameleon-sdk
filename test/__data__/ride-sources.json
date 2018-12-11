@@ -1,0 +1,176 @@
+{
+  "response": {
+    "viewModels": [
+      {
+        "spaceId": "dbba4a50-b915-46c0-8611-3797f15f041f",
+        "type": "uncommitted",
+        "id": "d34863de-8630-4758-8110-e395faa17d0f",
+        "name": "tudu",
+        "originSpaceId": "dbba4a50-b915-46c0-8611-3797f15f041f",
+        "defaultViewModel": false,
+        "versionId": "7f66d8e6-dcae-3838-b7db-cc7e970cba36",
+        "versionTag": "uncommitted",
+        "dataPackageId": "0e24dc66-2fce-40cf-b8ca-ba7651264e73",
+        "dataPackageName": "Logicno",
+        "rootRecordId": "01fc1bf0-ff39-49fe-adfd-ec19ea6c7851",
+        "rootRecordName": "Employees",
+        "createdAt": "2018-11-30T08:06:32.990758",
+        "modifiedAt": "2018-11-30T08:06:32.999864"
+      },
+      {
+        "spaceId": "dbba4a50-b915-46c0-8611-3797f15f041f",
+        "type": "uncommitted",
+        "id": "9ff71887-c9f2-4bbd-b415-18fb4a22f5e0",
+        "name": "Employees (Default)",
+        "originSpaceId": "dbba4a50-b915-46c0-8611-3797f15f041f",
+        "defaultViewModel": true,
+        "versionId": "7f66d8e6-dcae-3838-b7db-cc7e970cba36",
+        "versionTag": "uncommitted",
+        "dataPackageId": "0e24dc66-2fce-40cf-b8ca-ba7651264e73",
+        "dataPackageName": "Logicno",
+        "rootRecordId": "01fc1bf0-ff39-49fe-adfd-ec19ea6c7851",
+        "rootRecordName": "Employees",
+        "createdAt": "2018-11-27T15:22:37.169275",
+        "modifiedAt": "2018-12-03T14:26:22.925346"
+      },
+      {
+        "spaceId": "dbba4a50-b915-46c0-8611-3797f15f041f",
+        "type": "uncommitted",
+        "id": "2948aa59-bfcd-4d33-ae1a-4d8284b02685",
+        "name": "Second (Default)",
+        "originSpaceId": "dbba4a50-b915-46c0-8611-3797f15f041f",
+        "defaultViewModel": true,
+        "versionId": "3032af4a-48b0-3bd3-a361-f7a21c83ad41",
+        "versionTag": "uncommitted",
+        "dataPackageId": "762769e2-0d1e-4a38-82d8-8809d5c41202",
+        "dataPackageName": "Lana",
+        "rootRecordId": "482864f7-8b92-451f-a7e9-556a18fcd355",
+        "rootRecordName": "Second",
+        "createdAt": "2018-11-21T11:36:22.551778",
+        "modifiedAt": "2018-11-22T14:45:34.801302"
+      },
+      {
+        "spaceId": "dbba4a50-b915-46c0-8611-3797f15f041f",
+        "type": "uncommitted",
+        "id": "6a63ae1c-a755-431f-9a30-de07c8d55bca",
+        "name": "firstvm",
+        "originSpaceId": "dbba4a50-b915-46c0-8611-3797f15f041f",
+        "defaultViewModel": false,
+        "versionId": "8f22ad04-34f6-35ca-bf10-043d2e595326",
+        "versionTag": "uncommitted",
+        "dataPackageId": "713e7d21-b52c-4f7c-bc96-6b3d15750566",
+        "dataPackageName": "Ivica",
+        "rootRecordId": "19e15cec-e785-40e6-89eb-93bacddbaed2",
+        "rootRecordName": "test2vmc",
+        "createdAt": "2018-12-03T12:20:55.850989",
+        "modifiedAt": "2018-12-03T12:20:55.850995"
+      },
+      {
+        "spaceId": "dbba4a50-b915-46c0-8611-3797f15f041f",
+        "type": "uncommitted",
+        "id": "407be5d1-9e85-4b12-835f-f956a9e654b5",
+        "name": "Related stuff (Default)",
+        "originSpaceId": "dbba4a50-b915-46c0-8611-3797f15f041f",
+        "defaultViewModel": true,
+        "versionId": "3032af4a-48b0-3bd3-a361-f7a21c83ad41",
+        "versionTag": "uncommitted",
+        "dataPackageId": "762769e2-0d1e-4a38-82d8-8809d5c41202",
+        "dataPackageName": "Lana",
+        "rootRecordId": "f3d90e85-b809-4894-bfe7-a169afc0f619",
+        "rootRecordName": "Related stuff",
+        "createdAt": "2018-11-21T11:37:48.988205",
+        "modifiedAt": "2018-11-30T11:56:15.108405"
+      },
+      {
+        "spaceId": "dbba4a50-b915-46c0-8611-3797f15f041f",
+        "type": "uncommitted",
+        "id": "c0b7ce1f-c1e7-43e3-b504-8369cf2f8489",
+        "name": "First (Default)",
+        "originSpaceId": "dbba4a50-b915-46c0-8611-3797f15f041f",
+        "defaultViewModel": true,
+        "versionId": "3032af4a-48b0-3bd3-a361-f7a21c83ad41",
+        "versionTag": "uncommitted",
+        "dataPackageId": "762769e2-0d1e-4a38-82d8-8809d5c41202",
+        "dataPackageName": "Lana",
+        "rootRecordId": "7098f4ad-2a6e-4e76-ae06-b4846c4c8fd4",
+        "rootRecordName": "First",
+        "createdAt": "2018-11-21T11:35:55.43965",
+        "modifiedAt": "2018-11-22T14:45:35.341827"
+      }
+    ]
+  },
+  "result": {
+    "d34863de-8630-4758-8110-e395faa17d0f": {
+      "id": "d34863de-8630-4758-8110-e395faa17d0f",
+      "name": "tudu",
+      "model": "tudu",
+      "meta": {
+        "dataPackage": "0e24dc66-2fce-40cf-b8ca-ba7651264e73",
+        "dataPackageName": "Logicno",
+        "record": "01fc1bf0-ff39-49fe-adfd-ec19ea6c7851",
+        "schemaVersion": "7f66d8e6-dcae-3838-b7db-cc7e970cba36",
+        "schemaTag": "uncommitted"
+      }
+    },
+    "9ff71887-c9f2-4bbd-b415-18fb4a22f5e0": {
+      "id": "9ff71887-c9f2-4bbd-b415-18fb4a22f5e0",
+      "name": "Employees (Default)",
+      "model": "Employees (Default)",
+      "meta": {
+        "dataPackage": "0e24dc66-2fce-40cf-b8ca-ba7651264e73",
+        "dataPackageName": "Logicno",
+        "record": "01fc1bf0-ff39-49fe-adfd-ec19ea6c7851",
+        "schemaVersion": "7f66d8e6-dcae-3838-b7db-cc7e970cba36",
+        "schemaTag": "uncommitted"
+      }
+    },
+    "2948aa59-bfcd-4d33-ae1a-4d8284b02685": {
+      "id": "2948aa59-bfcd-4d33-ae1a-4d8284b02685",
+      "name": "Second (Default)",
+      "model": "Second (Default)",
+      "meta": {
+        "dataPackage": "762769e2-0d1e-4a38-82d8-8809d5c41202",
+        "dataPackageName": "Lana",
+        "record": "482864f7-8b92-451f-a7e9-556a18fcd355",
+        "schemaVersion": "3032af4a-48b0-3bd3-a361-f7a21c83ad41",
+        "schemaTag": "uncommitted"
+      }
+    },
+    "6a63ae1c-a755-431f-9a30-de07c8d55bca": {
+      "id": "6a63ae1c-a755-431f-9a30-de07c8d55bca",
+      "name": "firstvm",
+      "model": "firstvm",
+      "meta": {
+        "dataPackage": "713e7d21-b52c-4f7c-bc96-6b3d15750566",
+        "dataPackageName": "Ivica",
+        "record": "19e15cec-e785-40e6-89eb-93bacddbaed2",
+        "schemaVersion": "8f22ad04-34f6-35ca-bf10-043d2e595326",
+        "schemaTag": "uncommitted"
+      }
+    },
+    "407be5d1-9e85-4b12-835f-f956a9e654b5": {
+      "id": "407be5d1-9e85-4b12-835f-f956a9e654b5",
+      "name": "Related stuff (Default)",
+      "model": "Related stuff (Default)",
+      "meta": {
+        "dataPackage": "762769e2-0d1e-4a38-82d8-8809d5c41202",
+        "dataPackageName": "Lana",
+        "record": "f3d90e85-b809-4894-bfe7-a169afc0f619",
+        "schemaVersion": "3032af4a-48b0-3bd3-a361-f7a21c83ad41",
+        "schemaTag": "uncommitted"
+      }
+    },
+    "c0b7ce1f-c1e7-43e3-b504-8369cf2f8489": {
+      "id": "c0b7ce1f-c1e7-43e3-b504-8369cf2f8489",
+      "name": "First (Default)",
+      "model": "First (Default)",
+      "meta": {
+        "dataPackage": "762769e2-0d1e-4a38-82d8-8809d5c41202",
+        "dataPackageName": "Lana",
+        "record": "7098f4ad-2a6e-4e76-ae06-b4846c4c8fd4",
+        "schemaVersion": "3032af4a-48b0-3bd3-a361-f7a21c83ad41",
+        "schemaTag": "uncommitted"
+      }
+    }
+  }
+}

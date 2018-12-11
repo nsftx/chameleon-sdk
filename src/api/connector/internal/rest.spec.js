@@ -1,5 +1,6 @@
 /* eslint import/no-unresolved:"off" */
 import axiosMock from 'axios';
+import sourcesMock from 'data/ride-sources.json';
 import sourceSchemaMock from 'data/ride-source-schema.json';
 import sourceDataMock from 'data/ride-source-data.json';
 import rest from './rest';
@@ -33,6 +34,17 @@ const sourceMock = {
 };
 
 describe('internal rest connector', () => {
+  it('should get sources', (done) => {
+    axiosMock.get.mockImplementation(() => Promise.resolve({
+      data: sourcesMock.response,
+    }));
+
+    rest.getSources(connectorMock, sourceMock).then((result) => {
+      expect(result).toEqual(sourcesMock.result);
+      done();
+    });
+  });
+
   it('should get source schema', (done) => {
     axiosMock.get.mockImplementation(() => Promise.resolve({
       data: sourceSchemaMock.response,
