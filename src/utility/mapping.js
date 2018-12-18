@@ -49,12 +49,11 @@ export default {
   should be optimized once nesting is implemented.
   */
   mapWithSchema(schema, source) {
-    const mappedSource = {};
     if (isArray(schema)) {
       const hasMapping = !isNil(find(schema, field => !isNil(field.mapName)));
 
       if (hasMapping) {
-        return mapNestedSource(source, schema, mappedSource);
+        return mapNestedSource(source, schema);
       }
     }
 
