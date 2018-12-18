@@ -8,7 +8,19 @@ import sourceable from './sourceable';
 
 axiosMock.get.mockImplementation(() => Promise.resolve({
   data: [
-    { population: 2704659, age: '<5', active: true },
+    {
+      population: 2704659,
+      age: '<5',
+      items: [
+        {
+          population: 8819342, age: '45-64',
+        },
+        {
+          population: 1712463, age: '≥65',
+        },
+      ],
+      active: true,
+    },
     { population: 4499890, age: '5-13', active: true },
     { population: 2159981, age: '14-17', active: true },
     { population: 3853788, age: '18-24', active: false },
@@ -103,6 +115,12 @@ let wrapper = shallowMount(component, {
             mapName: 'age',
           },
           {
+            name: 'items',
+            type: 'Array',
+            label: 'Items',
+            mapName: 'children',
+          },
+          {
             name: 'active',
             type: 'Boolean',
             label: 'Active',
@@ -133,10 +151,12 @@ describe('sourceable mixin', () => {
       expect(result.model).toBeTruthy();
       expect(result.schema instanceof Array).toBeTruthy();
       expect(result.schema[1].mapName).toEqual('age');
-      expect(result.schema[2].mapName).toBeUndefined();
+      expect(result.schema[3].mapName).toBeUndefined();
       expect(result.items.length).toBeGreaterThan(0);
       expect(result.items[0].population).toEqual('<5');
-      expect(keys(result.items[0]).length).toEqual(3);
+      expect(result.items[0].children[0].age).toEqual(8819342);
+      expect(result.items[0].children.length).toEqual(2);
+      expect(keys(result.items[0]).length).toEqual(4);
       done();
     });
   });
