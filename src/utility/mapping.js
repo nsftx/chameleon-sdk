@@ -1,4 +1,5 @@
 import {
+  clone,
   each,
   find,
   isArray,
@@ -12,7 +13,7 @@ const originalSuffix = '_$';
 const mapItem = (schema, item) => {
   /* eslint no-param-reassign:"off" */
   each(schema, (field) => {
-    item[`${field.name}${originalSuffix}`] = item[field.name];
+    item[`${field.name}${originalSuffix}`] = clone(item[field.name]);
   });
 
   each(schema, (field) => {
@@ -20,7 +21,7 @@ const mapItem = (schema, item) => {
 
     if (field.mapName && !isNil(item[field.name])) {
       isSwitch = !isNil(item[field.mapName]);
-      item[field.mapName] = item[`${field.name}${originalSuffix}`];
+      item[field.mapName] = clone(item[`${field.name}${originalSuffix}`]);
       if (!isSwitch) {
         delete item[field.name];
       }
