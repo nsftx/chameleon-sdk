@@ -1,5 +1,4 @@
 import {
-  clone,
   each,
   find,
   isArray,
@@ -8,44 +7,36 @@ import {
   map,
 } from 'lodash';
 
-const originalSuffix = '_$';
-
 const mapItem = (schema, item) => {
-  /* eslint no-param-reassign:"off" */
+  const mappedItem = {};
   each(schema, (field) => {
-    item[`${field.name}${originalSuffix}`] = clone(item[field.name]);
-  });
-
-  each(schema, (field) => {
-    let isSwitch = false;
-
-    if (field.mapName && !isNil(item[field.name])) {
-      isSwitch = !isNil(item[field.mapName]);
-      item[field.mapName] = clone(item[`${field.name}${originalSuffix}`]);
-      if (!isSwitch) {
-        delete item[field.name];
+    if (!isNil(item[field.name])) {
+      // Add mapped value
+      if (field.mapName) {
+        mappedItem[field.mapName] = item[field.name];
+      } else {
+        // Add default value if it's not mapped
+        mappedItem[field.name] = item[field.name];
       }
     }
-
-    delete item[`${field.name}${originalSuffix}`];
   });
 
-  return item;
+  return mappedItem;
 };
 
 const mapNestedSource = (source, schema) => {
   if (isArray(source)) {
     return map(source, (item) => {
-      mapItem(schema, item);
+      const mappedItem = mapItem(schema, item);
 
       // Loop trough nested items
-      const itemKeys = keys(item);
-      each(itemKeys, (key) => {
-        if (isArray(item[key]) && item[key].length) {
-          mapNestedSource(item[key], schema);
+      const itemKeys = keys(mappedItem);
+      map(itemKeys, (key) => {
+        if (isArray(mappedItem[key]) && mappedItem[key].length) {
+          mappedItem[key] = mapNestedSource(mappedItem[key], schema);
         }
       });
-      return item;
+      return mappedItem;
     });
   }
   return mapItem(schema, source);
