@@ -153,8 +153,6 @@ export default {
     });
   },
   async getSourceSchema(connector, source, options) {
-    console.log(options);
-
     return new Promise((resolve, reject) => {
       if (source.name === 'parent' && options.parent) {
         const parentDataSource = options.parent.dataSource;
