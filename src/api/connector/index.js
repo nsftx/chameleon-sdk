@@ -72,8 +72,8 @@ export default {
       return result;
     });
   },
-  getSourceSchema(connector, source) {
+  getSourceSchema(connector, source, options) {
     const connectorType = this.getConnectorType(connector.type);
-    return connectorType.getSourceSchema(connector, source);
+    return connectorType.getSourceSchema(connector, source, options);
   },
 };

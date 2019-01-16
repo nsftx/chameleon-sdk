@@ -82,6 +82,14 @@ const sourceSchemas = {
       operators: ['eq'],
     },
   },
+  parent: {
+    name: 'parent',
+    model: 'Parent',
+    actions: ['read'],
+    identifier: null,
+    fields: [],
+    filters: {},
+  },
 };
 
 const sourceMeta = {
@@ -117,6 +125,7 @@ const sourceMeta = {
     context: 'registry',
     path: '=$themes',
   },
+  parent: {},
 };
 
 export default {
@@ -143,8 +152,17 @@ export default {
       });
     });
   },
-  async getSourceSchema(connector, source) {
+  async getSourceSchema(connector, source, options) {
     return new Promise((resolve, reject) => {
+      if (source.name === 'parent' && options.parent) {
+        const parentDataSource = options.parent.dataSource;
+        const schema = parentDataSource ? parentDataSource.schema : [];
+
+        return resolve({
+          schema,
+        });
+      }
+
       if (sourceSchemas[source.name]) {
         return resolve({
           schema: sourceSchemas[source.name],

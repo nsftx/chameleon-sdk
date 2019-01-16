@@ -51,7 +51,7 @@ export default {
           || !this.options.connectors
           || !this.isDataSourceRemoteValid
         ) {
-          resolve({
+          return resolve({
             items: isNil(this.dataSource) ? null : this.mapDataSourceItems(this.dataSource.items),
             pagination: {},
           });
