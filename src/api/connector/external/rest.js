@@ -39,7 +39,7 @@ const getCommonParams = (connector) => {
   const authConfig = connector.options.auth;
   const basicAuthParams = authConfig.username && authConfig.password ? {
     headers: {
-      authorization: btoa(`${authConfig.username}:${authConfig.password}`),
+      authorization: `Basic ${btoa(`${authConfig.username}:${authConfig.password}`)}`,
     },
   } : {};
 
