@@ -37,7 +37,7 @@ const getApiParams = (clientParams) => {
 
 const getCommonParams = (connector) => {
   const authConfig = connector.options.auth;
-  const basicAuthParams = authConfig ? {
+  const basicAuthParams = authConfig.username && authConfig.password ? {
     headers: {
       authorization: btoa(`${authConfig.username}:${authConfig.password}`),
     },
@@ -81,6 +81,8 @@ export default {
     if (savedOnly) return getSavedSources(connector);
 
     const url = `${connector.options.endpoint}/sources`;
+
+    console.log(connector.options);
 
     return http.get(url, getCommonParams(connector)).then(response => response.data.sources);
   },
