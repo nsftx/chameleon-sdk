@@ -1,6 +1,6 @@
 import http from 'axios';
-import { toLower } from 'lodash';
-import { getSavedSources } from '../common';
+import { toLower, assign } from 'lodash';
+import { getSavedSources, getCommonMeta } from '../common';
 import { logger } from '../../../utility';
 
 const getIdentifier = (source, options) => {
@@ -35,6 +35,17 @@ const getApiParams = (clientParams) => {
   apiParams.search = clientParams.search;
 };
 
+const getCommonParams = (connector) => {
+  const authConfig = connector.options.auth;
+  const basicAuthParams = authConfig.username && authConfig.password ? {
+    headers: {
+      authorization: btoa(`${authConfig.username}:${authConfig.password}`),
+    },
+  } : {};
+
+  return assign(getCommonMeta(connector), basicAuthParams);
+};
+
 // API Methods
 
 const createSourceData = (connector, source, options) => {
@@ -43,7 +54,7 @@ const createSourceData = (connector, source, options) => {
 
   const url = `${endpoint}/sources/${source.name}`;
 
-  return http.post(url, payload).then(response => response.data);
+  return http.post(url, payload, getCommonParams(connector)).then(response => response.data);
 };
 
 const updateSourceData = (connector, source, options) => {
@@ -53,7 +64,7 @@ const updateSourceData = (connector, source, options) => {
 
   const url = `${endpoint}/sources/${source.name}/${identifier}`;
 
-  return http.put(url, payload).then(response => response.data);
+  return http.put(url, payload, getCommonParams(connector)).then(response => response.data);
 };
 
 const deleteSourceData = (connector, source, options) => {
@@ -62,7 +73,7 @@ const deleteSourceData = (connector, source, options) => {
 
   const url = `${endpoint}/sources/${source.name}/${identifier}`;
 
-  return http.delete(url).then(response => response.data);
+  return http.delete(url, getCommonParams(connector)).then(response => response.data);
 };
 
 export default {
@@ -71,24 +82,24 @@ export default {
 
     const url = `${connector.options.endpoint}/sources`;
 
-    return http.get(url).then(response => response.data.sources);
+    return http.get(url, getCommonParams(connector)).then(response => response.data.sources);
   },
   getSourceSchema(connector, source) {
     const url = `${connector.options.endpoint}/sources/${source.name}/schema`;
 
-    return http.get(url).then(response => response.data);
+    return http.get(url, getCommonParams(connector)).then(response => response.data);
   },
   getSourceData(connector, source, options) {
     const { endpoint } = connector.options;
     const url = `${endpoint}/sources/${source.name}`;
     const params = options && options.params ? getApiParams(options.params) : null;
 
-    return http.get(url, {
-      params,
-    }).then(response => response.data);
+    return http.get(url, assign(getCommonParams(connector), params))
+      .then(response => response.data);
   },
   changeSourceData(connector, source, options) {
     const actionName = toLower(options.action);
+
     const actionMap = {
       delete: deleteSourceData,
       update: updateSourceData,

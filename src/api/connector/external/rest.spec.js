@@ -10,6 +10,10 @@ const connectorMock = {
   name: 'DataConnector',
   options: {
     endpoint: null,
+    auth: {
+      username: null,
+      password: null,
+    },
   },
   type: {
     name: 'genericHttp',
