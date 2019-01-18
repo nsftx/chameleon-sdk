@@ -82,8 +82,6 @@ export default {
 
     const url = `${connector.options.endpoint}/sources`;
 
-    console.log(connector.options);
-
     return http.get(url, getCommonParams(connector)).then(response => response.data.sources);
   },
   getSourceSchema(connector, source) {
