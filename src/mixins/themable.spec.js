@@ -34,6 +34,8 @@ describe('themable mixin', () => {
 
   it('sets dark theme', () => {
     expect(wrapper.vm.isThemeDark).toBeTruthy();
+    expect(wrapper.vm.themeBackgroundColor).toEqual('#424242');
+    expect(wrapper.vm.themeTextColor).toEqual('rgba(255,255,255,1)');
   });
 
   it('sets light theme', () => {
@@ -45,6 +47,8 @@ describe('themable mixin', () => {
     });
 
     expect(wrapper.vm.isThemeLight).toBeTruthy();
+    expect(wrapper.vm.themeBackgroundColor).toEqual('#fff');
+    expect(wrapper.vm.themeTextColor).toEqual('rgba(0,0,0,0.87)');
   });
 
   it('removes theme', () => {
