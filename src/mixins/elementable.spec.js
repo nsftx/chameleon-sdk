@@ -20,6 +20,7 @@ const component = {
 const componentSchema = {
   type: 'panel',
   group: 'widgets',
+  name: 'panel',
   uid: 1,
   parentUid: 2,
 };
@@ -71,6 +72,7 @@ describe('elementable mixin', () => {
     const schemaAttributes = wrapper.vm.getSchemaAttributes();
     expect(schemaAttributes['data-type']).toEqual(componentSchema.type);
     expect(schemaAttributes['data-group']).toEqual(componentSchema.group);
+    expect(schemaAttributes['data-name']).toEqual(componentSchema.name);
     expect(schemaAttributes['data-uid']).toEqual(componentSchema.uid);
     expect(schemaAttributes['data-parent']).toEqual(componentSchema.parentUid);
   });
