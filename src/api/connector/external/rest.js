@@ -1,7 +1,7 @@
 import http from 'axios';
 import { toLower, assign } from 'lodash';
 import { getSavedSources, getCommonMeta } from '../common';
-import { logger } from '../../../utility';
+import { logger, uriParser } from '../../../utility';
 
 const getIdentifier = (source, options) => {
   const identifierName = source.schema.identifier;
@@ -52,7 +52,7 @@ const createSourceData = (connector, source, options) => {
   const { endpoint } = connector.options;
   const { payload } = options;
 
-  const url = `${endpoint}/sources/${source.name}`;
+  const url = uriParser.joinUrl(endpoint, `/sources/${source.name}`);
 
   return http.post(url, payload, getCommonParams(connector)).then(response => response.data);
 };
@@ -62,7 +62,7 @@ const updateSourceData = (connector, source, options) => {
   const { endpoint } = connector.options;
   const { payload } = options;
 
-  const url = `${endpoint}/sources/${source.name}/${identifier}`;
+  const url = uriParser.joinUrl(endpoint, `${endpoint}/sources/${source.name}/${identifier}`);
 
   return http.put(url, payload, getCommonParams(connector)).then(response => response.data);
 };
@@ -80,7 +80,8 @@ export default {
   getSources(connector, { savedOnly }) {
     if (savedOnly) return getSavedSources(connector);
 
-    const url = `${connector.options.endpoint}/sources`;
+    const { endpoint } = connector.options;
+    const url = uriParser.joinUrl(endpoint, '/sources');
 
     return http.get(url, getCommonParams(connector)).then(response => response.data.sources);
   },
@@ -91,7 +92,7 @@ export default {
   },
   getSourceData(connector, source, options) {
     const { endpoint } = connector.options;
-    const url = `${endpoint}/sources/${source.name}`;
+    const url = uriParser.joinUrl(endpoint, `/sources/${source.name}`);
     const params = options && options.params ? getApiParams(options.params) : null;
 
     return http.get(url, assign(getCommonParams(connector), params))
