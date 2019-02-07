@@ -20,14 +20,14 @@ describe('Uri parser utility', () => {
     expect(result).toEqual(expected);
   });
 
-  it('should properly join url base and parts without passed slashes', () => {
+  it('should properly join url base and parts with passed slashes', () => {
     const result = uriParser.joinUrl('https://example.com/', '/api');
     const expected = 'https://example.com/api';
 
     expect(result).toEqual(expected);
   });
 
-  it('should properly join url base and multiple path parts', () => {
+  it('should properly join url base and multiple path parts w/ or w/o slashes', () => {
     const result = uriParser.joinUrl('https://example.com/', '/api', 'sources');
     const expected = 'https://example.com/api/sources';
 
