@@ -11,25 +11,28 @@ describe('Runner detection utility', () => {
     };
 
     const runner = runnerDetection.detectRunner();
-    expect(runner).toBeTruthy();
+    expect(runner.detected).toBeTruthy();
+    expect(runner.valid).toBeTruthy();
   });
 
-  it('should return false when global ChameleonRunner variable is not defined', () => {
+  it('should have detected flag set to false when global ChameleonRunner variable is not defined', () => {
     const runner = runnerDetection.detectRunner();
-    expect(runner).toBeFalsy();
+    expect(runner.detected).toBeFalsy();
   });
 
-  it('should return false when global ChameleonRunner variable does not have sendMessage method', () => {
+  it('should have valid flag set to false when global ChameleonRunner variable does not have sendMessage method', () => {
     global.ChameleonRunner = {};
 
     const runner = runnerDetection.detectRunner();
-    expect(runner).toBeFalsy();
+    expect(runner.detected).toBeTruthy();
+    expect(runner.valid).toBeFalsy();
   });
 
-  it('should return false when global ChameleonRunner variable has nullish value', () => {
+  it('should have valid flag set to false when global ChameleonRunner variable has nullish value', () => {
     global.ChameleonRunner = null;
 
     const runner = runnerDetection.detectRunner();
-    expect(runner).toBeFalsy();
+    expect(runner.detected).toBeTruthy();
+    expect(runner.valid).toBeFalsy();
   });
 });

@@ -3,4 +3,4 @@ export { default as localStorage } from './localStorage';
 export { default as logger } from './logger';
 export { default as mapping } from './mapping';
 export { default as runnerDetection } from './runnerDetection';
-export { default as uriEncoder } from './uriEncoder';
+export { default as uriParser } from './uriParser';
