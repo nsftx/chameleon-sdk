@@ -1,3 +1,4 @@
+/* eslint no-template-curly-in-string:"off" */
 import axiosMock from 'axios';
 import { keys } from 'lodash';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
@@ -20,6 +21,7 @@ axiosMock.get.mockImplementation(() => Promise.resolve({
         },
       ],
       active: true,
+      url: '100',
     },
     { population: 4499890, age: '5-13', active: true },
     { population: 2159981, age: '14-17', active: true },
@@ -125,6 +127,13 @@ let wrapper = shallowMount(component, {
             type: 'Boolean',
             label: 'Active',
           },
+          {
+            name: 'url',
+            type: 'String',
+            label: 'Url',
+            mask: 'http://google.ba/${url}/chart',
+            mapName: 'urlMasked',
+          },
         ],
       },
     },
@@ -156,7 +165,8 @@ describe('sourceable mixin', () => {
       expect(result.items[0].population).toEqual('<5');
       expect(result.items[0].children[0].age).toEqual(8819342);
       expect(result.items[0].children.length).toEqual(2);
-      expect(keys(result.items[0]).length).toEqual(4);
+      expect(keys(result.items[0]).length).toEqual(5);
+      expect(result.items[0].urlMasked).toEqual('http://google.ba/100/chart');
       done();
     });
   });
