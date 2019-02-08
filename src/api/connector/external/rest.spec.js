@@ -9,7 +9,7 @@ const connectorMock = {
   id: '5be410c46c11150026a97e4b',
   name: 'DataConnector',
   options: {
-    endpoint: null,
+    endpoint: 'https://localhost',
     auth: {
       username: null,
       password: null,

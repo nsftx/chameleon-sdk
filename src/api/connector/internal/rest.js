@@ -12,7 +12,7 @@ import {
   toLower,
   uniq,
 } from 'lodash';
-import { uriEncoder } from '../../../utility';
+import { uriParser } from '../../../utility';
 
 const formatSourceSchema = (record, view) => {
   const formatted = map(view.fields, (field) => {
@@ -260,7 +260,7 @@ export default {
 
     return http.get(requestDefinition.url, {
       params: requestDefinition.params,
-      paramsSerializer: uriEncoder.encode,
+      paramsSerializer: uriParser.encode,
     }).then((response) => {
       const result = response.data;
 
