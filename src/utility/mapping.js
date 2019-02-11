@@ -5,19 +5,16 @@ import {
   isNil,
   keys,
   map,
+  template,
 } from 'lodash';
 
 const mapItem = (schema, item) => {
   const mappedItem = {};
   each(schema, (field) => {
     if (!isNil(item[field.name])) {
-      // Add mapped value
-      if (field.mapName) {
-        mappedItem[field.mapName] = item[field.name];
-      } else {
-        // Add default value if it's not mapped
-        mappedItem[field.name] = item[field.name];
-      }
+      // Add mapped value and mask if set
+      const fieldName = field.mapName ? field.mapName : field.name;
+      mappedItem[fieldName] = field.mask ? template(field.mask)(item) : item[field.name];
     }
   });
 
@@ -36,9 +33,11 @@ const mapNestedSource = (source, schema) => {
           mappedItem[key] = mapNestedSource(mappedItem[key], schema);
         }
       });
+
       return mappedItem;
     });
   }
+
   return mapItem(schema, source);
 };
 
@@ -51,8 +50,9 @@ export default {
   mapWithSchema(schema, source) {
     if (isArray(schema)) {
       const hasMapping = !isNil(find(schema, field => !isNil(field.mapName)));
+      const hasMask = !isNil(find(schema, field => !isNil(field.mask)));
 
-      if (hasMapping) {
+      if (hasMapping || hasMask) {
         return mapNestedSource(source, schema);
       }
     }
