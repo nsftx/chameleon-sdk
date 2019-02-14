@@ -40,7 +40,7 @@ const formatSourceSchema = (record, view) => {
 const getBaseUrl = (connectorOptions, connectorType, type) => {
   const api = connectorType.options.endpoint;
   const serviceEndpoint = api[type];
-  const url = `${serviceEndpoint}/api/v1/${connectorOptions.space}`;
+  const url = `${serviceEndpoint}/${connectorOptions.space}`;
 
   return url;
 };
@@ -131,7 +131,7 @@ const getSourceSeedReqDefinition = (connector, source, options) => {
   };
 
   return {
-    url: `${api}/api/v1/misc/seed`,
+    url: `${api}/misc/seed`,
     params,
   };
 };
