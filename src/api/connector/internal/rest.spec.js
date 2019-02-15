@@ -31,7 +31,9 @@ const sourceMock = {
   meta: {
     record: '5059bdd6-2bda-4ccc-9bdd-7106cb705b2c',
   },
-  filters: [],
+  filters: [
+    {},
+  ],
 };
 
 describe('internal rest connector', () => {
