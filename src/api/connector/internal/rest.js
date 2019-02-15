@@ -107,6 +107,10 @@ const getSourceDataReqDefinition = (connector, source) => {
     fields: JSON.stringify(fields),
   };
 
+  if (source.filters && source.filters.length > 0) {
+    params.filters = JSON.stringify(source.filters);
+  }
+
   return {
     url,
     params,
