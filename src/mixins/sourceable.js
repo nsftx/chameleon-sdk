@@ -65,6 +65,7 @@ export default {
 
         const source = merge({}, {
           schema: this.dataSource.schema,
+          filters: this.dataSource.filters,
         }, connector.sources[this.dataSource.id]);
 
         this.loadingDataSource = true;
