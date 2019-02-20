@@ -9,6 +9,7 @@ import {
   isArray,
   keyBy,
   map,
+  forIn,
   toLower,
   uniq,
 } from 'lodash';
@@ -35,6 +36,27 @@ const formatSourceSchema = (record, view) => {
   const filteredFields = filter(formatted, field => field.type !== 'primary');
 
   return filteredFields;
+};
+
+const formatResponse = (response) => {
+  const responseMetadataFields = response.metadata.schema.fields;
+  const records = response.data;
+  const formatedResponse = { metadata: response.metadata, data: [] };
+  let formatedRecord;
+
+  map(records, (record) => {
+    formatedRecord = {};
+
+    forIn(record, (value, key) => {
+      if(has(responseMetadataFields, key)) {
+        formatedRecord[responseMetadataFields[key].displayName] = value;
+      }
+    })
+
+    formatedResponse.data.push(formatedRecord);;
+  });
+
+  return formatedResponse;
 };
 
 const getBaseUrl = (connectorOptions, connectorType, type) => {
@@ -105,6 +127,7 @@ const getSourceDataReqDefinition = (connector, source) => {
   const params = {
     viewId: source.id,
     fields: JSON.stringify(fields),
+    includeFieldMetadata: true,
   };
 
   if (source.filters && source.filters.length > 0) {
@@ -266,7 +289,7 @@ export default {
       params: requestDefinition.params,
       paramsSerializer: uriParser.encode,
     }).then((response) => {
-      const result = response.data;
+      const result = isSeed ? response.data : formatResponse(result.data);
 
       return {
         [source.name]: {
