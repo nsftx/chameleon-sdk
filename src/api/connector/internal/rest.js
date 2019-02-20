@@ -9,6 +9,7 @@ import {
   isArray,
   keyBy,
   map,
+  has,
   forIn,
   toLower,
   uniq,
