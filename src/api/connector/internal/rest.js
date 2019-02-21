@@ -49,10 +49,10 @@ const formatResponse = (response) => {
     formatedField = {};
 
     forIn(field, (value, key) => {
-      if(has(responseMetadataFields, key)) {
+      if (has(responseMetadataFields, key)) {
         formatedField[responseMetadataFields[key].displayName] = value;
       }
-    })
+    });
 
     formatedResponse.data.push(formatedField);
   });
@@ -290,7 +290,7 @@ export default {
       params: requestDefinition.params,
       paramsSerializer: uriParser.encode,
     }).then((response) => {
-      const result = isSeed ? response.data : formatResponse(result.data);
+      const result = isSeed ? response.data : formatResponse(response.data);
 
       return {
         [source.name]: {
