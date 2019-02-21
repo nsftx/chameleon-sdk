@@ -10,6 +10,7 @@ import {
   keyBy,
   map,
   has,
+  omit,
   forIn,
   toLower,
   uniq,
@@ -42,7 +43,7 @@ const formatSourceSchema = (record, view) => {
 const formatResponse = (response) => {
   const responseMetadataFields = response.metadata.schema.fields;
   const fields = response.data;
-  const formatedResponse = { metadata: response.metadata, data: [] };
+  const formatedResponse = { metadata: omit(response.metadata, ['schema']), data: [] };
   let formatedField;
 
   map(fields, (field) => {

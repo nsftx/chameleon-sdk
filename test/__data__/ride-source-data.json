@@ -1,6 +1,18 @@
 {
   "seedResponse": {
     "metadata": {
+      "schema": {
+        "fields": {
+          "address": {
+            "type": "text",
+            "displayName": "address"
+          },
+          "name": {
+            "type": "text",
+            "displayName": "name"
+          }
+        }
+      },
       "totalRecordCount": 15,
       "lastSortValue": null,
       "firstSortValue": null,
@@ -105,7 +117,19 @@
         "totalRecordCount": 15,
         "lastSortValue": null,
         "firstSortValue": null,
-        "took": 1
+        "took": 1,
+        "schema": {
+          "fields": {
+            "address": {
+              "type": "text",
+              "displayName": "address"
+            },
+            "name": {
+              "type": "text",
+              "displayName": "name"
+            }
+          }
+        }
       }
     }
   }
