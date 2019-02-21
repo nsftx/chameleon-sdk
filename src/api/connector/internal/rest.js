@@ -41,20 +41,20 @@ const formatSourceSchema = (record, view) => {
 
 const formatResponse = (response) => {
   const responseMetadataFields = response.metadata.schema.fields;
-  const records = response.data;
+  const fields = response.data;
   const formatedResponse = { metadata: response.metadata, data: [] };
-  let formatedRecord;
+  let formatedField;
 
-  map(records, (record) => {
-    formatedRecord = {};
+  map(fields, (field) => {
+    formatedField = {};
 
-    forIn(record, (value, key) => {
+    forIn(field, (value, key) => {
       if(has(responseMetadataFields, key)) {
-        formatedRecord[responseMetadataFields[key].displayName] = value;
+        formatedField[responseMetadataFields[key].displayName] = value;
       }
     })
 
-    formatedResponse.data.push(formatedRecord);;
+    formatedResponse.data.push(formatedField);
   });
 
   return formatedResponse;
