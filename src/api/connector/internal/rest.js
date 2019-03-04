@@ -64,7 +64,8 @@ const formatResponse = (response) => {
 const getBaseUrl = (connectorOptions, connectorType, type) => {
   const api = connectorType.options.endpoint;
   const serviceEndpoint = api[type];
-  const url = `${serviceEndpoint}/${connectorOptions.space}`;
+  const spaceIdentifier = type === 'blueprint' ? `spaces/${connectorOptions.space}` : connectorOptions.space;
+  const url = `${serviceEndpoint}/${spaceIdentifier}`;
 
   return url;
 };
