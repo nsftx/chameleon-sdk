@@ -9,5 +9,6 @@ module.exports = require('babel-jest').createTransformer({
       polyfill: false,
       regenerator: true,
     }],
+    'transform-object-rest-spread',
   ],
 });
