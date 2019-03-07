@@ -10,25 +10,33 @@ import {
 import { getCommonMeta, getSavedSources } from '../common';
 
 const getQueryParams = (source) => {
-  if (!isEmpty(source.params)) {
-    const args = [];
-    const bindings = [];
-    each(source.params, (arg) => {
-      args.push(`$${arg.name}: ${arg.type}`);
-      bindings.push(`${arg.name}: $${arg.name}`);
-    });
+  const args = [];
+  const bindings = [];
+  each(source.params, (arg) => {
+    args.push(`$${arg.name}: ${arg.type}`);
+    bindings.push(`${arg.name}: $${arg.name}`);
+  });
 
-    return {
-      args: `(${args.join(',')})`,
-      bindings: `(${bindings.join(',')})`,
-      pagination: source.params.pagination ? 'pagination { totalResults }' : null,
-    };
+  if (!isEmpty(source.filters)) {
+    args.push('$filters: JSON');
+    bindings.push('filters: $filters');
   }
 
-  return {
+  const params = {
     args: '',
     bindings: '',
   };
+
+  if (!isEmpty(args)) {
+    params.args = `(${args.join(',')})`;
+    params.bindings = `(${bindings.join(',')})`;
+  }
+
+  if (source.params && source.params.pagination) {
+    params.pagination = 'pagination { totalResults }';
+  }
+
+  return params;
 };
 
 const getQueryFields = (source) => {
@@ -162,7 +170,10 @@ export default {
     const url = `${connectorType.options.endpoint}/${connectorType.name}`;
     return http.post(url, {
       query: getQuery(source),
-      variables: options.params,
+      variables: {
+        ...options.params,
+        filters: source.filters,
+      },
     }, getCommonMeta(connector)).then((response) => {
       const result = response.data.data;
       return result;
