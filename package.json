@@ -1,6 +1,6 @@
 {
   "name": "@nsoft/chameleon-sdk",
-  "version": "1.0.87",
+  "version": "1.0.88",
   "description": "Chameleon Software Development Kit",
   "author": "Chameleon Team <chameleon@nsoft.com>",
   "contributors": [
@@ -12,7 +12,7 @@
   "private": false,
   "main": "./src/index.js",
   "scripts": {
-    "build": "babel src --presets babel-preset-env --out-dir dist --ignore spec.js,test.js",
+    "build": "babel src --presets @babel/preset-env --out-dir dist --ignore spec.js,test.js",
     "lint": "eslint --ext .js,.vue src",
     "test": "npm run lint && jest",
     "coverage": "npm test && codecov",
@@ -24,19 +24,20 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/plugin-transform-runtime": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/runtime": "^7.3.4",
     "@vue/test-utils": "^1.0.0-beta.29",
     "axios": "^0.18.0",
-    "babel-cli": "^6.26.0",
-    "babel-jest": "^23.6.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.7.0",
+    "babel-jest": "^24.3.0",
     "codecov": "^3.1.0",
     "eslint": "^5.14.0",
     "eslint-config-airbnb-base": "^13.0.0",
     "eslint-friendly-formatter": "^4.0.1",
     "eslint-plugin-html": "^5.0.3",
     "eslint-plugin-import": "^2.16.0",
-    "jest": "^23.6.0",
+    "jest": "^24.3.0",
     "jest-localstorage-mock": "^2.4.0",
     "lodash": "^4.17.11",
     "uuid": "^3.3.2",
@@ -55,8 +56,12 @@
       "json"
     ],
     "moduleNameMapper": {
-      "data(.*)$": "<rootDir>/test/__data__/$1"
+      "data/(.*)$": "<rootDir>/test/__data__/$1"
     },
+    "moduleFileExtensions": [
+      "js",
+      "json"
+    ],
     "setupFiles": [
       "jest-localstorage-mock"
     ],
