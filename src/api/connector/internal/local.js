@@ -11,6 +11,7 @@ import {
   flatMap,
   map,
   pick,
+  startsWith,
 } from 'lodash';
 import { getSavedSources } from '../common';
 
@@ -19,15 +20,12 @@ const filterOperations = {
     item => item[filterRule.fields[0]] === filterRule.values[0]),
   ne: (data, filterRule) => filter(data,
     item => item[filterRule.fields[0]] !== filterRule.values[0]),
-  in: () => {
-
-  },
-  notIn: () => {
-
-  },
-  startsWith: () => {
-
-  },
+  in: (data, filterRule) => filter(data,
+    item => filterRule.values.indexOf(item[filterRule.fields[0]]) >= 0),
+  notIn: (data, filterRule) => filter(data,
+    item => filterRule.values.indexOf(item[filterRule.fields[0]]) < 0),
+  startsWith: (data, filterRule) => filter(data,
+    item => startsWith(item[filterRule.fields[0]], filterRule.values[0])),
 };
 
 const filterData = (data, filters) => {
