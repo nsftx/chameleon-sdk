@@ -71,5 +71,8 @@
     "transform": {
       "^.+\\.js$": "<rootDir>/test/jest.transform.js"
     }
+  },
+  "dependencies": {
+    "date-fns": "^2.0.0-alpha.27"
   }
 }
