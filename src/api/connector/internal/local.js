@@ -26,6 +26,14 @@ const filterOperations = {
     item => filterRule.values.indexOf(item[filterRule.fields[0]]) < 0),
   startsWith: (data, filterRule) => filter(data,
     item => startsWith(item[filterRule.fields[0]], filterRule.values[0])),
+  lt: (data, filterRule) => filter(data,
+    item => item[filterRule.fields[0]] < filterRule.values[0]),
+  lte: (data, filterRule) => filter(data,
+    item => item[filterRule.fields[0]] <= filterRule.values[0]),
+  gt: (data, filterRule) => filter(data,
+    item => item[filterRule.fields[0]] > filterRule.values[0]),
+  gte: (data, filterRule) => filter(data,
+    item => item[filterRule.fields[0]] >= filterRule.values[0]),
 };
 
 const filterData = (data, filters) => {
@@ -56,7 +64,7 @@ export default {
     const url = `${connector.type.options.endpoint}/${source.id}.json`;
     return http.get(url).then((response) => {
       const result = response.data;
-      const filters = flattenFiltersDefinition(source.filters);
+      const filters = flattenFiltersDefinition(source.filters || []);
 
       const filteredData = filterData(result, filters);
       const columns = map(source.schema, n => n.name);
