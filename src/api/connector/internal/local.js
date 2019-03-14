@@ -9,11 +9,30 @@ import {
   each,
   filter,
   flatMap,
+  isNumber,
+  isUndefined,
   map,
   pick,
   startsWith,
+  toNumber,
 } from 'lodash';
+import { compareAsc, isValid, parseISO } from 'date-fns';
 import { getSavedSources } from '../common';
+import { logger } from '../../../utility';
+
+const compareValues = (firstValue, secondValue, context) => {
+  if (isNumber(firstValue)) {
+    return firstValue - toNumber(secondValue);
+  }
+
+  const firstValueDate = parseISO(firstValue);
+  if (isValid(firstValueDate)) {
+    return compareAsc(firstValueDate, parseISO(secondValue));
+  }
+
+  logger.error(`Expected Number or Date type, received ${typeof firstValue}`, context);
+  return false;
+};
 
 const filterOperations = {
   eq: (data, filterRule) => filter(data,
@@ -26,14 +45,46 @@ const filterOperations = {
     item => filterRule.values.indexOf(item[filterRule.fields[0]]) < 0),
   startsWith: (data, filterRule) => filter(data,
     item => startsWith(item[filterRule.fields[0]], filterRule.values[0])),
-  lt: (data, filterRule) => filter(data,
-    item => item[filterRule.fields[0]] < filterRule.values[0]),
-  lte: (data, filterRule) => filter(data,
-    item => item[filterRule.fields[0]] <= filterRule.values[0]),
-  gt: (data, filterRule) => filter(data,
-    item => item[filterRule.fields[0]] > filterRule.values[0]),
-  gte: (data, filterRule) => filter(data,
-    item => item[filterRule.fields[0]] >= filterRule.values[0]),
+  lt: (data, filterRule) => {
+    const filterValue = filterRule.values[0];
+    return filter(data, (item) => {
+      const itemValue = item[filterRule.fields[0]];
+
+      const diff = compareValues(itemValue, filterValue);
+
+      return isNumber(diff) ? diff < 0 : false;
+    });
+  },
+  lte: (data, filterRule) => {
+    const filterValue = filterRule.values[0];
+    return filter(data, (item) => {
+      const itemValue = item[filterRule.fields[0]];
+
+      const diff = compareValues(itemValue, filterValue);
+
+      return isNumber(diff) ? diff <= 0 : false;
+    });
+  },
+  gt: (data, filterRule) => {
+    const filterValue = filterRule.values[0];
+    return filter(data, (item) => {
+      const itemValue = item[filterRule.fields[0]];
+
+      const diff = compareValues(itemValue, filterValue);
+
+      return isNumber(diff) ? diff > 0 : false;
+    });
+  },
+  gte: (data, filterRule) => {
+    const filterValue = filterRule.values[0];
+    return filter(data, (item) => {
+      const itemValue = item[filterRule.fields[0]];
+
+      const diff = compareValues(itemValue, filterValue);
+
+      return isNumber(diff) ? diff >= 0 : false;
+    });
+  },
 };
 
 const filterData = (data, filters) => {
@@ -48,7 +99,14 @@ const filterData = (data, filters) => {
   return result;
 };
 
-const flattenFiltersDefinition = definition => flatMap(definition, item => [item, ...item.and]);
+const flattenFiltersDefinition = (definition) => {
+  return flatMap(definition, (item) => {
+    const filterItem = item;
+    if (isUndefined(filterItem.and)) filterItem.and = [];
+
+    return [item, ...item.and];
+  });
+};
 
 export default {
   getSources(connector, { savedOnly }) {
