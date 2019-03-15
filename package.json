@@ -23,16 +23,19 @@
     "url": "https://github.com/chmjs/chameleon-sdk"
   },
   "license": "MIT",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "date-fns": "^2.0.0-alpha.27",
+    "lodash": "^4.17.11"
+  },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/plugin-transform-runtime": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
     "@babel/runtime": "^7.3.4",
     "@vue/test-utils": "^1.0.0-beta.29",
-    "axios": "^0.18.0",
     "babel-jest": "^24.3.0",
     "codecov": "^3.1.0",
-    "date-fns": "^2.0.0-alpha.27",
     "eslint": "^5.14.0",
     "eslint-config-airbnb-base": "^13.0.0",
     "eslint-friendly-formatter": "^4.0.1",
@@ -40,7 +43,6 @@
     "eslint-plugin-import": "^2.16.0",
     "jest": "^24.3.0",
     "jest-localstorage-mock": "^2.4.0",
-    "lodash": "^4.17.11",
     "uuid": "^3.3.2",
     "vue": "^2.6.3",
     "vue-template-compiler": "^2.6.3"
