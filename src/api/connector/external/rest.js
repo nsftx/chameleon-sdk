@@ -86,7 +86,8 @@ export default {
     return http.get(url, getCommonParams(connector)).then(response => response.data.sources);
   },
   getSourceSchema(connector, source) {
-    const url = `${connector.options.endpoint}/sources/${source.name}/schema`;
+    const { endpoint } = connector.options;
+    const url = uriParser.joinUrl(endpoint, `/sources/${source.name}/schema`);
 
     return http.get(url, getCommonParams(connector)).then(response => response.data);
   },
