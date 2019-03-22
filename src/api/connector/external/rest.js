@@ -25,14 +25,38 @@ const getSortPrefix = (sortOrder) => {
   return sortPrefix;
 };
 
-const getApiParams = (clientParams) => {
-  const apiParams = {};
+const getCommonFilterQuery = filterParams => ({
+  filters: filterParams,
+});
 
-  // TODO: Add field filter handling
-  apiParams.sort = `${getSortPrefix(clientParams.sort)}${clientParams.sortBy}`;
-  apiParams.limit = clientParams.limit || clientParams.pageSize;
-  apiParams.page = clientParams.page || clientParams.currentPage;
-  apiParams.search = clientParams.search;
+const getExtendedFilterQuery = filterParams => ({
+  filters: JSON.stringify(filterParams),
+});
+
+const getFilterQueryParams = (filterParams) => {
+  const flag = true; // test flag until real arg param is passed
+
+  if (!filterParams) return {};
+  if (flag) return getExtendedFilterQuery(filterParams);
+  if (!flag) return getCommonFilterQuery(filterParams);
+
+  return getCommonFilterQuery(filterParams);
+};
+
+const getClientParams = (optionParams) => {
+  const clientParams = {};
+
+  if (optionParams.size) clientParams.size = optionParams.size;
+  if (optionParams.page) clientParams.page = optionParams.page;
+
+  if (optionParams.limit) clientParams.limit = optionParams.limit;
+  if (optionParams.offset) clientParams.offset = optionParams.offset;
+
+  if (optionParams.sortBy) clientParams.sort = `${getSortPrefix(optionParams.sort)}${optionParams.sortBy}`;
+
+  if (optionParams.search) clientParams.search = optionParams.search;
+
+  return clientParams;
 };
 
 const getCommonParams = (connector) => {
@@ -94,10 +118,12 @@ export default {
   getSourceData(connector, source, options) {
     const { endpoint } = connector.options;
     const url = uriParser.joinUrl(endpoint, `/sources/${source.name}`);
-    const params = options && options.params ? getApiParams(options.params) : null;
+    const clientParams = options && options.params ? getClientParams(options.params) : null;
+    const filterParams = getFilterQueryParams(source.filters);
 
-    return http.get(url, assign(getCommonParams(connector), params))
-      .then(response => response.data);
+    return http.get(url, assign(getCommonParams(connector), {
+      params: assign(clientParams, filterParams),
+    })).then(response => response.data);
   },
   changeSourceData(connector, source, options) {
     const actionName = toLower(options.action);
