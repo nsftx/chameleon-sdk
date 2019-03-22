@@ -63,10 +63,13 @@ export default {
           this.options.connectors[this.dataConnector.id],
         );
 
-        const source = merge({}, {
-          schema: this.dataSource.schema,
-          filters: this.dataSource.filters,
-        }, connector.sources[this.dataSource.id]);
+        const source = merge({},
+          connector.sources[this.dataSource.id],
+          {
+            schema: this.dataSource.schema,
+            filters: this.dataSource.filters,
+            meta: this.dataSource.meta,
+          });
 
         this.loadingDataSource = true;
         return this.options.connector.getSourceData(
