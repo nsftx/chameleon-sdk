@@ -54,7 +54,12 @@ describe('rest connector', () => {
       name: 'articles',
     };
     rest.getSourceSchema(connectorMock, sourceMock).then((result) => {
-      expect(result).toEqual(sourceSchemaMock);
+      expect(result).toEqual({
+        ...sourceSchemaMock,
+        meta: {
+          filterFormat: 'common',
+        },
+      });
       done();
     });
   });

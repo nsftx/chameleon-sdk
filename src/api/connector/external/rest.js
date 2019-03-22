@@ -1,5 +1,9 @@
 import http from 'axios';
-import { toLower, assign, each } from 'lodash';
+import {
+  toLower,
+  assign, each,
+  isEmpty,
+} from 'lodash';
 import { getSavedSources, getCommonMeta } from '../common';
 import { logger, uriParser } from '../../../utility';
 
@@ -147,7 +151,9 @@ export default {
     const { endpoint } = connector.options;
     const url = uriParser.joinUrl(endpoint, `/sources/${source.name}`);
     const clientParams = options && options.params ? getClientParams(options.params) : null;
-    const filterParams = getFilterQueryParams(source.filters[0], 'common');
+
+    const filterParams = !isEmpty(source.filters)
+      ? getFilterQueryParams(source.filters[0], 'common') : {};
 
     return http.get(url, assign(getCommonParams(connector), {
       params: assign(clientParams, filterParams),
