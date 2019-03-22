@@ -1,5 +1,5 @@
 import http from 'axios';
-import { toLower, assign } from 'lodash';
+import { toLower, assign, each } from 'lodash';
 import { getSavedSources, getCommonMeta } from '../common';
 import { logger, uriParser } from '../../../utility';
 
@@ -17,28 +17,46 @@ const getIdentifier = (source, options) => {
 
 const getSortPrefix = (sortOrder) => {
   const sortOrderParam = toLower(sortOrder);
-  let sortPrefix = '';
 
-  if (sortOrderParam === 'desc') sortPrefix = '-';
-  else if (sortOrderParam === 'asc') sortPrefix = '+';
+  if (sortOrderParam === 'desc') return '-';
+  if (sortOrderParam === 'asc') return '+';
 
-  return sortPrefix;
+  return '';
 };
 
-const getCommonFilterQuery = filterParams => ({
-  filters: filterParams,
+const getFilterField = param => ({
+  name: `${param.fields[0]}:${param.operator}`,
+  value: param.values[0],
 });
+
+const getCommonFilterQuery = (filterParams) => {
+  if (!filterParams.fields || !filterParams.fields.length) return {};
+
+  const baseField = getFilterField(filterParams);
+  const parsedParams = {
+    [baseField.name]: baseField.value,
+  };
+
+  each(filterParams.and, (filterParam) => {
+    const field = getFilterField(filterParam);
+
+    if (!parsedParams[field.name]) {
+      parsedParams[field.name] = field.value;
+    } else {
+      parsedParams[field.name] = `${parsedParams[field.name]},${field.value}`;
+    }
+  });
+
+  return parsedParams;
+};
 
 const getExtendedFilterQuery = filterParams => ({
   filters: JSON.stringify(filterParams),
 });
 
-const getFilterQueryParams = (filterParams) => {
-  const flag = true; // test flag until real arg param is passed
-
+const getFilterQueryParams = (filterParams, filterFormat) => {
   if (!filterParams) return {};
-  if (flag) return getExtendedFilterQuery(filterParams);
-  if (!flag) return getCommonFilterQuery(filterParams);
+  if (filterFormat === 'extended') return getExtendedFilterQuery(filterParams);
 
   return getCommonFilterQuery(filterParams);
 };
@@ -100,6 +118,13 @@ const deleteSourceData = (connector, source, options) => {
   return http.delete(url, getCommonParams(connector)).then(response => response.data);
 };
 
+const enrichSchemaResponseWithMeta = schemaResponse => ({
+  ...schemaResponse,
+  meta: {
+    filterFormat: schemaResponse.schema.filters.format,
+  },
+});
+
 export default {
   getSources(connector, { savedOnly }) {
     if (savedOnly) return getSavedSources(connector);
@@ -113,13 +138,16 @@ export default {
     const { endpoint } = connector.options;
     const url = uriParser.joinUrl(endpoint, `/sources/${source.name}/schema`);
 
-    return http.get(url, getCommonParams(connector)).then(response => response.data);
+    return http.get(
+      url,
+      getCommonParams(connector),
+    ).then(response => enrichSchemaResponseWithMeta(response.data));
   },
   getSourceData(connector, source, options) {
     const { endpoint } = connector.options;
     const url = uriParser.joinUrl(endpoint, `/sources/${source.name}`);
     const clientParams = options && options.params ? getClientParams(options.params) : null;
-    const filterParams = getFilterQueryParams(source.filters);
+    const filterParams = getFilterQueryParams(source.filters[0], 'common');
 
     return http.get(url, assign(getCommonParams(connector), {
       params: assign(clientParams, filterParams),
