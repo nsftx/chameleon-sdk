@@ -42,13 +42,15 @@ export default {
       );
     },
     getMergedSource(connector) {
-      merge({},
+      return merge(
+        {},
         connector.sources[this.dataSource.id],
         {
           schema: this.dataSource.schema,
           filters: this.dataSource.filters,
           meta: this.dataSource.meta,
-        });
+        },
+      );
     },
     getMergedDataSourceParams() {
       return {
