@@ -34,6 +34,22 @@ export default {
     },
   },
   methods: {
+    getMergedConnector() {
+      return assign(
+        {},
+        this.dataConnector,
+        this.options.connectors[this.dataConnector.id],
+      );
+    },
+    getMergedSource(connector) {
+      merge({},
+        connector.sources[this.dataSource.id],
+        {
+          schema: this.dataSource.schema,
+          filters: this.dataSource.filters,
+          meta: this.dataSource.meta,
+        });
+    },
     getMergedDataSourceParams() {
       return {
         params: merge(this.dataSourceParams, this.dataSource.params),
@@ -57,19 +73,8 @@ export default {
           });
         }
 
-        const connector = assign(
-          {},
-          this.dataConnector,
-          this.options.connectors[this.dataConnector.id],
-        );
-
-        const source = merge({},
-          connector.sources[this.dataSource.id],
-          {
-            schema: this.dataSource.schema,
-            filters: this.dataSource.filters,
-            meta: this.dataSource.meta,
-          });
+        const connector = this.getMergedConnector();
+        const source = this.getMergedSource(connector);
 
         this.loadingDataSource = true;
         return this.options.connector.getSourceData(
