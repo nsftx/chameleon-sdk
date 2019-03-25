@@ -3,7 +3,6 @@ import {
   toLower,
   assign,
   each,
-  isEmpty,
   omit,
   isNil,
 } from 'lodash';
@@ -54,7 +53,12 @@ const getExtendedFilterQueryParams = filterParams => ({
   filters: JSON.stringify(filterParams),
 });
 
-const getFilterQueryParams = (filterParams, filterFormat) => {
+const getFilterQueryParams = (source) => {
+  if (!source.filters || !source.filters.length) return {};
+
+  const filterFormat = source.meta && source.meta.filterFormat ? source.meta.filterFormat : 'common';
+  const filterParams = source.filters[0];
+
   if (filterFormat === 'extended') return getExtendedFilterQueryParams(filterParams);
 
   return getCommonFilterQueryParams(filterParams);
@@ -160,14 +164,9 @@ export default {
   getSourceData(connector, source, options) {
     const { endpoint } = connector.options;
     const url = uriParser.joinUrl(endpoint, `/sources/${source.name}`);
-    const clientParams = options && options.params ? getClientParams(options.params) : null;
-    const filterFormat = source.meta && source.meta.filterFormat ? source.meta.filterFormat : 'common';
 
-    let filterParams = {};
-
-    if (!isEmpty(source.filters) || source.filters.length) {
-      filterParams = getFilterQueryParams(source.filters[0], filterFormat);
-    }
+    const clientParams = getClientParams(options.params);
+    const filterParams = getFilterQueryParams(source);
 
     return http.get(url, assign(getCommonParams(connector), {
       params: assign(clientParams, filterParams),
