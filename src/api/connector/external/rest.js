@@ -1,8 +1,11 @@
 import http from 'axios';
 import {
   toLower,
-  assign, each,
+  assign,
+  each,
   isEmpty,
+  omit,
+  isNil,
 } from 'lodash';
 import { getSavedSources, getCommonMeta } from '../common';
 import { logger, uriParser } from '../../../utility';
@@ -19,21 +22,12 @@ const getIdentifier = (source, options) => {
   return identifier;
 };
 
-const getSortPrefix = (sortOrder) => {
-  const sortOrderParam = toLower(sortOrder);
-
-  if (sortOrderParam === 'desc') return '-';
-  if (sortOrderParam === 'asc') return '+';
-
-  return '';
-};
-
 const getFilterField = param => ({
   name: `${param.fields[0]}:${param.operator}`,
   value: param.values[0],
 });
 
-const getCommonFilterQuery = (filterParams) => {
+const getCommonFilterQueryParams = (filterParams) => {
   if (!filterParams.fields || !filterParams.fields.length) return {};
 
   const baseField = getFilterField(filterParams);
@@ -43,42 +37,57 @@ const getCommonFilterQuery = (filterParams) => {
 
   each(filterParams.and, (filterParam) => {
     const field = getFilterField(filterParam);
+    const fieldName = field.name;
+    const fieldValue = field.value;
 
-    if (!parsedParams[field.name]) {
-      parsedParams[field.name] = field.value;
+    if (!parsedParams[fieldName]) {
+      parsedParams[fieldName] = fieldValue;
     } else {
-      parsedParams[field.name] = `${parsedParams[field.name]},${field.value}`;
+      parsedParams[fieldName] = `${parsedParams[fieldName]},${fieldValue}`;
     }
   });
 
   return parsedParams;
 };
 
-const getExtendedFilterQuery = filterParams => ({
+const getExtendedFilterQueryParams = filterParams => ({
   filters: JSON.stringify(filterParams),
 });
 
 const getFilterQueryParams = (filterParams, filterFormat) => {
-  if (!filterParams) return {};
-  if (filterFormat === 'extended') return getExtendedFilterQuery(filterParams);
+  if (filterFormat === 'extended') return getExtendedFilterQueryParams(filterParams);
 
-  return getCommonFilterQuery(filterParams);
+  return getCommonFilterQueryParams(filterParams);
 };
 
-const getClientParams = (optionParams) => {
+const getSortParam = (sortOrder, sortFieldParam) => {
+  const sortOrderParam = toLower(sortOrder);
+  const validAscParams = ['asc', '+'];
+  const validDescParams = ['desc', '-'];
+
+  let sortPrefix = '';
+
+  if (validAscParams.includes(sortOrderParam)) sortPrefix = '+';
+  if (validDescParams.includes(sortOrderParam)) sortPrefix = '-';
+
+  return `${sortPrefix}${sortFieldParam}`;
+};
+
+const getClientParams = (optionParams = {}) => {
   const clientParams = {};
 
-  if (optionParams.size) clientParams.size = optionParams.size;
-  if (optionParams.page) clientParams.page = optionParams.page;
+  clientParams.size = optionParams.size || optionParams.pageSize;
+  clientParams.page = optionParams.page || optionParams.currentPage;
 
-  if (optionParams.limit) clientParams.limit = optionParams.limit;
-  if (optionParams.offset) clientParams.offset = optionParams.offset;
+  clientParams.limit = optionParams.limit;
+  clientParams.offset = optionParams.offset;
 
-  if (optionParams.sortBy) clientParams.sort = `${getSortPrefix(optionParams.sort)}${optionParams.sortBy}`;
+  clientParams.sort = optionParams.sortBy
+    ? getSortParam(optionParams.sort, optionParams.sortBy) : null;
 
-  if (optionParams.search) clientParams.search = optionParams.search;
+  clientParams.search = optionParams.search;
 
-  return clientParams;
+  return omit(clientParams, isNil);
 };
 
 const getCommonParams = (connector) => {
@@ -91,6 +100,7 @@ const getCommonParams = (connector) => {
 
   return assign(getCommonMeta(connector), basicAuthParams);
 };
+
 
 // API Methods
 
@@ -148,14 +158,16 @@ export default {
     ).then(response => enrichSchemaResponseWithMeta(response.data));
   },
   getSourceData(connector, source, options) {
-    console.log(connector, source, options);
     const { endpoint } = connector.options;
     const url = uriParser.joinUrl(endpoint, `/sources/${source.name}`);
     const clientParams = options && options.params ? getClientParams(options.params) : null;
     const filterFormat = source.meta && source.meta.filterFormat ? source.meta.filterFormat : 'common';
 
-    const filterParams = !isEmpty(source.filters)
-      ? getFilterQueryParams(source.filters[0], filterFormat) : {};
+    let filterParams = {};
+
+    if (!isEmpty(source.filters) || source.filters.length) {
+      filterParams = getFilterQueryParams(source.filters[0], filterFormat);
+    }
 
     return http.get(url, assign(getCommonParams(connector), {
       params: assign(clientParams, filterParams),
