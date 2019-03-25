@@ -148,12 +148,14 @@ export default {
     ).then(response => enrichSchemaResponseWithMeta(response.data));
   },
   getSourceData(connector, source, options) {
+    console.log(connector, source, options);
     const { endpoint } = connector.options;
     const url = uriParser.joinUrl(endpoint, `/sources/${source.name}`);
     const clientParams = options && options.params ? getClientParams(options.params) : null;
+    const filterFormat = source.meta && source.meta.filterFormat ? source.meta.filterFormat : 'common';
 
     const filterParams = !isEmpty(source.filters)
-      ? getFilterQueryParams(source.filters[0], 'common') : {};
+      ? getFilterQueryParams(source.filters[0], filterFormat) : {};
 
     return http.get(url, assign(getCommonParams(connector), {
       params: assign(clientParams, filterParams),
