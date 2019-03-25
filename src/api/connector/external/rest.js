@@ -3,7 +3,7 @@ import {
   toLower,
   assign,
   each,
-  omit,
+  omitBy,
   isNil,
 } from 'lodash';
 import { getSavedSources, getCommonMeta } from '../common';
@@ -31,7 +31,7 @@ const getCommonFilterQueryParams = (filterParams) => {
 
   const baseField = getFilterField(filterParams);
   const parsedParams = {
-    [baseField.name]: baseField.value,
+    [baseField.name]: [baseField.value],
   };
 
   each(filterParams.and, (filterParam) => {
@@ -40,9 +40,9 @@ const getCommonFilterQueryParams = (filterParams) => {
     const fieldValue = field.value;
 
     if (!parsedParams[fieldName]) {
-      parsedParams[fieldName] = fieldValue;
+      parsedParams[fieldName] = [fieldValue];
     } else {
-      parsedParams[fieldName] = `${parsedParams[fieldName]},${fieldValue}`;
+      parsedParams[fieldName].push(fieldValue);
     }
   });
 
@@ -91,7 +91,7 @@ const getClientParams = (optionParams = {}) => {
 
   clientParams.search = optionParams.search;
 
-  return omit(clientParams, isNil);
+  return omitBy(clientParams, isNil);
 };
 
 const getCommonParams = (connector) => {
@@ -170,6 +170,7 @@ export default {
 
     return http.get(url, assign(getCommonParams(connector), {
       params: assign(clientParams, filterParams),
+      paramsSerializer: uriParser.encode,
     })).then(response => response.data);
   },
   changeSourceData(connector, source, options) {
