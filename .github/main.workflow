@@ -15,7 +15,7 @@ action "Test" {
 }
 
 action "Build" {
-  needs = "Install Dependencies"
+  needs = "Test"
   uses = "actions/npm@master"
   args = "run build"
 }
