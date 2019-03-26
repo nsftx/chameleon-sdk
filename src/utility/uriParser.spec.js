@@ -13,6 +13,22 @@ describe('Uri parser utility', () => {
     expect(result).toEqual(expected);
   });
 
+  it('should properly handle encoding multi-value query params', () => {
+    const params = {
+      key1: 'value1',
+      key2: [
+        'value2',
+        'value3',
+      ],
+      key3: 'value4,withcomma',
+    };
+
+    const result = uriParser.encode(params);
+    const expected = 'key1=value1&key2=value2&key2=value3&key3=value4%2Cwithcomma';
+
+    expect(result).toEqual(expected);
+  });
+
   it('should properly join url base and parts without passed slashes', () => {
     const result = uriParser.joinUrl('https://example.com', 'api');
     const expected = 'https://example.com/api';

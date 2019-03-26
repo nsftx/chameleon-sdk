@@ -1,10 +1,20 @@
+import { each, isArray } from 'lodash';
+
 export default {
   encode(params) {
-    return Object.keys(params).map((key) => {
-      const encoded = `${key}=${encodeURIComponent(params[key])}`;
+    const queryParams = new URLSearchParams();
 
-      return encoded;
-    }).join('&');
+    each(params, (paramValue, key) => {
+      if (isArray(paramValue)) { // multi-value query parameter
+        each(paramValue, (paramMultiValue) => {
+          queryParams.append(key, paramMultiValue);
+        });
+      } else {
+        queryParams.append(key, paramValue);
+      }
+    });
+
+    return queryParams.toString();
   },
   joinUrl(baseUrl, ...urlParts) {
     // Remove ending slash in base url

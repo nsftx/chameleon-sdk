@@ -16,6 +16,7 @@
       "type": "Date"
     }],
     "filters": {
+      "format": "common",
       "operators": ["eq"],
       "searchable": true
     }
