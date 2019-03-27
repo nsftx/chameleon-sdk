@@ -14,7 +14,7 @@
   "scripts": {
     "build": "babel src --presets @babel/preset-env --out-dir dist --ignore spec.js,test.js",
     "lint": "eslint --ext .js,.vue src",
-    "test": "npm run lint && jest --coverage",
+    "test": "npm run lint && jest",
     "coverage": "npm test && codecov",
     "prepublish": "npm test && npm run build"
   },
@@ -50,7 +50,7 @@
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/**/*.{js}"
+      "src/**/*.js"
     ],
     "coverageDirectory": "./test/coverage/",
     "coverageReporters": [
