@@ -65,6 +65,9 @@
       "js",
       "json"
     ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/dist/"
+    ],
     "setupFiles": [
       "jest-localstorage-mock"
     ],

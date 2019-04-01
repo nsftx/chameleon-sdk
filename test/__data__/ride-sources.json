@@ -1,6 +1,6 @@
 {
   "response": {
-    "viewModels": [
+    "data": [
       {
         "spaceId": "dbba4a50-b915-46c0-8611-3797f15f041f",
         "type": "uncommitted",
