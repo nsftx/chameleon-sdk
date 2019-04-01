@@ -108,7 +108,7 @@ const getInstalledVersions = (baseUrl, versions) => {
     params,
   }).then((response) => {
     const result = response.data;
-    return result.installedSchemaVersions;
+    return result.data;
   });
 };
 
@@ -267,7 +267,7 @@ export default {
         types: ['uncommitted', 'foreign'].join(','),
       },
     }).then((response) => {
-      const { viewModels } = response.data;
+      const viewModels = response.data.data;
       const formattedViewModels = formatViewModels(viewModels);
 
       if (savedOnly) {

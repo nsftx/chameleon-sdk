@@ -1,6 +1,6 @@
 {
   "name": "@nsoft/chameleon-sdk",
-  "version": "1.0.94",
+  "version": "1.0.95",
   "description": "Chameleon Software Development Kit",
   "author": "Chameleon Team <chameleon@nsoft.com>",
   "contributors": [
@@ -12,7 +12,7 @@
   "private": false,
   "main": "./src/index.js",
   "scripts": {
-    "build": "babel src --presets @babel/preset-env --out-dir dist --ignore spec.js,test.js",
+    "build": "babel src --presets @babel/preset-env --out-dir dist --ignore src/**/*.spec.js,src/**/*.test.js",
     "lint": "eslint --ext .js,.vue src",
     "test": "npm run lint && jest",
     "coverage": "npm test && codecov",
@@ -64,6 +64,9 @@
     "moduleFileExtensions": [
       "js",
       "json"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/dist/"
     ],
     "setupFiles": [
       "jest-localstorage-mock"
