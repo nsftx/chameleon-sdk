@@ -152,10 +152,12 @@ export default {
       });
     });
   },
-  async getSourceSchema(connector, source, options) {
+  async getSourceSchema(connector, source, options = {}) {
     return new Promise((resolve, reject) => {
-      if (source.name === 'parent' && options.parent) {
-        const parentDataSource = options.parent.dataSource;
+      const { context } = options;
+
+      if (source.name === 'parent' && context.parent) {
+        const parentDataSource = context.parent.dataSource;
         const schema = parentDataSource ? parentDataSource.schema : [];
 
         return resolve({
