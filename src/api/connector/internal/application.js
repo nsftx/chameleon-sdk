@@ -152,7 +152,7 @@ export default {
       });
     });
   },
-  async getSourceSchema(connector, source, options) {
+  async getSourceSchema(connector, source, options = {}) {
     return new Promise((resolve, reject) => {
       const { context } = options;
 
