@@ -39,7 +39,7 @@ export default {
     if (source) {
       return binding.split('.').reduce((o, i) => {
         if (o[i]) return o[i];
-        return value;
+        return '';
       }, source);
     }
 
