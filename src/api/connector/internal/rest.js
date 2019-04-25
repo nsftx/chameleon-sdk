@@ -254,7 +254,7 @@ export default {
       return result;
     });
   },
-  getSources(connector, { savedOnly }) {
+  getSources(connector, { savedOnly, pagination = {} }) {
     const baseUrl = getBaseUrl(
       connector.options,
       connector.type,
@@ -265,16 +265,23 @@ export default {
     return http.get(`${baseUrl}/available-view-models`, {
       params: {
         types: ['uncommitted', 'foreign'].join(','),
+        page: pagination.page,
+        size: pagination.size,
       },
     }).then((response) => {
       const viewModels = response.data.data;
       const formattedViewModels = formatViewModels(viewModels);
 
       if (savedOnly) {
+        // TODO Revise this logic, it's possible that some sources get lost
+        // due to pagination in upper request
         return getSavedViewModels(formattedViewModels, connector, baseUrl);
       }
 
-      return formattedViewModels;
+      return {
+        data: formattedViewModels,
+        pagination: response.data.pagination,
+      };
     });
   },
   getSourceData(connector, source, options) {
