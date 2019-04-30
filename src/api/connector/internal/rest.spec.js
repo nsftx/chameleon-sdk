@@ -42,7 +42,14 @@ describe('internal rest connector', () => {
       data: sourcesMock.response,
     }));
 
-    rest.getSources(connectorMock, sourceMock).then((result) => {
+    const options = {
+      pagination: {
+        page: 1,
+        size: 10,
+      },
+    };
+
+    rest.getSources(connectorMock, options).then((result) => {
       expect(result).toEqual(sourcesMock.result);
       done();
     });
