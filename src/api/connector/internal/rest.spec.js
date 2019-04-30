@@ -50,8 +50,6 @@ describe('internal rest connector', () => {
     };
 
     rest.getSources(connectorMock, options).then((result) => {
-      console.log('RESULT', result);
-      console.log('RESULT', sourcesMock.result);
       expect(result).toEqual(sourcesMock.result);
       done();
     });
