@@ -61,7 +61,7 @@ describe('bindable mixin', () => {
   it('ignores invalid dynamic value', () => {
     const value = '=element..myDynamicProp';
     const bindingValue = wrapper.vm.getBindingValue(value);
-    expect(bindingValue).toEqual(value);
+    expect(bindingValue).toEqual('');
   });
 
   it('resolves dynamic value', () => {
