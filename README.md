@@ -1,9 +1,9 @@
 [![CircleCI](https://circleci.com/gh/nsftx/chameleon-sdk/tree/master.svg?style=shield)](https://circleci.com/gh/nsftx/chameleon-sdk/tree/master)
 [![Build Status](https://travis-ci.org/nsftx/chameleon-sdk.svg?branch=master)](https://travis-ci.org/nsftx/chameleon-sdk) 
-[![codebeat badge](https://codebeat.co/badges/690f689b-87eb-42f4-a656-cc3400ac3c0d)](https://codebeat.co/projects/github-com-chmjs-chameleon-sdk-master)
+[![codebeat badge](https://codebeat.co/badges/690f689b-87eb-42f4-a656-cc3400ac3c0d)](https://codebeat.co/projects/github-com-nsftx-chameleon-sdk-master)
 [![codecov](https://codecov.io/gh/nsftx/chameleon-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/nsftx/chameleon-sdk)
 [![npm](https://img.shields.io/npm/v/@nsoft/chameleon-sdk.svg)](https://www.npmjs.com/package/@nsoft/chameleon-sdk) 
-[![Greenkeeper badge](https://badges.greenkeeper.io/chmjs/chameleon-sdk.svg)](https://greenkeeper.io/) 
+[![Greenkeeper badge](https://badges.greenkeeper.io/nsftx/chameleon-sdk.svg)](https://greenkeeper.io/) 
 
 # chameleon-sdk
 
