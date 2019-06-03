@@ -1,6 +1,6 @@
 {
   "name": "@nsoft/chameleon-sdk",
-  "version": "1.0.97",
+  "version": "1.0.98",
   "description": "Chameleon Software Development Kit",
   "author": "Chameleon Team <chameleon@nsoft.com>",
   "contributors": [
@@ -24,7 +24,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.19.0",
     "date-fns": "^2.0.0-alpha.27",
     "lodash": "^4.17.11"
   },
