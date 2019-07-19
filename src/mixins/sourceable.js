@@ -53,8 +53,16 @@ export default {
       );
     },
     getMergedDataSourceParams() {
+      const urlParams = this.config.useAppPageParams ? this.$route.params : {};
+      const queryParams = this.config.useAppPageParams ? this.$route.query : {};
+
       return {
-        params: merge(this.dataSourceParams, this.dataSource.params),
+        params: merge(
+          this.dataSourceParams,
+          this.dataSource.params,
+          { queryParams },
+          { urlParams },
+        ),
         seed: this.registry.isPreviewMode,
         context: {
           registry: this.registry,

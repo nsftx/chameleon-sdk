@@ -5,6 +5,7 @@ import {
   each,
   omitBy,
   isNil,
+  merge,
 } from 'lodash';
 import { getSavedSources, getCommonMeta } from '../common';
 import { logger, uriParser } from '../../../utility';
@@ -89,9 +90,14 @@ const getClientParams = (optionParams = {}) => {
   clientParams.sort = optionParams.sortBy
     ? getSortParam(optionParams.sort, optionParams.sortBy) : null;
 
+
   clientParams.search = optionParams.search;
 
-  return omitBy(clientParams, isNil);
+  return merge(
+    omitBy(clientParams, isNil),
+    { ...optionParams.queryParams },
+    { ...optionParams.urlParams },
+  );
 };
 
 const getCommonParams = (connector) => {
