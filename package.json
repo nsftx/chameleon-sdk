@@ -16,7 +16,7 @@
     "lint": "eslint --ext .js,.vue src",
     "test": "npm run lint && jest",
     "coverage": "npm test && codecov",
-    "prepublish": "npm test && npm run build"
+    "prepare": "npm test && npm run build"
   },
   "repository": {
     "type": "git",
