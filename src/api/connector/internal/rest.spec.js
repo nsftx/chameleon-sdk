@@ -34,6 +34,32 @@ const sourceMock = {
   filters: [
     {},
   ],
+  schema: [
+    {
+      displayFieldId: 'a3a0ed17-0292-41ab-8485-3d77c7919e79',
+      displayName: 'name',
+      id: '7142243f-5de5-4a6a-ad0f-e33c4ec1c09e',
+      mapName: 'field-1',
+      mapType: null,
+      mask: null,
+      name: 'name',
+      recordId: 'cf758676-bf3d-40bc-9214-166c48284c13',
+      title: null,
+      type: 'text',
+    },
+    {
+      displayFieldId: '3c14b367-47c2-4d8f-a52e-2e5f2c4d9cbd',
+      displayName: 'address',
+      id: '14a1ca2a-3985-4ec9-9a97-b5f96e527a3d',
+      mapName: 'field-2',
+      mapType: null,
+      mask: null,
+      name: 'address',
+      recordId: 'cf758676-bf3d-40bc-9214-166c48284c13',
+      title: null,
+      type: 'text',
+    },
+  ],
 };
 
 describe('internal rest connector', () => {
@@ -97,6 +123,30 @@ describe('internal rest connector', () => {
           items: expect.any(Array),
           pagination: expect.any(Object),
         }),
+      });
+
+      expect(result).toEqual(expectedResult);
+      done();
+    });
+  });
+
+  it('should create new source record instance', (done) => {
+    axiosMock.post.mockImplementation(() => Promise.resolve({
+      data: { recordInstanceId: 'b086fb68-6805-46d2-838a-4d1c10862a00' },
+    }));
+
+    const options = {
+      payload: {
+        'field-1': 'Borg',
+        'field-2': 'The Cube',
+      },
+    };
+
+    rest.changeSourceData(connectorMock, sourceMock, options).then((result) => {
+      const expectedResult = expect.objectContaining({
+        'field-1': 'Borg',
+        'field-2': 'The Cube',
+        id: expect.any(String),
       });
 
       expect(result).toEqual(expectedResult);
