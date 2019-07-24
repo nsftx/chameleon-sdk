@@ -93,7 +93,8 @@ const getChangePayload = (payload, schema) => {
   each(payload, (value, key) => {
     const schemaField = find(schema, { mapName: key });
 
-    const fieldValue = schemaField.type === 'number' ? parseFloat(value) : value;
+    const fieldValue = schemaField.type === 'number' && value
+      ? parseFloat(value) : value;
     change[schemaField.displayFieldId] = fieldValue;
   });
 
@@ -252,7 +253,10 @@ export default {
     }
 
     return http[method](url, payload).then((response) => {
-      const result = response.data;
+      // return result with field names from original payload
+      const result = options.payload;
+      result.id = response.data.recordInstanceId;
+
       return result;
     });
   },
