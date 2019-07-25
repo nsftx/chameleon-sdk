@@ -121,9 +121,6 @@ const getSourceModel = (source) => {
 };
 
 export default {
-  changeSourceData(connector) {
-    throw new Error(`Method changeSourceData is not implemented on ${connector.name} connector!`);
-  },
   getSources(connector, { savedOnly }) {
     if (savedOnly) return getSavedSources(connector);
 

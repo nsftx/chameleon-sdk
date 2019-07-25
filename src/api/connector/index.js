@@ -1,6 +1,7 @@
-import { assign } from 'lodash';
+import { assign, isFunction } from 'lodash';
 import * as internalTypes from './internal';
 import * as externalTypes from './external';
+import { logger } from '../../utility';
 
 const connectorTypes = assign({}, internalTypes, externalTypes);
 
@@ -49,7 +50,13 @@ export default {
     Action is used to differentiate methods on connector backend API.
     */
   changeSourceData(connector, source, options = {}) {
-    const connectorType = this.getConnectorType(connector);
+    const connectorType = this.getConnectorType(connector.type);
+
+    if (!isFunction(connectorType.changeSourceData)) {
+      const message = `Changing source data is not supported on ${connector.name} connector`;
+      logger.error(message);
+      return Promise.reject(message);
+    }
 
     return connectorType.changeSourceData(connector, source, options).then((data) => {
       const result = parseChangeSourceData(connector, source, options, data);
