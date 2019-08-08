@@ -9,6 +9,7 @@ import {
   cloneDeep,
   map,
 } from 'lodash';
+import { storeRegistrator } from '../utility';
 
 const uuid = () => v4();
 
@@ -114,6 +115,12 @@ export default {
     },
     setConfig(value) {
       this.config = cloneDeep(value);
+    },
+    registerModule(storeModule, state) {
+      storeRegistrator.registerModule(this.$store, storeModule, state);
+    },
+    unregisterModule(storeModule, state) {
+      storeRegistrator.unregisterModule(this.$store, storeModule, state);
     },
   },
   watch: {
