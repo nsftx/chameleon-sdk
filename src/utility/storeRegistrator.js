@@ -10,7 +10,7 @@ export default {
     }
 
     const moduleName = isArray(name) ? name[0] : name;
-    if (context.$store.state && context.$store.state[moduleName]) {
+    if (context.$store && context.$store.state && context.$store.state[moduleName]) {
       logger.warn(`Module ${moduleName} is already registered`);
       return;
     }
@@ -22,7 +22,7 @@ export default {
       return;
     }
     const moduleName = isArray(name) ? name[0] : name;
-    if (context.state && !context.state[moduleName]) {
+    if (context.$store && context.$store.state && !context.$store.state[moduleName]) {
       logger.warn(`Module ${moduleName} is not registered`);
       return;
     }
