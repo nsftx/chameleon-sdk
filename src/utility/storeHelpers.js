@@ -19,7 +19,7 @@ export default {
       logger.warn('Context, module name or state is not provided');
       return;
     }
-    if (context.$store && context.$store.state && !has(context.$store.state, name)) {
+    if (!(context.$store && context.$store.state && has(context.$store.state, name))) {
       logger.warn(`Module ${name} is not registered`);
       return;
     }
