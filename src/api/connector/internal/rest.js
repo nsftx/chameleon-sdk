@@ -91,8 +91,11 @@ const getChangePayload = (payload, schema) => {
   const change = {};
 
   each(payload, (value, key) => {
-    const schemaField = find(schema, { name: key });
-    change[schemaField.id] = value;
+    const schemaField = find(schema, { mapName: key });
+
+    const fieldValue = schemaField.type === 'number' && value
+      ? parseFloat(value) : value;
+    change[schemaField.displayFieldId] = fieldValue;
   });
 
   return change;
@@ -242,15 +245,18 @@ export default {
   changeSourceData(connector, source, options) {
     const baseUrl = getBaseUrl(connector.options, connector.type, 'write');
     const method = getChangeMethod(options);
-    const payload = getChangePayload(options.payload, options.schema);
-    let url = `${baseUrl}/schema-versions/${source.schemaVersion}/records/${source.record}`;
+    const payload = getChangePayload(options.payload, source.schema);
+    let url = `${baseUrl}/schema-versions/${source.meta.schemaVersion}/records/${source.meta.record}`;
 
     if (payload.recordInstanceId) {
       url += `/instances/${payload.recordInstanceId}`;
     }
 
     return http[method](url, payload).then((response) => {
-      const result = response.data;
+      // return result with field names from original payload
+      const result = options.payload;
+      result.id = response.data.recordInstanceId;
+
       return result;
     });
   },

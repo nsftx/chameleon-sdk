@@ -6,6 +6,7 @@ module.exports = {
   },
   extends: 'airbnb-base',
   rules: {
+    'arrow-parens': ['error', 'as-needed', { 'requireForBlockBody': true }],
     'import/extensions': ['error', 'always', {
       'js': 'never',
     }],

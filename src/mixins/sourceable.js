@@ -103,5 +103,17 @@ export default {
       const { schema } = this.dataSource;
       return mapping.mapWithSchema(schema, items);
     },
+    saveConnectorData(data) {
+      const connector = this.getMergedConnector();
+      const source = this.getMergedSource(connector);
+      const params = this.getMergedDataSourceParams();
+      params.payload = data;
+
+      return this.options.connector.changeSourceData(
+        connector,
+        source,
+        params,
+      ).then(response => response);
+    },
   },
 };
