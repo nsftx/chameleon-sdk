@@ -28,25 +28,25 @@ export default {
       context.registerModule(moduleName, state);
     }
   },
-  mapState(context, path, prop) {
+  mapState(context, moduleName, properties) {
     return mapState.call(
       context,
-      path,
-      prop,
+      moduleName,
+      properties,
     );
   },
-  mapGetters(context, path, prop) {
+  mapGetters(context, moduleName, properties) {
     return mapGetters.call(
       context,
-      path,
-      prop,
+      moduleName,
+      properties,
     );
   },
-  mapActions(context, path, prop) {
+  mapActions(context, moduleName, properties) {
     return mapActions.call(
       context,
-      path,
-      prop,
+      moduleName,
+      properties,
     );
   },
 };
