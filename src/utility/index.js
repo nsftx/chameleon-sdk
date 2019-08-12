@@ -4,4 +4,4 @@ export { default as logger } from './logger';
 export { default as mapping } from './mapping';
 export { default as runnerDetection } from './runnerDetection';
 export { default as uriParser } from './uriParser';
-export { default as storeRegistrator } from './storeRegistrator';
+export { default as storeHelpers } from './storeHelpers';

@@ -9,7 +9,7 @@ import {
   cloneDeep,
   map,
 } from 'lodash';
-import { storeRegistrator } from '../utility';
+import { storeHelpers } from '../utility';
 
 const uuid = () => v4();
 
@@ -117,10 +117,10 @@ export default {
       this.config = cloneDeep(value);
     },
     registerModule(storeModule, state) {
-      storeRegistrator.registerModule(this, storeModule, state);
+      storeHelpers.registerModule(this, storeModule, state);
     },
     unregisterModule(storeModule, state) {
-      storeRegistrator.unregisterModule(this, storeModule, state);
+      storeHelpers.unregisterModule(this, storeModule, state);
     },
   },
   watch: {
