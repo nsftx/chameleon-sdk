@@ -1,17 +1,29 @@
 import { mapState, mapActions, mapGetters } from 'vuex';
+import { isArray } from 'lodash';
 import logger from './logger';
 
 export default {
-  registerModule(context, moduleName, state) {
-    if (!context || !moduleName || !state) {
+  registerModule(context, name, state) {
+    if (!context || !name || !state) {
       logger.warn('Context, module name or state is not provided');
+      return;
+    }
+
+    const moduleName = isArray(name) ? name[0] : name;
+    if (context.$store.state && context.$store.state[moduleName]) {
+      logger.warn(`Module ${moduleName} is already registered`);
       return;
     }
     context.$store.registerModule(moduleName, state);
   },
-  unregisterModule(context, moduleName, state) {
-    if (!context || !moduleName || !state) {
+  unregisterModule(context, name, state) {
+    if (!context || !name || !state) {
       logger.warn('Context, module name or state is not provided');
+      return;
+    }
+    const moduleName = isArray(name) ? name[0] : name;
+    if (context.state && !context.state[moduleName]) {
+      logger.warn(`Module ${moduleName} is not registered`);
       return;
     }
     context.$store.unregisterModule(moduleName, state);
