@@ -14,7 +14,7 @@ export default {
       logger.warn(`Module ${moduleName} is already registered`);
       return;
     }
-    context.$store.registerModule(moduleName, state);
+    context.$store.registerModule(name, state);
   },
   unregisterModule(context, name, state) {
     if (!context || !name || !state) {
@@ -26,7 +26,7 @@ export default {
       logger.warn(`Module ${moduleName} is not registered`);
       return;
     }
-    context.$store.unregisterModule(moduleName, state);
+    context.$store.unregisterModule(name, state);
   },
   mapState(context, moduleName, properties) {
     return mapState.call(
