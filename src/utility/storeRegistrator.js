@@ -19,6 +19,11 @@ export default {
       return;
     }
 
+    if (context.state && !context.state[moduleName]) {
+      logger.warn(`Module with ${moduleName} name is not registered`);
+      return;
+    }
+
     if (context.state && context.state[moduleName]) {
       context.registerModule(moduleName, state);
     }
