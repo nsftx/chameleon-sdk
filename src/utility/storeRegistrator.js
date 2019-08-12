@@ -7,23 +7,23 @@ export default {
   unregisterModule(context, storeModule, state) {
     context.registerModule(storeModule, state);
   },
-  mapState(path, prop) {
+  mapState(context, path, prop) {
     return mapState.call(
-      this,
+      context,
       path,
       prop,
     );
   },
-  mapGetters(path, prop) {
+  mapGetters(context, path, prop) {
     return mapGetters.call(
-      this,
+      context,
       path,
       prop,
     );
   },
-  mapActions(path, prop) {
+  mapActions(context, path, prop) {
     return mapActions.call(
-      this,
+      context,
       path,
       prop,
     );
