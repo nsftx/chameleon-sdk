@@ -4,29 +4,17 @@ import logger from './logger';
 export default {
   registerModule(context, moduleName, state) {
     if (!context || !moduleName || !state) {
-      logger.warn('Please provide valid informations');
+      logger.warn('Context, module name or state is not provided');
       return;
     }
-    if (context.state && context.state[moduleName]) {
-      logger.warn(`Module with ${moduleName} name is already registered`);
-      return;
-    }
-    context.registerModule(moduleName, state);
+    context.$store.registerModule(moduleName, state);
   },
   unregisterModule(context, moduleName, state) {
     if (!context || !moduleName || !state) {
-      logger.warn('Please provide valid informations');
+      logger.warn('Context, module name or state is not provided');
       return;
     }
-
-    if (context.state && !context.state[moduleName]) {
-      logger.warn(`Module with ${moduleName} name is not registered`);
-      return;
-    }
-
-    if (context.state && context.state[moduleName]) {
-      context.registerModule(moduleName, state);
-    }
+    context.$store.unregisterModule(moduleName, state);
   },
   mapState(context, moduleName, properties) {
     return mapState.call(

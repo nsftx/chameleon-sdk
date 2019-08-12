@@ -117,10 +117,10 @@ export default {
       this.config = cloneDeep(value);
     },
     registerModule(storeModule, state) {
-      storeRegistrator.registerModule(this.$store, storeModule, state);
+      storeRegistrator.registerModule(this, storeModule, state);
     },
     unregisterModule(storeModule, state) {
-      storeRegistrator.unregisterModule(this.$store, storeModule, state);
+      storeRegistrator.unregisterModule(this, storeModule, state);
     },
   },
   watch: {
