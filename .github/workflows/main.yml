@@ -1,0 +1,26 @@
+name: Run Lint, Test and Build
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - uses: actions/npm@master
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        with:
+          args: ci
+      - run: npm run coverage
+      - run: npm run lint && npm run test:unit && npm run build
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
