@@ -1,6 +1,4 @@
-/* eslint max-len: "off" */
 import runnerDetection from './runnerDetection';
-import { SERVFAIL } from 'dns';
 
 describe('Runner detection utility', () => {
   beforeEach(() => {
