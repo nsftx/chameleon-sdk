@@ -7,6 +7,18 @@ const RUNNER_NAME = 'ChameleonRunner';
 
 const validateRunner = runner => typeof runner.sendMessage === 'function';
 
+const handleRunnerOptions = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (!urlParams.has('options')) {
+    return false;
+  }
+
+  const options = JSON.parse(urlParams.get('options'));
+  options.os = urlParams.get('os');
+
+  return options;
+};
+
 export default {
   /*
   Detects is app running inside runner device.
@@ -17,6 +29,19 @@ export default {
       detected: false,
       valid: false,
     };
+
+    if (window.location.search) {
+      const options = handleRunnerOptions();
+
+      // If options are present, don't validate further
+      if (options) {
+        runnerDetection.detected = true;
+        runnerDetection.valid = true;
+        runnerDetection.options = options;
+
+        return runnerDetection;
+      }
+    }
 
     if (!window.hasOwnProperty(RUNNER_NAME)) {
       logger.error('ChameleonRunner not detected.');

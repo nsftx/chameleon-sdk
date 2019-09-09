@@ -35,4 +35,25 @@ describe('Runner detection utility', () => {
     expect(runner.detected).toBeTruthy();
     expect(runner.valid).toBeFalsy();
   });
+
+  it('should handle options from query string', () => {
+    global.window = Object.create(window);
+    const url = 'http://localhost:8080/';
+    const search = 'options=%7B%22endpoint%22%3A%22http%3A%2F%2Flocalhost%3A3000%22%7D';
+    Object.defineProperty(window, 'location', {
+      value: {
+        href: url,
+        search,
+      },
+    });
+
+    const expectedOptions = {
+      endpoint: 'http://localhost:3000',
+    };
+
+    const runner = runnerDetection.detectRunner();
+    expect(runner.detected).toBeTruthy();
+    expect(runner.valid).toBeTruthy();
+    expect(runner.options).toMatchObject(expectedOptions);
+  });
 });
