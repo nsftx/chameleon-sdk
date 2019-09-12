@@ -242,12 +242,15 @@ const getSavedViewModels = (viewModels, connector, baseUrl) => {
   });
 };
 
-const getSourcesRequestParams = (sources, savedOnly, pagination = {}) => {
+const getSourcesRequestParams = (sources, { savedOnly, pagination = {}, search }) => {
+  const viewModelNames = search && search.length ? [search] : undefined;
+
   // When fetching full result set, use incoming pagination
   if (!savedOnly) {
     return {
       page: pagination.page,
       size: pagination.size,
+      viewModelNames,
     };
   }
 
@@ -259,6 +262,7 @@ const getSourcesRequestParams = (sources, savedOnly, pagination = {}) => {
     page: 1,
     size: sourcesIds.length,
     viewModelIds: sourcesIds,
+    viewModelNames,
   };
 };
 
@@ -281,8 +285,9 @@ export default {
       return result;
     });
   },
-  getSources(connector, { savedOnly, pagination = {} }) {
-    const requestParams = getSourcesRequestParams(connector.sources, savedOnly, pagination);
+  getSources(connector, options) {
+    const { savedOnly } = options;
+    const requestParams = getSourcesRequestParams(connector.sources, options);
     const baseUrl = getBaseUrl(
       connector.options,
       connector.type,
