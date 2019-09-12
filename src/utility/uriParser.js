@@ -1,4 +1,4 @@
-import { each, isArray } from 'lodash';
+import { each, isArray, isUndefined } from 'lodash';
 
 export default {
   encode(params) {
@@ -9,7 +9,7 @@ export default {
         each(paramValue, (paramMultiValue) => {
           queryParams.append(key, paramMultiValue);
         });
-      } else {
+      } else if (!isUndefined(paramValue)) {
         queryParams.append(key, paramValue);
       }
     });

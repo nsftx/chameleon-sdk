@@ -8,6 +8,7 @@ import {
   find,
   isArray,
   keyBy,
+  keys,
   map,
   has,
   omit,
@@ -241,6 +242,30 @@ const getSavedViewModels = (viewModels, connector, baseUrl) => {
   });
 };
 
+const getSourcesRequestParams = (sources, { savedOnly, pagination = {}, search }) => {
+  const viewModelNames = search && search.length ? [search] : undefined;
+
+  // When fetching full result set, use incoming pagination
+  if (!savedOnly) {
+    return {
+      page: pagination.page,
+      size: pagination.size,
+      viewModelNames,
+    };
+  }
+
+  const sourcesIds = keys(sources);
+
+  // When fetching info about already saved sources,
+  // construct new pagination and filter it by view model ids
+  return {
+    page: 1,
+    size: sourcesIds.length,
+    viewModelIds: sourcesIds,
+    viewModelNames,
+  };
+};
+
 export default {
   changeSourceData(connector, source, options) {
     const baseUrl = getBaseUrl(connector.options, connector.type, 'write');
@@ -260,7 +285,9 @@ export default {
       return result;
     });
   },
-  getSources(connector, { savedOnly, pagination = {} }) {
+  getSources(connector, options) {
+    const { savedOnly } = options;
+    const requestParams = getSourcesRequestParams(connector.sources, options);
     const baseUrl = getBaseUrl(
       connector.options,
       connector.type,
@@ -270,17 +297,15 @@ export default {
     // Get available view models from all data packages in space
     return http.get(`${baseUrl}/available-view-models`, {
       params: {
-        types: ['uncommitted', 'foreign'].join(','),
-        page: pagination.page,
-        size: pagination.size,
+        types: ['uncommitted', 'foreign'],
+        ...requestParams,
       },
+      paramsSerializer: uriParser.encode,
     }).then((response) => {
       const viewModels = response.data.data;
       const formattedViewModels = formatViewModels(viewModels);
 
       if (savedOnly) {
-        // TODO Revise this logic, it's possible that some sources get lost
-        // due to pagination in upper request
         return getSavedViewModels(formattedViewModels, connector, baseUrl);
       }
 
