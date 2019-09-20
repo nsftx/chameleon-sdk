@@ -44,7 +44,7 @@ const formatSourceSchema = (record, view) => {
 const formatResponse = (response) => {
   const responseMetadataFields = response.metadata.schema.fields;
   const fields = response.data;
-  const formatedResponse = { metadata: omit(response.metadata, ['schema']), data: [] };
+  const formatedResponse = { metadata: omit(response.metadata, ['schema']), data: [], pagination: response.pagination };
   let formatedField;
 
   map(fields, (field) => {
@@ -334,7 +334,8 @@ export default {
       return {
         [source.name]: {
           items: result.data,
-          pagination: result.metadata,
+          metadata: result.metadata, // todo do we need this?
+          pagination: result.pagination,
         },
       };
     });
