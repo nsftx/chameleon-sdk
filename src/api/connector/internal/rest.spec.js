@@ -99,9 +99,6 @@ describe('internal rest connector', () => {
 
     const options = {
       seed: true,
-      params: {
-        pageSize: 15,
-      },
     };
 
     rest.getSourceData(connectorMock, sourceMock, options).then((result) => {
@@ -115,7 +112,11 @@ describe('internal rest connector', () => {
       data: sourceDataMock.seedResponse,
     }));
 
-    const options = {};
+    const options = {
+      params: {
+        pagination: {},
+      },
+    };
 
     rest.getSourceData(connectorMock, sourceMock, options).then((result) => {
       const expectedResult = expect.objectContaining({
