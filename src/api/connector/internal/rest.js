@@ -130,10 +130,8 @@ const getClientParams = (optionParams = {}) => {
 
   clientParams.size = optionParams.size || optionParams.pageSize;
   clientParams.page = optionParams.page || optionParams.currentPage;
-  if (optionParams.sortBy && optionParams.sortBy.id) {
-    clientParams.sort = optionParams.sortBy
-      ? getSortParam(optionParams.sort, optionParams.sortBy.id) : null;
-  }
+  clientParams.sort = optionParams.sortBy && optionParams.sortBy.id
+    ? getSortParam(optionParams.sort, optionParams.sortBy.id) : null;
 
   return omitBy(clientParams, isNil);
 };
