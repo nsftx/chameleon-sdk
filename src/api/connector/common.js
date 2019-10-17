@@ -1,4 +1,4 @@
-import { isNil } from 'lodash';
+import { isNil, toLower } from 'lodash';
 import { localStorage } from '../../utility';
 
 /* eslint import/prefer-default-export:"off" */
@@ -17,6 +17,19 @@ export function getCommonMeta(connector) {
   return {
     headers,
   };
+}
+
+export function getSortParam(sortOrder, sortFieldParam) {
+  const sortOrderParam = toLower(sortOrder);
+  const validAscParams = ['asc', '+'];
+  const validDescParams = ['desc', '-'];
+
+  let sortPrefix = '';
+
+  if (validAscParams.includes(sortOrderParam)) sortPrefix = '+';
+  if (validDescParams.includes(sortOrderParam)) sortPrefix = '-';
+
+  return `${sortPrefix}${sortFieldParam}`;
 }
 
 export function getSavedSources(connector) {

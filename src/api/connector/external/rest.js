@@ -6,7 +6,7 @@ import {
   omitBy,
   isNil,
 } from 'lodash';
-import { getSavedSources, getCommonMeta } from '../common';
+import { getSavedSources, getSortParam, getCommonMeta } from '../common';
 import { logger, uriParser } from '../../../utility';
 
 const getIdentifier = (source, options) => {
@@ -62,19 +62,6 @@ const getFilterQueryParams = (source) => {
   if (filterFormat === 'extended') return getExtendedFilterQueryParams(filterParams);
 
   return getCommonFilterQueryParams(filterParams);
-};
-
-const getSortParam = (sortOrder, sortFieldParam) => {
-  const sortOrderParam = toLower(sortOrder);
-  const validAscParams = ['asc', '+'];
-  const validDescParams = ['desc', '-'];
-
-  let sortPrefix = '';
-
-  if (validAscParams.includes(sortOrderParam)) sortPrefix = '+';
-  if (validDescParams.includes(sortOrderParam)) sortPrefix = '-';
-
-  return `${sortPrefix}${sortFieldParam}`;
 };
 
 const getClientParams = (optionParams = {}) => {

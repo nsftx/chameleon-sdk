@@ -3,19 +3,23 @@ Reserved for Ride Core connector.
 */
 import http from 'axios';
 import {
+  assign,
   each,
   filter,
   find,
   isArray,
+  isNil,
   keyBy,
   keys,
   map,
   has,
   omit,
+  omitBy,
   forIn,
   toLower,
   uniq,
 } from 'lodash';
+import { getSortParam } from '../common';
 import { uriParser } from '../../../utility';
 
 const formatSourceSchema = (record, view) => {
@@ -44,7 +48,7 @@ const formatSourceSchema = (record, view) => {
 const formatResponse = (response) => {
   const responseMetadataFields = response.metadata.schema.fields;
   const fields = response.data;
-  const formatedResponse = { metadata: omit(response.metadata, ['schema']), data: [] };
+  const formatedResponse = { metadata: omit(response.metadata, ['schema']), data: [], pagination: response.pagination };
   let formatedField;
 
   map(fields, (field) => {
@@ -121,7 +125,18 @@ const getLatestSchema = (baseUrl, dataPackageId) => {
   return http.get(latestSchemaUrl).then(response => response.data);
 };
 
-const getSourceDataReqDefinition = (connector, source) => {
+const getClientParams = (optionParams = {}) => {
+  const clientParams = {};
+
+  clientParams.size = optionParams.size || optionParams.pageSize;
+  clientParams.page = optionParams.page || optionParams.currentPage;
+  clientParams.sort = optionParams.sortBy && optionParams.sortBy.id
+    ? getSortParam(optionParams.sort, optionParams.sortBy.id) : null;
+
+  return omitBy(clientParams, isNil);
+};
+
+const getSourceDataReqDefinition = (connector, source, options) => {
   const baseUrl = getBaseUrl(
     connector.options,
     connector.type,
@@ -135,6 +150,8 @@ const getSourceDataReqDefinition = (connector, source) => {
     fields: JSON.stringify(fields),
     includeFieldMetadata: true,
   };
+
+  assign(params, getClientParams(options.params.pagination));
 
   if (source.filters && source.filters.length > 0) {
     params.filters = JSON.stringify(source.filters);
@@ -159,7 +176,7 @@ const getSourceSeedReqDefinition = (connector, source, options) => {
   });
 
   const params = {
-    numRecords: options.params ? options.params.pageSize : 10,
+    numRecords: options.params && options.params.numRecords ? options.params.numRecords : 10,
     schema: JSON.stringify({ name: 'test', schema }),
   };
 
@@ -322,7 +339,7 @@ export default {
     if (isSeed) {
       requestDefinition = getSourceSeedReqDefinition(connector, source, options);
     } else {
-      requestDefinition = getSourceDataReqDefinition(connector, source);
+      requestDefinition = getSourceDataReqDefinition(connector, source, options);
     }
 
     return http.get(requestDefinition.url, {
@@ -334,7 +351,8 @@ export default {
       return {
         [source.name]: {
           items: result.data,
-          pagination: result.metadata,
+          metadata: result.metadata, // todo do we need this?
+          pagination: result.pagination,
         },
       };
     });
