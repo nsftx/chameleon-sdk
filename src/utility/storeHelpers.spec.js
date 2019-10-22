@@ -6,7 +6,23 @@ const storeConfig = {
   state: { product: 'Car' },
   modules: {
     a: {
-      state: { product: 'Module car' },
+      namespaced: true,
+      state: { product: 'Module' },
+      getters: {
+        product(state) {
+          return state.product;
+        },
+      },
+      mutations: {
+        setItem(state) {
+          state.product = 'New module';
+        },
+      },
+      actions: {
+        changeProduct(context) {
+          context.commit('setItem');
+        },
+      },
     },
   },
 };
@@ -14,17 +30,6 @@ const storeConfig = {
 
 const moduleState = {
   state: { product: 'Car' },
-  mutations: {
-    setProduct(state, newProduct) {
-      state.product = newProduct;
-    },
-  },
-
-  getters: {
-    product(state) {
-      return state.product;
-    },
-  },
 };
 
 const component = {
@@ -59,7 +64,7 @@ describe('Store helpers utility', () => {
         ...storeHelpers.mapState(this, 'a', ['product']),
       },
     });
-    expect(wrapper.vm.product).toBe('Module car');
+    expect(wrapper.vm.product).toBe('Module');
   });
 
   it('should map store getters', () => {
@@ -71,6 +76,21 @@ describe('Store helpers utility', () => {
       },
     });
     expect(wrapper.vm.product).toBeTruthy();
+  });
+
+  it('should map store actions', () => {
+    const wrapper = shallowMount(component, {
+      store,
+      localVue,
+      methods: {
+        ...storeHelpers.mapActions(this, 'a', ['changeProduct']),
+      },
+      computed: {
+        ...storeHelpers.mapGetters(this, 'a', ['product']),
+      },
+    });
+    wrapper.vm.changeProduct();
+    expect(wrapper.vm.product).toBe('New module');
   });
 
   it('should unregister module in store', () => {
