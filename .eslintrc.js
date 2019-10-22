@@ -16,5 +16,9 @@ module.exports = {
     'no-underscore-dangle': ['error', {
       allow: ['_schema', '_options', '_reactions', '_id'],
     }],
+    'no-param-reassign': ['error', {
+      props: true,
+      ignorePropertyModificationsFor: ['state'],
+    }],
   }
 }
