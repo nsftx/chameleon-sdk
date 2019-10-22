@@ -3,23 +3,23 @@ import { createLocalVue, shallowMount } from '@vue/test-utils';
 import storeHelpers from './storeHelpers';
 
 const storeConfig = {
-  state: { product: 'Car' },
+  state: { type: 'Page' },
   modules: {
-    a: {
+    firstModule: {
       namespaced: true,
-      state: { product: 'Module' },
+      state: { type: 'Widget' },
       getters: {
-        product(state) {
-          return state.product;
+        type(state) {
+          return state.type;
         },
       },
       mutations: {
         setItem(state) {
-          state.product = 'New module';
+          state.type = 'Element';
         },
       },
       actions: {
-        changeProduct(context) {
+        changeType(context) {
           context.commit('setItem');
         },
       },
@@ -29,7 +29,7 @@ const storeConfig = {
 
 
 const moduleState = {
-  state: { product: 'Car' },
+  state: { type: 'Flow' },
 };
 
 const component = {
@@ -51,20 +51,20 @@ describe('Store helpers utility', () => {
       store,
       localVue,
       beforeCreate() {
-        storeHelpers.registerModule(this, 'testModule', moduleState);
+        storeHelpers.registerModule(this, 'secondModule', moduleState);
       },
     });
-    expect(wrapper.vm.$store.state.testModule).toBeTruthy();
+    expect(wrapper.vm.$store.state.secondModule).toBeTruthy();
   });
   it('should map store state', () => {
     const wrapper = shallowMount(component, {
       store,
       localVue,
       computed: {
-        ...storeHelpers.mapState(this, 'a', ['product']),
+        ...storeHelpers.mapState(this, 'firstModule', ['type']),
       },
     });
-    expect(wrapper.vm.product).toBe('Module');
+    expect(wrapper.vm.type).toBe('Widget');
   });
 
   it('should map store getters', () => {
@@ -72,10 +72,10 @@ describe('Store helpers utility', () => {
       store,
       localVue,
       computed: {
-        ...storeHelpers.mapGetters(this, 'a', ['product']),
+        ...storeHelpers.mapGetters(this, 'firstModule', ['type']),
       },
     });
-    expect(wrapper.vm.product).toBeTruthy();
+    expect(wrapper.vm.type).toBe('Widget');
   });
 
   it('should map store actions', () => {
@@ -83,14 +83,14 @@ describe('Store helpers utility', () => {
       store,
       localVue,
       methods: {
-        ...storeHelpers.mapActions(this, 'a', ['changeProduct']),
+        ...storeHelpers.mapActions(this, 'firstModule', ['changeType']),
       },
       computed: {
-        ...storeHelpers.mapGetters(this, 'a', ['product']),
+        ...storeHelpers.mapGetters(this, 'firstModule', ['type']),
       },
     });
-    wrapper.vm.changeProduct();
-    expect(wrapper.vm.product).toBe('New module');
+    wrapper.vm.changeType();
+    expect(wrapper.vm.type).toBe('Element');
   });
 
   it('should unregister module in store', () => {
@@ -98,10 +98,10 @@ describe('Store helpers utility', () => {
       store,
       localVue,
       beforeCreate() {
-        storeHelpers.registerModule(this, 'testModule', moduleState);
+        storeHelpers.registerModule(this, 'secondModule', moduleState);
       },
     });
-    storeHelpers.unregisterModule(wrapper.vm, 'testModule', moduleState);
-    expect(wrapper.vm.$store.state.testModule).toBeFalsy();
+    storeHelpers.unregisterModule(wrapper.vm, 'secondModule', moduleState);
+    expect(wrapper.vm.$store.state.secondModule).toBeFalsy();
   });
 });
