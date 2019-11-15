@@ -5,7 +5,7 @@ const isGlobalAvailable = global => !!window[global];
 const startAvailabilityInterval = (global, resolve) => {
   const availabilityInterval = setInterval(() => {
     if (isGlobalAvailable(global)) {
-      resolve();
+      resolve(global);
       clearInterval(availabilityInterval);
     }
   }, 100);
@@ -70,8 +70,9 @@ export default {
 
     if (config.bundle.styles && config.style) {
       styles = map(config.bundle.styles, style => addBundleItem(style, 'link', config.bundle.name, config.baseURL));
-      promises = promises.concat(styles);
     }
+
+    promises = promises.concat(styles);
 
     return Promise.all(promises);
   },
