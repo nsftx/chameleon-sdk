@@ -1,4 +1,4 @@
-import { filter, map } from 'lodash';
+import { filter, map, indexOf } from 'lodash';
 
 const isGlobalAvailable = global => !!window[global];
 
@@ -50,7 +50,7 @@ export default {
   /**
     * Load bundles method.
     * @param {object} config - Config object width properties:
-    * scriptType, baseURL, styles, scripts.
+    * scriptTypes, baseURL, styles.
     * @param {object} bundle - Bundle object that contains bundle information.
     * @return {object} promise.
     */
@@ -60,10 +60,10 @@ export default {
     let styles = [];
 
     if (bundle.scripts) {
-      scripts = filter(bundle.scripts, script => script.type === config.scriptType);
+      scripts = filter(bundle.scripts, script => indexOf(config.scriptTypes, script.type) > -1);
     }
 
-    if (scripts.length > 0 && config.scripts) {
+    if (scripts.length > 0) {
       promises = map(scripts, script => addBundleItem(script, 'script', bundle.name, config.baseURL));
     }
 
