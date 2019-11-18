@@ -47,21 +47,28 @@ const addBundleItem = (item, type, bundleName, bundleBaseUrl) => {
 };
 
 export default {
-  loadBundles(config) {
+  /**
+    * Load bundles method.
+    * @param {object} config - Config object width properties:
+    * scriptType, baseURL, styles, scripts.
+    * @param {object} bundle - Bundle object that contains bundle information.
+    * @return {object} promise.
+    */
+  loadBundles(config, bundle) {
     let scripts = [];
     let promises = [];
     let styles = [];
 
-    if (config.bundle.scripts) {
-      scripts = filter(config.bundle.scripts, script => script.type === config.scriptType);
+    if (bundle.scripts) {
+      scripts = filter(bundle.scripts, script => script.type === config.scriptType);
     }
 
-    if (scripts.length > 0 && config.script) {
-      promises = map(scripts, script => addBundleItem(script, 'script', config.bundle.name, config.baseURL));
+    if (scripts.length > 0 && config.scripts) {
+      promises = map(scripts, script => addBundleItem(script, 'script', bundle.name, config.baseURL));
     }
 
-    if (config.bundle.styles && config.style) {
-      styles = map(config.bundle.styles, style => addBundleItem(style, 'link', config.bundle.name, config.baseURL));
+    if (bundle.styles && config.styles) {
+      styles = map(bundle.styles, style => addBundleItem(style, 'link', bundle.name, config.baseURL));
     }
 
     promises = promises.concat(styles);
