@@ -48,14 +48,6 @@ const addBundleItem = (item, type, bundleName, bundleBaseUrl) => {
 
 export default {
   loadBundles(config) {
-    // config example
-    // const config = {
-    //   bundle: bundle,
-    //   scriptType: 'meta',
-    //   baseURL: process.env.VUE_APP_ASSETS_BASEURL,
-    //   style: false,
-    //   script: true
-    // };
     let scripts = [];
     let promises = [];
     let styles = [];
