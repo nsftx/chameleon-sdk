@@ -49,18 +49,18 @@ const addBundleItem = (item, type, bundleName, bundleBaseUrl) => {
 export default {
   /**
     * Load bundles method.
-    * @param {object} config - Config object width properties:
-    * scriptTypes, baseURL, styles.
     * @param {object} bundle - Bundle object that contains bundle information.
+    * @param {object} config - Config object width properties:
+    * scripts, baseURL, styles.
     * @return {object} promise.
     */
-  loadBundles(config, bundle) {
+  loadBundles(bundle, config) {
     let scripts = [];
     let promises = [];
     let styles = [];
 
     if (bundle.scripts) {
-      scripts = filter(bundle.scripts, script => indexOf(config.scriptTypes, script.type) > -1);
+      scripts = filter(bundle.scripts, script => indexOf(config.scripts, script.type) > -1);
     }
 
     if (scripts.length > 0) {
