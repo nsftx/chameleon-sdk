@@ -4,7 +4,7 @@ import {
   forIn,
   toLower,
   toUpper,
-} from 'lodash'
+} from 'lodash';
 
 export default {
   createAvatar(config, content) {
@@ -13,17 +13,28 @@ export default {
   generateSvg(config) {
     const self = this;
     const svg = this.createNode('svg', {
-      width: config.width, height: config.height, borderRadius: config.borderRadius,
-      style: { backgroundColor: self.getRandomColor() }
+      width: config.width,
+      height: config.height,
+      borderRadius: config.borderRadius,
+      style: { backgroundColor: self.getRandomColor() },
     });
     const g = this.createNode('g', {});
-    const rect = this.createNode('rect', { width: '100%', height: '100%', rx: '5' });
-    const text = this.createNode('text', { x: '50%', y: '50%', dominantBaseline: 'middle', textAnchor: 'middle' });
+    const rect = this.createNode('rect', {
+      width: '100%',
+      height: '100%',
+      rx: '5',
+    });
+    const text = this.createNode('text', {
+      x: '50%',
+      y: '50%',
+      dominantBaseline: 'middle',
+      textAnchor: 'middle',
+    });
     const span = document.createElement('span');
     const initials = document.createTextNode(this.getInitials());
     span.appendChild(initials);
     text.appendChild(span);
-    react.appendChild(text);
+    rect.appendChild(text);
     g.appendChild(rect);
     svg.appendChild(g);
 
@@ -32,12 +43,12 @@ export default {
   createNode(node, attributes) {
     const element = document.createElementNS('http://www.w3.org/2000/svg', node);
     forIn(attributes, (value, key) => {
-      element.setAttributeNS(null, key.replace(/[A-Z]/g, m => '-' + toLower(m), attributes[key]));
+      element.setAttributeNS(null, key.replace(/[A-Z]/g, m => `- ${toLower(m)}`, attributes[key]));
     });
   },
   getInitials(config, content) {
     const initials = [];
-    content.forEach((item) => {
+    content.item.forEach((item) => {
       if (isEmpty(item) || config.initialsLength >= this.max) return;
       initials.push(toUpper(item[0]));
     });
@@ -50,8 +61,8 @@ export default {
     const color = this.color || `#${this.getRandomNumber(100000, 999999)}`;
     return `fill: ${color}`;
   },
-  getRandomColorFromPalette(palette) {
-    const randomItem = random(0, palette.length);
-    return palette[randomItem];
-  }
+  getRandomColorFromPalette(colortPalette) {
+    const randomItem = random(0, colortPalette.length);
+    return colortPalette[randomItem];
+  },
 };
