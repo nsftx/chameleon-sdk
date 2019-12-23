@@ -54,11 +54,8 @@ export default {
     });
     return initials.join('');
   },
-  getRandomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  },
   getRandomColor() {
-    const color = this.color || `#${this.getRandomNumber(100000, 999999)}`;
+    const color = this.color || `#${random(100000, 999999)}`;
     return `fill: ${color}`;
   },
   getRandomColorFromPalette(colortPalette) {
