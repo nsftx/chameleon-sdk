@@ -1,7 +1,7 @@
 import bundleInjector from './bundleInjector';
 
 describe('bundleInjector utility', () => {
-  it('promise', () => {
+  it('Should load bundles', () => {
     const bundle = {
       name: 'material',
       namespace: 'c-',
@@ -34,12 +34,12 @@ describe('bundleInjector utility', () => {
       },
     };
     const config = {
-      scripts: ['components'],
+      scripts: ['meta', 'components'],
       baseURL: 'https://storage.googleapis.com/chameleon-storage',
     };
     return bundleInjector.loadBundles(bundle, config).then((data) => {
       // eslint-disable-next-line
-      expect(data).toMatchObject(["__CHAMELEON_MATERIAL__"]);
+      expect(data).toEqual(["__CHAMELEON_MATERIAL__", "__CHAMELEON_MATERIAL_META__"]);
     });
   });
 });
