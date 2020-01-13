@@ -14,11 +14,9 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - uses: actions/npm@master
+      - run: npm ci
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        with:
-          args: ci
       - run: npm run coverage
       - run: npm run lint && npm run test && npm run build
         env:
