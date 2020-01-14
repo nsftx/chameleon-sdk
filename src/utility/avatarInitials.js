@@ -6,16 +6,24 @@ import {
   toUpper,
 } from 'lodash';
 
+const defaultConfiguration = {
+  width: '65px',
+  height: '65px',
+  borderRadius: '50%',
+  fontSize: '18px',
+}
+
 export default {
-  createAvatar(config, content) {
-    this.generateSvg(config, content);
+  createAvatar(content, config) {
+    this.generateSvg(config);
   },
   generateSvg(config) {
     const self = this;
     const svg = this.createNode('svg', {
-      width: config.width,
-      height: config.height,
-      borderRadius: config.borderRadius,
+      width: config.width || defaultConfiguration.width,
+      height: config.height || defaultConfiguration.height,
+      borderRadius: config.borderRadius || defaultConfiguration.borderRadius,
+      fontSize: defaultConfiguration.fontSize,
       style: { backgroundColor: self.getRandomColor() },
     });
     const g = this.createNode('g', {});
