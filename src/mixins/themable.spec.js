@@ -46,9 +46,11 @@ describe('themable mixin', () => {
       },
     });
 
-    expect(wrapper.vm.isThemeLight).toBeTruthy();
-    expect(wrapper.vm.themeBackgroundColor).toEqual('#fff');
-    expect(wrapper.vm.themeTextColor).toEqual('rgba(0,0,0,0.87)');
+    localVue.nextTick(() => {
+      expect(wrapper.vm.isThemeLight).toBeTruthy();
+      expect(wrapper.vm.themeBackgroundColor).toEqual('#fff');
+      expect(wrapper.vm.themeTextColor).toEqual('rgba(0,0,0,0.87)');
+    });
   });
 
   it('removes theme', () => {
@@ -59,7 +61,9 @@ describe('themable mixin', () => {
       },
     });
 
-    expect(wrapper.vm.isThemeLight).toBeFalsy();
-    expect(wrapper.vm.isThemeDark).toBeFalsy();
+    localVue.nextTick(() => {
+      expect(wrapper.vm.isThemeLight).toBeFalsy();
+      expect(wrapper.vm.isThemeDark).toBeFalsy();
+    });
   });
 });

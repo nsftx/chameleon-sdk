@@ -1,6 +1,8 @@
 import Vue from 'vue';
-import { shallowMount } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 import errorable from './errorable';
+
+const localVue = createLocalVue();
 
 describe('Errorable Mixin', () => {
   it('Compares Error on update', () => {
@@ -30,6 +32,9 @@ describe('Errorable Mixin', () => {
     };
 
     wrapper.vm.a = 2;
-    expect(wrapper.vm.error.msg).toEqual(error);
+
+    localVue.nextTick(() => {
+      expect(wrapper.vm.error.msg).toEqual(error);
+    });
   });
 });
