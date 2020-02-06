@@ -8,7 +8,8 @@
 # chameleon-sdk
 
 Chameleon Software Development Kit is a package for rapid development of Chameleon bundles. It also serves as an integral part of Chameleon Builder. This package is already used if you use [chameleon-bundle](https://github.com/nsftx/vue-cli-plugin-chameleon-bundle) Vue CLI plugin for scaffolding bundle projects.
-Compatible with Node v10.x and newer.
+
+Note: Compatible with Node v10.x and newer.
 
 ## Installing
 
