@@ -6,3 +6,4 @@ export { default as mapping } from './mapping';
 export { default as runnerDetection } from './runnerDetection';
 export { default as uriParser } from './uriParser';
 export { default as storeHelpers } from './storeHelpers';
+export { default as RunnerClient } from './runner';

@@ -10,7 +10,7 @@
     "Macić Ahmet <macic.ahmet@nsoft.com>"
   ],
   "private": false,
-  "main": "./src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "babel src --presets @babel/preset-env --out-dir dist --ignore src/**/*.spec.js,src/**/*.test.js",
     "lint": "eslint --ext .js,.vue src",
