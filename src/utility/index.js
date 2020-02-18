@@ -1,3 +1,4 @@
+export { default as avatarUtility } from './avatarUtility';
 export { default as binding } from './binding';
 export { default as bundleInjector } from './bundleInjector';
 export { default as localStorage } from './localStorage';

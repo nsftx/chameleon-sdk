@@ -15,11 +15,11 @@ const defaultConfiguration = {
   commonColor: false,
 };
 
-const getInitials = (config, content) => {
+const getInitials = (content, config) => {
   const initials = [];
   content.forEach((item) => {
     item.label.split(' ').forEach((name) => {
-      if (isEmpty(name) || initials.length >= this.max) return;
+      if (isEmpty(name) || initials.length >= (config.max || 2)) return;
       initials.push(toUpper(name[0]));
     });
   });
@@ -27,8 +27,8 @@ const getInitials = (config, content) => {
 };
 
 const getRandomColor = () => {
-  const color = this.color || `#${random(100000, 999999)}`;
-  return `fill: ${color}`;
+  const color = `#${random(100000, 999999)}`;
+  return `${color}`;
 };
 
 const getRandomColorFromPalette = (colortPalette) => {
@@ -49,17 +49,20 @@ const setBackgroundColor = (config) => {
 const createNode = (node, attributes) => {
   const element = document.createElementNS('http://www.w3.org/2000/svg', node);
   forIn(attributes, (value, key) => {
-    element.setAttributeNS(null, key.replace(/[A-Z]/g, m => `- ${toLower(m)}`, attributes[key]));
+    let node = key.replace(/[A-Z]/g, m => `-${toLower(m)}`);
+    element.setAttribute(node, attributes[key]);
   });
+
+  return element;
 };
 
-const generateSvg = (config, content) => {
+const generateSvg = (content, config) => {
   const svg = createNode('svg', {
     width: config.width || defaultConfiguration.width,
     height: config.height || defaultConfiguration.height,
     borderRadius: config.borderRadius || defaultConfiguration.borderRadius,
     fontSize: defaultConfiguration.fontSize,
-    style: { backgroundColor: setBackgroundColor(config) },
+    style: `fill: ${ setBackgroundColor(config) }`,
   });
   const g = createNode('g', {});
   const rect = createNode('rect', {
@@ -74,7 +77,7 @@ const generateSvg = (config, content) => {
     textAnchor: 'middle',
   });
   const span = document.createElement('span');
-  const initials = document.createTextNode(getInitials(config, content));
+  const initials = document.createTextNode(getInitials(content, config));
   span.appendChild(initials);
   text.appendChild(span);
   rect.appendChild(text);
@@ -87,6 +90,6 @@ const generateSvg = (config, content) => {
 
 export default {
   createAvatar(content, config) {
-    generateSvg(config, content);
+    return generateSvg(content, config);
   },
 };
